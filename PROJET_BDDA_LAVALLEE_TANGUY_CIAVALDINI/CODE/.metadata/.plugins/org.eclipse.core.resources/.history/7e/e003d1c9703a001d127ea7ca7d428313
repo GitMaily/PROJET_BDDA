@@ -1,0 +1,41 @@
+public class DBParams {
+	
+	public static String DBPath;
+	public static int pageSize= 85;
+	public static int maxPagesPerFile;
+	
+	public DBParams() {
+		// TODO Auto-generated constructor stub
+		
+	}
+	
+
+	public static int getPageSize() {
+		return pageSize;
+	}
+
+	public static void setPageSize(int pageSize) {
+		DBParams.pageSize = pageSize;
+	}
+
+	public static int getMaxPagesPerFile() {
+		return maxPagesPerFile;
+	}
+
+	public static void setMaxPagesPerFile(int maxPagesPerFile) {
+		DBParams.maxPagesPerFile = maxPagesPerFile;
+	}
+
+	public static void setDBPath(String dBPath) {
+		DBPath = dBPath;
+	}
+
+	
+	
+	
+	
+
+	
+	
+	
+}
