@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete element from project &apos;IDE_PROJET_LAVALLEE_TANGUY_CIAVALDINI&apos;&#x0A;- Original project: &apos;IDE_PROJET_LAVALLEE_TANGUY_CIAVALDINI&apos;&#x0A;- Original element: &apos;IDE_PROJET_LAVALLEE_TANGUY_CIAVALDINI/src/bdda&apos;" description="Delete element" element1="/src&lt;bdda" elements="1" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1663243856289" subPackages="false" version="1.0"/>
+</session>
