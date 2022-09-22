@@ -1,0 +1,8 @@
+
+public class DiskManager {
+
+
+	public pageId allocPage() {
+		
+	}
+}

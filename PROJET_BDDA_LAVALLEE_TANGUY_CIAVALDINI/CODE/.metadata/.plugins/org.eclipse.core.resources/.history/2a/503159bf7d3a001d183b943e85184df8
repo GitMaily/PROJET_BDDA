@@ -1,0 +1,8 @@
+
+public class PageId {
+	public int FileIdx; // id du fichier
+	public int PageIdx; // indice de la page (0 ou 1)
+	
+	
+
+}
