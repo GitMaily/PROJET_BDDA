@@ -44,14 +44,8 @@ public class Main {
 	
 
 	public static void main(String[] args) {
-		/*DBParams param = new DBParams();
-		DBParams.DBPath="/users/licence/ik05057/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/db.txt";
-		DBParams.pageSize = 4096;
-		DBParams.maxPagesPerFile = 4;
+		/*DBParams param = new DBParams("/users/licence/ik05057/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/db.txt",4096,4);
 		
-		
-		
-		// TODO Auto-generated method stub
 		System.out.println("le chemin marche ");
 		System.out.println(param.getPageSize());
 	
