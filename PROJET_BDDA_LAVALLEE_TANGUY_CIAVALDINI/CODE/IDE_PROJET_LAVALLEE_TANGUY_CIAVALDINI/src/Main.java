@@ -3,6 +3,8 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class Main {
@@ -50,9 +52,18 @@ public class Main {
 		System.out.println(param.getPageSize());
 	
 	*/
+
+		
 		
 		DiskManager dm = new DiskManager();
-		dm.allocPage();
+	
+		//dm.creerFichierTexte();
+		//dm.lireFichier();
+		//dm.creerFichierTest();
+		//dm.creerFichierBinaire();
+		dm.creerFichier();
+		//dm.allocPage();
+		dm.readPage(null, null);
 	}
 
 }
