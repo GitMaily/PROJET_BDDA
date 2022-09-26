@@ -38,48 +38,7 @@ public class DiskManager {
 		this.page = bb;
 	}
 	
-	/*public void creerFichier3() {
-		// Create the set of options for appending to the file.
-	    Set<OpenOption> options = new HashSet<OpenOption>();
-	    options.add(APPEND);
-	    options.add(CREATE);
-
-	    // Create the custom permissions attribute.
-	    Set<PosixFilePermission> perms =
-	      PosixFilePermissions.fromString("rw-r-----");
-	    FileAttribute<Set<PosixFilePermission>> attr =
-	      PosixFilePermissions.asFileAttribute(perms);
-
-	    // Convert the string to a ByteBuffer.
-	    String s = "Hello World! ";
-	    byte data[] = s.getBytes();
-	    ByteBuffer bb = ByteBuffer.wrap(data);
-	    
-	    Path file = Paths.get("./permissions.log");
-
-	    try (SeekableByteChannel sbc =
-	      Files.newByteChannel(file, options, attr)) {
-	      sbc.write(bb);
-	    } catch (IOException x) {
-	      System.out.println("Exception thrown: " + x);
-	    }
-	  }
-	}*/
 	
-	
-	/*public void creerFichier2() {
-		// Convert the string to a
-	    // byte array.
-	    String s = "Hello World! ";
-	    byte data[] = s.getBytes();
-	    Path p = Paths.get("./logfile.txt");
-
-	    try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(p, CREATE, APPEND))) {
-	      out.write(data, 0, data.length);
-	    } catch (IOException x) {
-	      System.err.println(x);
-	    }
-	}*/
 	
 	
 	
@@ -273,6 +232,8 @@ public class DiskManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 		return pi;
 		
 		
@@ -293,28 +254,16 @@ public class DiskManager {
 			//System.out.println(buff.get(i)); // Print le contenu de buff
 		}
 		
-		/*Iterator<Byte> it = new page.Iterator();
 		
-		
-		for(Byte it : pageId) { // Pour chaque contenu Byte dans pageId
-			page.put();
-		 */
 		}
 		
 	public void writePage(PageId pageId, ByteBuffer buff) {
 
-		try {
-			RandomAccessFile fichier = new RandomAccessFile("F"+pageId.getFileIdx()+".bdda","rw");
-			
+		try (RandomAccessFile fichier = new RandomAccessFile("F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId
 			buff.hasArray();
-			/*for(int i = 0;i<buff.limit();i++) {
-				fichier.seek(fichier.length());
-	            fichier.write(buff.get(pageId.PageIdx));
-			}*/
-			
-			
+			// On se place à la position de la page, donc page*byte-ième position, puis on écrit le contenu du buff dans le fichier
 			for(int i = pageId.PageIdx;i<buff.limit();i++) {
-				fichier.seek(fichier.length());
+				fichier.seek(pageId.getPageIdx()*4096);
 				fichier.write(buff.get(i));
 			}
 			
