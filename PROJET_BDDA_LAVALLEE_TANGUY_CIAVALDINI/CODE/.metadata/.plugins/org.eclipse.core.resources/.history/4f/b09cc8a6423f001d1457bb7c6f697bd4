@@ -40,8 +40,7 @@ public class DiskManager {
 	
 	
 	
-//// TEST 	//// TEST 	//// TEST 	//// TEST
-
+	
 	
 	public void creerFichier() {
 		
@@ -79,7 +78,11 @@ public class DiskManager {
 		}
 
 	}
-
+	
+	
+	
+	
+	//// TEST 	//// TEST 	//// TEST 	//// TEST
 	public void creerFichierBinaire() {
 		PageId pi = new PageId();
 		pi.setFileIdx(++pi.FileIdx);
