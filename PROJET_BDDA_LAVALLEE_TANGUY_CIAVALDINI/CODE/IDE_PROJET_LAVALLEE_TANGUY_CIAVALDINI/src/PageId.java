@@ -1,9 +1,23 @@
 
 public class PageId {
-	public int FileIdx; // id du fichier
+	
+	
+	public  int FileIdx; // id du fichier
 	public int PageIdx; // indice de la page 
 	
+	public PageId(int fileIdx, int pageIdx) {
+		FileIdx = fileIdx;
+		PageIdx = pageIdx;
+	}
 	
+	
+	
+	public PageId() {
+		// TODO Auto-generated constructor stub
+	}
+
+
+
 	public int getFileIdx() {
 		return FileIdx;
 	}

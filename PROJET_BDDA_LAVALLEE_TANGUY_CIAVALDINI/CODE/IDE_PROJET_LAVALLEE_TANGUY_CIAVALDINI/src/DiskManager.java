@@ -30,6 +30,11 @@ public class DiskManager {
 	//private byte [] page2;
 	private ByteBuffer page;
 	
+	private static int fileId;
+	static int countpage ;
+	static ArrayList<PageId[]> listeblanche = new ArrayList<PageId[]>();
+	static ArrayList<PageId[]> listenoire = new ArrayList<PageId[]>();
+
 	public DiskManager() {
 	}
 	// Constructeurs
@@ -45,10 +50,9 @@ public class DiskManager {
 	
 	public void creerFichier() {
 		
-		PageId pi = new PageId();
-		pi.setFileIdx(pi.FileIdx);
+		
 		try {
-			RandomAccessFile fichier = new RandomAccessFile("F"+pi.getFileIdx()+".bdda","rw");
+			RandomAccessFile fichier = new RandomAccessFile("F"+fileId+".bdda","rw");
             //fichier.setLength(DBParams.maxPagesPerFile*DBParams.pageSize);
 
 			fichier.setLength(0);
@@ -77,6 +81,7 @@ public class DiskManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		fileId++;
 
 	}
 
@@ -167,13 +172,15 @@ public class DiskManager {
 	@SuppressWarnings("null")
 	public PageId allocPage() {
 
-		PageId pi = new PageId();
+		
 		//on cherche un fichier qui n'a pas encore atteint sa taille maximale
 		// en l'occurrence, la taille d'un fichier est de 4*4096
 		
 		
+		  PageId pi = new PageId();
+		
 		try {
-			RandomAccessFile fichiers = new RandomAccessFile("F"+pi.getFileIdx()+".bdda","rw"); //"/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw"
+			RandomAccessFile fichiers = new RandomAccessFile("F"+fileId+".bdda","rw"); //"/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw"
 
 			
 			// Si la taille du fichier F est inférieure à sa taille maximale
@@ -201,7 +208,24 @@ public class DiskManager {
 				//System.out.println(page3.capacity());
 
 				//page.add(e);
+	            int id = (int) ((16384-fichiers.length()) / 4096 );
+	            int paid = 0;
+	            switch(id) {
+	            	case 1:  paid= 3;
+	            	break;
+	            	case 2 : paid=2;
+	            	break;
+	            	case 3: paid =1;
+	            	break;
+	            	case 4: paid =0;
+	            }
 	            fichiers.close();
+	            
+	           
+	            pi.FileIdx= fileId;
+	            pi.PageIdx=paid;
+	          
+	            
 				
 			}
 			/*RandomAccessFile pages = new RandomAccessFile("/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw");
@@ -211,6 +235,9 @@ public class DiskManager {
 
 			// Ajouter un nouveau fichier si maxi
 			else {
+				 pi.FileIdx=fileId;
+				 pi.PageIdx=0;
+
 				if(DBParams.maxPagesPerFile == pi.getPageIdx()) { // On vérifie si on a dépassé le nombre de pages max dans le fichier
 			
 					// créer fichier, peut être faire une boucle while?
@@ -230,6 +257,7 @@ public class DiskManager {
 			e.printStackTrace();
 		}
 		
+		countpage++;
 		
 		return pi;
 		
@@ -274,11 +302,40 @@ public class DiskManager {
 	
 	public void Deadalloc (PageId pi) {
 		
+/*
+	public class Delete_File(){
+	
+}
+    public static void main(String[] args)
+    {
+     try{
+
+      File file = new File("c:\\fichier.log");
+
+      if(file.delete()){
+       System.out.println(file.getName() + " est supprimé.");
+      }else{
+       System.out.println("Opération de suppression echouée");
+      }
+                File dossier = new File("c:\\dossier_log");
+
+      if(dossier.delete()){
+       System.out.println(dossier.getName() + " est supprimé.");
+      }else{
+       System.out.println("Opération de suppression echouée");
+      }
+
+     }catch(Exception e){
+      e.printStackTrace();
+     }
+    }
+}*/
+		countpage-- ;
 	}
 
 
 	public int GetCurrentCountAllocPages() {
-		return 0;
+		return countpage;
 		
 	}
 
