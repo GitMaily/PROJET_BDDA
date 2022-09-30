@@ -32,8 +32,8 @@ public class DiskManager {
 	
 	private static int fileId;
 	static int countpage ;
-	static ArrayList<PageId> listeblanche = new ArrayList<PageId>();
-	static ArrayList<PageId> listenoire = new ArrayList<PageId>();
+	static ArrayList<PageId[]> listeblanche = new ArrayList<PageId[]>();
+	static ArrayList<PageId[]> listenoire = new ArrayList<PageId[]>();
 
 	public DiskManager() {
 	}
@@ -226,8 +226,6 @@ public class DiskManager {
 	            pi.PageIdx=paid;
 	          
 	            
-	            listeblanche.add(pi);
-	            
 				
 			}
 			/*RandomAccessFile pages = new RandomAccessFile("/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw");
@@ -303,8 +301,6 @@ public class DiskManager {
 	
 	
 	public void Deadalloc (PageId pi) {
-		
-		
 		
 /*
 	public class Delete_File(){

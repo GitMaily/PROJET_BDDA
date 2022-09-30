@@ -1,8 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PageId {
 	
@@ -36,9 +34,7 @@ public class PageId {
 		PageIdx = pageIdx;
 	}
 	
-	
-	
-	public int calcPageIDlibre(int fileID) throws IOException {
+	public int calcPageID(int fileID) throws IOException {
 		RandomAccessFile fichiers;
 		int paid = 0;
 		try {
@@ -62,25 +58,7 @@ public class PageId {
 		}
         return paid;
 	}
+		
 	
-	@SuppressWarnings("resource")
-	public boolean estalloc(int pageID, int fileID,@SuppressWarnings("rawtypes") HashMap dico)
-	{
-	
-		
-		if(dico.containsKey(fileID)== true) {
-			System.out.println("les pages du fichier "+fileID+" sont déja allouer, passage au prochain fichier");
-			
-			estalloc( pageID, fileID,dico);
-			
-			
-			
-		}
-		
-		
-
-
-		}
-	}
 
 }
