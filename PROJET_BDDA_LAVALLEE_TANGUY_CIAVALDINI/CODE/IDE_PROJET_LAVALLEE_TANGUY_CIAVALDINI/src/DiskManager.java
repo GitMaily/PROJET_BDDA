@@ -1,22 +1,7 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
-import java.io.Writer;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class DiskManager {
 
@@ -25,9 +10,7 @@ public class DiskManager {
 	/* On ne peut utiliser qu'une seule instance
 	 * il faut choisir entre ByteBuffer et byte[]
 	 */
-	 
-	//private List<ByteBuffer>page;
-	//private byte [] page2;
+
 	private ByteBuffer page;
 	
 	private static int fileId;
@@ -45,9 +28,6 @@ public class DiskManager {
 	
 	
 	
-//// TEST 	//// TEST 	//// TEST 	//// TEST
-
-	
 	public void creerFichier() {
 		
 		
@@ -55,8 +35,6 @@ public class DiskManager {
 			RandomAccessFile fichier = new RandomAccessFile("F"+fileId+".bdda","rw");
             //fichier.setLength(DBParams.maxPagesPerFile*DBParams.pageSize);
 
-			fichier.setLength(0);
-            System.out.println(fichier.length());
 
 			ByteBuffer bb = ByteBuffer.allocate(DBParams.pageSize); // alloue 4096 octets
 			
@@ -85,87 +63,6 @@ public class DiskManager {
 
 	}
 
-	public void creerFichierBinaire() {
-		PageId pi = new PageId();
-		pi.setFileIdx(++pi.FileIdx);
-
-
-
-		
-		try {
-			System.out.println(pi.PageIdx);
-			FileOutputStream fout = new FileOutputStream("Ffff"+pi.getFileIdx()+".bdda");
-			ObjectOutputStream oout = new ObjectOutputStream(fout);
-			
-			oout.write(5555);
-			ByteBuffer bb = ByteBuffer.allocate(DBParams.pageSize); // alloue 4096 octets
-
-            bb.put((byte) 4095);
-            
-            //System.out.println(((CharSequence) oout).length());
-			//out.write();
-		} catch (IOException e) {
-			System.out.println(" Erreur E/S ");
-
-			//e.printStackTrace();
-		}
-
-	}
-	
-	public void creerFichierTest() {
-		try {
-			FileOutputStream f = new FileOutputStream ("testtttt.txt");
-			ObjectOutputStream s = new ObjectOutputStream(f);
-			s.write(1);
-			s.flush();
-		}
-		catch (IOException e){
-			System.out.println(" Erreur E/S ");
-			} 
-		
-	}
-	
-	public void creerFichierTexte() {
-		
-		PageId pi = new PageId();
-		
-		
-		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("F"+pi.getFileIdx()+".bdda"), "utf-8"))) { //  "test.txt"
-			System.out.println("Création");
-			writer.write("testt");
-			writer.close();
-			
-		} catch(IOException e) {
-			System.out.println("Erreur");
-			e.printStackTrace();
-		} finally {
-			try {
-				//writer.close();
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public void lireFichier() {
-		
-	    Path path = FileSystems.getDefault().getPath("C:", "\\test.txt.txt");
-
-		Charset charset = Charset.forName("US-ASCII");
-
-		try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
-		    String line = null;
-		    while ((line = reader.readLine()) != null) {
-		        System.out.println(line);
-		    }
-		} catch (IOException x) {
-		    System.err.format("IOException: %s%n", x);
-		}
-		
-	}
-	//// TEST 	//// TEST 	//// TEST 	//// TEST
-	
 	
 	
 	
@@ -198,14 +95,6 @@ public class DiskManager {
 	            
 	            fichiers.write(bb.get(4095));
 	            
-	       
-				//ByteBuffer e = null;
-				//e.allocate(4096);
-				//ByteBuffer.wrap(page2);
-				//System.out.println(e.capacity());
-
-				//page3.allocate(4096);
-				//System.out.println(page3.capacity());
 
 				//page.add(e);
 	            int id = (int) ((16384-fichiers.length()) / 4096 );
@@ -268,35 +157,42 @@ public class DiskManager {
 	}
 	
 	public void readPage(PageId pageId, ByteBuffer buff) {
+		/*fichier.seek(pageId.PageIdx*4096);
+		for(int i = pageId.PageIdx*4096;i<pageId.PageIdx*4096+4096;i++) {
+			buff.put(fichier.readByte());
+		}*/
 		
-
-		for(int i =pageId.PageIdx;i<buff.limit();i++) {
-			buff.putInt(pageId.getPageIdx()); // Place le contenu de PageId dans le buff
-			buff.put(page.get(i)); // ? ça a l'air + logique
-		}
-		
-		// Au cas où on a besoin de test?
-		for(int i =0;i<buff.limit();i++) {
-			buff.get(i);
-			//System.out.println(buff.get(i)); // Print le contenu de buff
-		}
-		
-		
-		}
+		try (RandomAccessFile fichier = new RandomAccessFile("F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId
+			fichier.seek(pageId.PageIdx*4096);
+			fichier.read(buff.array());
+			
+			//Test sur le Main
+			System.out.println(buff.limit());
+			System.out.println("Position 10:"+buff.get(10));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} //"/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw"
+	}
+	
 		
 	public void writePage(PageId pageId, ByteBuffer buff) {
 
 		try (RandomAccessFile fichier = new RandomAccessFile("F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId
-			buff.hasArray();
-			// On se place à la position de la page, donc page*byte-ième position, puis on écrit le contenu du buff dans le fichier
+			/*
 			for(int i = pageId.PageIdx;i<buff.limit();i++) {
 				fichier.seek(pageId.getPageIdx()*4096);
 				fichier.write(buff.get(i));
-			}
+			}*/
 			
+			fichier.seek(pageId.PageIdx*4096); // On se place à la position de la page, donc page*byte-ième position
+			fichier.write(buff.array()); // puis on écrit le contenu du buff dans le fichier
+
+			
+			// Test sur le Main
+			fichier.seek(5);
+			System.out.println(fichier.read());
             
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} //"/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw"
 	}
