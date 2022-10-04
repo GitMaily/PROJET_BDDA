@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DiskManager {
 
@@ -62,8 +64,68 @@ public class DiskManager {
 		fileId++;
 
 	}
+	static Map<Integer, ArrayList<Integer> > dico = new HashMap<Integer, ArrayList<Integer>>(); 
+	static void allocPage2() {
+		 int c =0;
+		 
 
-	
+		// TODO Auto-generated method stub
+		 /*etape 1 , verifie que le dictionnaire est vide 
+			 * si oui alors creer premeir FICHIER et l initialise (la clé) à zéro +
+			 * sinon parcour (for ou while) le dico en cherchant une case de valeur vide
+			 * si ne trouve pas de case vide, alors creer une nouveau FICHIER 
+			 */
+			
+			if (dico.isEmpty()==true){
+				System.out.println("le dico est vide, un premier fichier sera créer");
+				
+				
+				
+				//"/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw"
+				
+				/*ajoute un élémnt dans le dico, en l occurence 0*/
+				dico.computeIfAbsent((dico.size()), k -> new ArrayList<>()).add(0);
+		        System.out.println(dico.toString()); 
+
+				//creerFichier();
+				fileId++;
+				
+			}
+			
+		//	System.out.println(dico.toString());
+			
+			else if (dico.isEmpty()==false) {
+				
+				
+				for (Integer key : dico.keySet()) {
+			        
+			        System.out.println(key + " = " + dico.get(key))	;
+
+			    
+						if((dico.get(key)).size()<4) {
+							dico.computeIfAbsent(key, k -> new ArrayList<>()).add((dico.get(key)).size());
+							System.out.println("Fin du parcour emplacement libre trouver");
+							
+							break;
+						}
+					c++;	
+					System.out.println(c);
+						
+				}
+		        System.out.println(dico.toString())	;
+
+				if(c==dico.size()){
+							dico.computeIfAbsent(dico.size()+1, k -> new ArrayList<>()).add(0);
+							System.out.println("tout les fichier sont complet, creation d'un fichier existant");
+							//creerFichier();
+							fileId++;
+
+			}
+				
+
+				
+			}
+	 }
 	
 	
 	@SuppressWarnings("null")
