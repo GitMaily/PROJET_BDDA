@@ -92,7 +92,6 @@ public class DiskManager {
 
 				//creerFichier();
 				fileId++;
-				countpage++;
 				
 				return pi;
 				
@@ -115,29 +114,21 @@ public class DiskManager {
 							if(dico.get(key).contains(0)==false) {
 								dico.computeIfAbsent(key, k -> new ArrayList<>()).add(0, 0);
 								pi.PageIdx=0;
-								countpage++;
-
 								return pi;
 							}
 							else if(dico.get(key).contains(1)==false) {
 								dico.computeIfAbsent(key, k -> new ArrayList<>()).add(1, 1);
 								pi.PageIdx=1;
-								countpage++;
-
 								return pi;
 							}
 							else if(dico.get(key).contains(2)==false) {
 								dico.computeIfAbsent(key, k -> new ArrayList<>()).add(2,2 );
 								pi.PageIdx=2;
-								countpage++;
-
 								return pi;
 							}
 							else if(dico.get(key).contains(3)==false) {
 								dico.computeIfAbsent(key, k -> new ArrayList<>()).add(3, 3);
 								pi.PageIdx=3;
-								countpage++;
-
 								return pi;
 							}
 							
@@ -160,8 +151,6 @@ public class DiskManager {
 						fileId++;
 						pi.FileIdx=dico.size();
 						pi.PageIdx=0;
-						countpage++;
-
 				}
 				
 
@@ -308,7 +297,6 @@ public class DiskManager {
 		
 		System.out.println("apres dealloc");
 		System.out.println(dico.toString());
-		countpage--;
 	}
 		
 		
@@ -340,7 +328,8 @@ public class DiskManager {
      }
     }
 }*/
-	
+		countpage-- ;
+	}
 
 
 	public int GetCurrentCountAllocPages() {

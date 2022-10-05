@@ -64,13 +64,10 @@ public class DiskManager {
 		fileId++;
 
 	}
-	
-	
 	static Map<Integer, ArrayList<Integer> > dico = new HashMap<Integer, ArrayList<Integer>>(); 
-	static PageId allocPage2() {
+	static void allocPage2() {
 		 int c =0;
 		 
-		  PageId pi = new PageId();
 
 		// TODO Auto-generated method stub
 		 /*etape 1 , verifie que le dictionnaire est vide 
@@ -81,20 +78,17 @@ public class DiskManager {
 			
 			if (dico.isEmpty()==true){
 				System.out.println("le dico est vide, un premier fichier sera créer");
-
+				
+				
+				
 				//"/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw"
 				
 				/*ajoute un élémnt dans le dico, en l occurence 0*/
 				dico.computeIfAbsent((dico.size()), k -> new ArrayList<>()).add(0);
-				
-				pi.FileIdx=0;
-				pi.PageIdx=0;
+		        System.out.println(dico.toString()); 
 
 				//creerFichier();
 				fileId++;
-				countpage++;
-				
-				return pi;
 				
 			}
 			
@@ -102,73 +96,37 @@ public class DiskManager {
 			
 			else if (dico.isEmpty()==false) {
 				
+				
 				for (Integer key : dico.keySet()) {
 			        
 			        System.out.println(key + " = " + dico.get(key))	;
 
 			    
 						if((dico.get(key)).size()<4) {
-						//	dico.get(key).containsAll(null);
-							
-							pi.FileIdx =key;
-							
-							if(dico.get(key).contains(0)==false) {
-								dico.computeIfAbsent(key, k -> new ArrayList<>()).add(0, 0);
-								pi.PageIdx=0;
-								countpage++;
-
-								return pi;
-							}
-							else if(dico.get(key).contains(1)==false) {
-								dico.computeIfAbsent(key, k -> new ArrayList<>()).add(1, 1);
-								pi.PageIdx=1;
-								countpage++;
-
-								return pi;
-							}
-							else if(dico.get(key).contains(2)==false) {
-								dico.computeIfAbsent(key, k -> new ArrayList<>()).add(2,2 );
-								pi.PageIdx=2;
-								countpage++;
-
-								return pi;
-							}
-							else if(dico.get(key).contains(3)==false) {
-								dico.computeIfAbsent(key, k -> new ArrayList<>()).add(3, 3);
-								pi.PageIdx=3;
-								countpage++;
-
-								return pi;
-							}
-							
-							
-							/*dico.computeIfAbsent(key, k -> new ArrayList<>()).add((dico.get(key)).size());*/
+							dico.computeIfAbsent(key, k -> new ArrayList<>()).add((dico.get(key)).size());
 							System.out.println("Fin du parcour emplacement libre trouver");
-
 							
 							break;
 						}
 					c++;	
-					 	
+					System.out.println(c);
+						
 				}
 		        System.out.println(dico.toString())	;
 
 				if(c==dico.size()){
-						dico.computeIfAbsent(dico.size(), k -> new ArrayList<>()).add(0);
-						System.out.println("tout les fichier sont complet, creation d'un fichier existant");
+							dico.computeIfAbsent(dico.size()+1, k -> new ArrayList<>()).add(0);
+							System.out.println("tout les fichier sont complet, creation d'un fichier existant");
 							//creerFichier();
-						fileId++;
-						pi.FileIdx=dico.size();
-						pi.PageIdx=0;
-						countpage++;
+							fileId++;
 
-				}
+			}
 				
 
 				
 			}
 	 }
-
+	
 	
 	@SuppressWarnings("null")
 	public PageId allocPage() {
@@ -308,7 +266,6 @@ public class DiskManager {
 		
 		System.out.println("apres dealloc");
 		System.out.println(dico.toString());
-		countpage--;
 	}
 		
 		
@@ -340,7 +297,8 @@ public class DiskManager {
      }
     }
 }*/
-	
+		countpage-- ;
+	}
 
 
 	public int GetCurrentCountAllocPages() {

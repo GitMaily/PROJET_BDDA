@@ -308,7 +308,6 @@ public class DiskManager {
 		
 		System.out.println("apres dealloc");
 		System.out.println(dico.toString());
-		countpage--;
 	}
 		
 		
@@ -340,7 +339,8 @@ public class DiskManager {
      }
     }
 }*/
-	
+		countpage-- ;
+	}
 
 
 	public int GetCurrentCountAllocPages() {
