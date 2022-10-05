@@ -167,6 +167,7 @@ public class DiskManager {
 
 				
 			}
+			return pi;
 	 }
 
 	
@@ -260,6 +261,12 @@ public class DiskManager {
 		
 	}
 	
+	/**
+	 * Remplie l’argument buff avec le contenu disque de la page identifiée par l’argument pageId.
+	 * @param pageId la position du fichier
+	 * @param buff le ByteBuffer (externe) à remplir
+	 */
+	
 	public void readPage(PageId pageId, ByteBuffer buff) {
 		/*fichier.seek(pageId.PageIdx*4096);
 		for(int i = pageId.PageIdx*4096;i<pageId.PageIdx*4096+4096;i++) {
@@ -278,7 +285,12 @@ public class DiskManager {
 		} //"/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw"
 	}
 	
-		
+	
+	/**
+	 *  Ecrit le contenu de l’argument buff dans le fichier et à la position indiqués par l’argument pageId. 
+	 *  @param pageId position du fichier
+	 *  @param buff le contenu du ByteBuffer à écrire dans un fichier
+	 */
 	public void writePage(PageId pageId, ByteBuffer buff) {
 
 		try (RandomAccessFile fichier = new RandomAccessFile("F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId

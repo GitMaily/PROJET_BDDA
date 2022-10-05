@@ -11,19 +11,24 @@ public class DiskManagerTests {
 		//TestEcriturePage(0);
 		//TestLecturePage(0);
 		
-		//TestCreerFichier();
+		TestCreerFichier();
+
 		TestAllocPage();
 		TestCountAllocPage();
 	}
 	
 	
 	public static void TestAllocPage() {
-		disk.allocPage();
-		
+		DiskManager.allocPage2();
+		DiskManager.allocPage2();
+		DiskManager.allocPage2();
+		DiskManager.allocPage2();
+
 	}
 	
 	public static void TestCreerFichier() {
 		disk.creerFichier();
+	
 		disk.creerFichier();
 		disk.creerFichier();
 
@@ -32,9 +37,9 @@ public class DiskManagerTests {
 	}
 	
 	public static void TestCountAllocPage() {
-		disk.allocPage();
-		disk.allocPage();
 		
+	
+
 		System.out.println("Current allocated pages: "+disk.GetCurrentCountAllocPages());
 	}
 	

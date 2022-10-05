@@ -4,6 +4,8 @@ public class DBParams {
 	public static int pageSize = 4096;
 	public static int maxPagesPerFile = 4;
 	
+	public static int frameCount = 2;
+	
 	public DBParams(String DBPath, int pageSize, int maxPagesPerFile) {
 		DBParams.DBPath= DBPath;
 		DBParams.pageSize = pageSize;
