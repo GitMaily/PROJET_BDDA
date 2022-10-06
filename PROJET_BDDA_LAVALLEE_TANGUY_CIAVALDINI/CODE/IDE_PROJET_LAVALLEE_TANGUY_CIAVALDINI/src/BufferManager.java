@@ -63,7 +63,29 @@ public class BufferManager {
 	 * Actualiser le flag dirty de la page
 	 * (et aussi potentiellement actualiser des informations concernant la politique de remplacement).
 	 */
-		
+	public void FreePage(PageId pageId, boolean valdirty) {
+		for(int i=0; i<ListFrames.size();i++) {
+			if(ListFrames.get(i).getPageId()!=null) {
+				if(ListFrames.get(i).equals(pageId)) {
+					if(ListFrames.get(i).getPin_count()==0) {
+						System.out.println("pin count à 0");
+					return;
+					}
+					else {
+						Frame temps = ListFrames.get(i);
+						temps.setPin_count(temps.getPin_count()-1);
+						temps.setDirty(valdirty);
+						ListFrames.remove(temps);
+						ListFrames.add(temps);
+						return;
+					}
+				}
+				
+			}
+		}
+		System.out.println("page non trouvé dans buffer manager");
+		return;
+	}
 	
 	/* écriture de toutes les pages dont le flag dirty = 1 sur disque
 	 * remise à 0 de tous les flags/informations et contenus des buffers (buffer pool « vide »)
