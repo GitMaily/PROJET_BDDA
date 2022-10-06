@@ -158,7 +158,7 @@ public class DiskManager {
 						System.out.println("tout les fichier sont complet, creation d'un fichier existant");
 							//creerFichier();
 						fileId++;
-						pi.FileIdx=dico.size();
+						pi.FileIdx=dico.size()-1;
 						pi.PageIdx=0;
 						countpage++;
 
