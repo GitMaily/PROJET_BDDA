@@ -38,49 +38,5 @@ public class PageId {
 	
 	
 	
-	public int calcPageIDlibre(int fileID) throws IOException {
-		RandomAccessFile fichiers;
-		int paid = 0;
-		try {
-			fichiers = new RandomAccessFile("F"+fileID+".bdda","rw");
-			int id = (int) ((16384-fichiers.length()) / 4096 );
-			
-			switch(id) {
-				case 1:  paid= 3;
-				break;
-				case 2 : paid=2;
-				break;
-				case 3: paid =1;
-				break;
-				case 4: paid =0;
-			}
-		}
-			
-		 catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        return paid;
-	}
 	
-	@SuppressWarnings("resource")
-	public boolean estalloc(int pageID, int fileID,@SuppressWarnings("rawtypes") HashMap dico)
-	{
-	
-		
-		if(dico.containsKey(fileID)== true) {
-			System.out.println("les pages du fichier "+fileID+" sont déja allouer, passage au prochain fichier");
-			
-			estalloc( pageID, fileID,dico);
-			
-			
-			
-		}
-		
-		
-
-
-		}
-	}
-
 }
