@@ -6,16 +6,31 @@ public class BufferManager {
 	
 	// Ne comporte qu'une seule et unique instance
 	
-	private PageId pageId;
+	public PageId pageId;
 	private int pin_count;
 	private boolean isDirty;
 	
 	private Frame frame;
-	private List<Frame> frames; // buffer pool
 	
-	public BufferManager() {
-		frames = new ArrayList<Frame>();
+	private List<Frame> ListFrames; // buffer pool
+	
+	private static final BufferManager INSTANCE = new BufferManager();
+	
+	public static BufferManager getInstance() {
+		return INSTANCE;
 	}
+	
+	private BufferManager()
+	{
+		ListFrames = new ArrayList<Frame>();
+		for (int i=0; i<DBParams.frameCount;i++) {
+			ListFrames.add(new Frame());
+		}
+	}
+	
+	
+	
+	
 	
 	
 	/*
@@ -37,7 +52,7 @@ public class BufferManager {
 		// Choisir quelle est la bonne frame à récupérer
 		dm.readPage(pageId,frame.getFrame());
 
-		dm.readPage(pageId, frames.get(pageId.getPageIdx()).getFrame());
+		dm.readPage(pageId, ListFrames.get(pageId.getPageIdx()).getFrame());
 		
 		return frame.getFrame();
 		
@@ -48,15 +63,24 @@ public class BufferManager {
 	 * Actualiser le flag dirty de la page
 	 * (et aussi potentiellement actualiser des informations concernant la politique de remplacement).
 	 */
-	public void FreePage(PageId pageId, boolean valdirty) {
 		
-	}
 	
 	/* écriture de toutes les pages dont le flag dirty = 1 sur disque
 	 * remise à 0 de tous les flags/informations et contenus des buffers (buffer pool « vide »)
 	 */
 	public void FlushAll() {
+		for (int i=0; i<ListFrames.size();i++) {
+			if(ListFrames.get(i).isDirty()==true) {
+				DiskManager.writePage(ListFrames.get(i).getPageId(), ListFrames.get(i).getFrame());
+			}
+		}
+		ListFrames.clear();
+		for(int i=0; i<DBParams.frameCount;i++) {
+			ListFrames.add(new Frame());
+		}
 		
 	}
+	
+	
 
 }
