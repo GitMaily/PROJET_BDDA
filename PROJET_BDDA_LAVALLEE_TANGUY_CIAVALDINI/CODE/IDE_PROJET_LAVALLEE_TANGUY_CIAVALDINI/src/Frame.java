@@ -16,14 +16,19 @@ public class Frame {
 	
 	
 	public Frame() {
-		
+
 	}
 	
 	public Frame(PageId pageId) {
-		this.setPin_count(1);
-		this.setDirty(false);
+		this.pin_count =1;
+		this.isDirty=false;
 		this.pageId = pageId;
+		frame = ByteBuffer.allocate(DBParams.pageSize);
+		DiskManager.readPage(pageId, frame);
 	}
+	
+	
+	
 	
 	
 	public Frame(ByteBuffer frame, PageId pageId) {

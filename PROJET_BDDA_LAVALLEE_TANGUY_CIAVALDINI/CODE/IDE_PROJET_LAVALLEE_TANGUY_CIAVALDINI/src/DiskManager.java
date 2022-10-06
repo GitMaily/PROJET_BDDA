@@ -67,7 +67,7 @@ public class DiskManager {
 	
 	
 	static Map<Integer, ArrayList<Integer> > dico = new HashMap<Integer, ArrayList<Integer>>(); 
-	static PageId allocPage2() {
+	static PageId allocPage() {
 		 int c =0;
 		 
 		  PageId pi = new PageId();
@@ -171,103 +171,13 @@ public class DiskManager {
 	 }
 
 	
-	@SuppressWarnings("null")
-	public PageId allocPage() {
-
-		
-		//on cherche un fichier qui n'a pas encore atteint sa taille maximale
-		// en l'occurrence, la taille d'un fichier est de 4*4096
-		
-		
-		  PageId pi = new PageId();
-		
-		try {
-			RandomAccessFile fichiers = new RandomAccessFile("F"+fileId+".bdda","rw"); //"/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw"
-
-			
-			// Si la taille du fichier F est inférieure à sa taille maximale
-			if(fichiers.length() < (DBParams.maxPagesPerFile*DBParams.pageSize)) {
-				// On créé une page
-				ByteBuffer bb = ByteBuffer.allocate(DBParams.pageSize); // alloue 4096 octets
-				
-				bb.put(4095, (byte) 32);
-				
-				System.out.println(bb.limit());
-	            
-	            System.out.println(bb.get(4095));
-	            
-	            fichiers.seek(fichiers.length());
-	            
-	            fichiers.write(bb.get(4095));
-	            
-
-				//page.add(e);
-	            int id = (int) ((16384-fichiers.length()) / 4096 );
-	            int paid = 0;
-	            switch(id) {
-	            	case 1:  paid= 3;
-	            	break;
-	            	case 2 : paid=2;
-	            	break;
-	            	case 3: paid =1;
-	            	break;
-	            	case 4: paid =0;
-	            }
-	            fichiers.close();
-	            
-	           
-	            pi.FileIdx= fileId;
-	            pi.PageIdx=paid;
-	          
-	            
-	            listeblanche.add(pi);
-	            
-				
-			}
-			/*RandomAccessFile pages = new RandomAccessFile("/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw");
-			pages.setLength(4096);
-	        pages.writeUTF("Hello World");
-			System.out.println(pages.length());*/
-
-			// Ajouter un nouveau fichier si maxi
-			else {
-				 pi.FileIdx=fileId;
-				 pi.PageIdx=0;
-
-				if(DBParams.maxPagesPerFile == pi.getPageIdx()) { // On vérifie si on a dépassé le nombre de pages max dans le fichier
-			
-					// créer fichier, peut être faire une boucle while?
-					pi.setFileIdx(++pi.FileIdx); // On incrémente l'Id du fichier
-	
-					creerFichier();
-					
-				
-					//RandomAccessFile rf = new RandomAccessFile("/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test2.txt","rw");
-					
-					//System.out.println(pages.length());
-				}
-			}
-		
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		countpage++;
-		
-		return pi;
-		
-		
-		
-	}
-	
 	/**
 	 * Remplie l’argument buff avec le contenu disque de la page identifiée par l’argument pageId.
 	 * @param pageId la position du fichier
 	 * @param buff le ByteBuffer (externe) à remplir
 	 */
 	
-	public void readPage(PageId pageId, ByteBuffer buff) {
+	public static void readPage(PageId pageId, ByteBuffer buff) {
 		/*fichier.seek(pageId.PageIdx*4096);
 		for(int i = pageId.PageIdx*4096;i<pageId.PageIdx*4096+4096;i++) {
 			buff.put(fichier.readByte());
@@ -291,7 +201,7 @@ public class DiskManager {
 	 *  @param pageId position du fichier
 	 *  @param buff le contenu du ByteBuffer à écrire dans un fichier
 	 */
-	public void writePage(PageId pageId, ByteBuffer buff) {
+	public static void writePage(PageId pageId, ByteBuffer buff) {
 
 		try (RandomAccessFile fichier = new RandomAccessFile("F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId
 			/*
