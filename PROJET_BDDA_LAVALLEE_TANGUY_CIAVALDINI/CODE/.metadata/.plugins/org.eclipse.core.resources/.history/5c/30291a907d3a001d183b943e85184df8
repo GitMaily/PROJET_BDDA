@@ -1,8 +1,0 @@
-
-public class DiskManager {
-
-
-	public PageId allocPage() {
-		System.out.println("On va procéder à la création d'une pageId");
-	}
-}

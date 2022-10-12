@@ -1,4 +1,0 @@
-INDEX VERSION 1.131+/users/licence/ik05057/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/CODE/.metadata/.plugins/org.eclipse.jdt.core
-931231134.index
-1865797976.index
-3549474242.index
