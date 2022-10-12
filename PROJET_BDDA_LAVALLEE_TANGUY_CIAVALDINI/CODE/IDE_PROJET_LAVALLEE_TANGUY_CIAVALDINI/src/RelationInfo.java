@@ -1,12 +1,12 @@
 
 public class RelationInfo {
 	
-	private String nom;
-	private int nb_col;
-	private String[] nom_col;
-	private String[] type_col;
+	private String nom; //nom de la relation
+	private int nb_col; // le nombre de colonnes
+	private String[] nom_col; // le nom des colonnes
+	private String[] type_col; // le types des colonnes
 	
-	
+	// le constructeur de la relationInfo
 	public RelationInfo(String nom, int nb_col, String[] nom_col, String[] type_col) {
 		this.nom=nom;
 		this.nb_col=nb_col;

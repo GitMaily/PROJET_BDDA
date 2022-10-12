@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Catalog {
 		
-	private ArrayList<RelationInfo> listRI;
-	private int compteurRelation;
+	private ArrayList<RelationInfo> listRI; // liste de relation
+	private int compteurRelation; // un compteur de relation
 	
 	
 	public void Finish() {
@@ -13,13 +13,14 @@ public class Catalog {
 		
 	}
 	
-	
-	public void AddRelation(RelationInfo RI) {
+	//pour ajouter une relation a la liste des relations
+	public void AddRelationInfo (RelationInfo RI) {
 		listRI.add(RI);
 	}
 	
-	
-	public RelationInfo GetRelationInfo(String nomRI) {
+	/*On rentre un nom et ça nous renvoie la relation 
+	assiocié dans la liste des relations sinon renvoie null*/
+	public RelationInfo GetRelationInfo (String nomRI) {
 		int indice = -1;
 		for (int i =0; i<listRI.size(); i++) {
 			if(nomRI == listRI.get(i).getNom()) {
