@@ -12,19 +12,33 @@ public class Frame {
 	private PageId pageId;
 	private int pin_count;
 	private boolean isDirty;
+	private int timestamp;
 	
 	
 	
-	public Frame() {
+	public int getTimestamp() {
+		return timestamp;
+	}
 
+	public void setTimestamp(int timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public Frame() {
+		this.pin_count = 0;
+		this.isDirty = false;
+		this.pageId = null;
+		frame = null;
+		this.timestamp = 0;
 	}
 	
 	public Frame(PageId pageId) {
-		this.pin_count =1;
+		this.pin_count = 0;
 		this.isDirty=false;
 		this.pageId = pageId;
 		frame = ByteBuffer.allocate(DBParams.pageSize);
-		DiskManager.readPage(pageId, frame);
+		this.timestamp = 0;
+		//DiskManager.readPage(pageId, frame);
 	}
 	
 	
