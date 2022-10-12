@@ -1,0 +1,8 @@
+
+public class PageId {
+	private int FileIdx;
+	private boolean PageIdx;
+	
+	
+
+}

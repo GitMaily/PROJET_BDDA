@@ -1,0 +1,15 @@
+import java.util.ArrayList;
+
+public class Catalog {
+		
+	private ArrayList<RelationInfo> listRI;
+	
+
+	public ArrayList<RelationInfo> getListRI() {
+		return listRI;
+	}
+
+	public void setListRI(ArrayList<RelationInfo> listRI) {
+		this.listRI = listRI;
+	}
+}

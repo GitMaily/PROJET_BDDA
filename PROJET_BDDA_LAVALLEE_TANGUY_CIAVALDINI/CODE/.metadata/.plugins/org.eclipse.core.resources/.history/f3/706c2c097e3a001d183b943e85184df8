@@ -1,0 +1,13 @@
+
+public class DiskManager {
+
+
+	public PageId allocPage() {
+		PageId pi = new PageId();
+		if(DBParams.maxPagesPerFile < pi) {
+			
+		}
+		System.out.println("On va procéder à la création d'une pageId");
+		return null;
+	}
+}

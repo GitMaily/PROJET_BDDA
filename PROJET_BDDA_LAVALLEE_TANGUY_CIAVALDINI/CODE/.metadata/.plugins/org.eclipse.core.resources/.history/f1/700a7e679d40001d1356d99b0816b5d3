@@ -1,0 +1,52 @@
+import java.io.RandomAccessFile;
+
+public class PageId {
+	
+	
+	public  int FileIdx; // id du fichier
+	public int PageIdx; // indice de la page 
+	
+	public PageId(int fileIdx, int pageIdx) {
+		FileIdx = fileIdx;
+		PageIdx = pageIdx;
+	}
+	
+	
+	
+	public PageId() {
+		// TODO Auto-generated constructor stub
+	}
+
+
+
+	public int getFileIdx() {
+		return FileIdx;
+	}
+	public void setFileIdx(int fileIdx) {
+		FileIdx = fileIdx;
+	}
+	public int getPageIdx() {
+		return PageIdx;
+	}
+	public void setPageIdx(int pageIdx) {
+		PageIdx = pageIdx;
+	}
+	
+	public int calcPageID(int fileID) {
+		RandomAccessFile fichiers = new RandomAccessFile("F"+fileId+".bdda","rw");
+		int id = (int) ((16384-fichiers.length()) / 4096 );
+        int paid = 0;
+        switch(id) {
+        	case 1:  paid= 3;
+        	break;
+        	case 2 : paid=2;
+        	break;
+        	case 3: paid =1;
+        	break;
+        	case 4: paid =0;
+        }
+        return paid;
+		
+	}
+
+}
