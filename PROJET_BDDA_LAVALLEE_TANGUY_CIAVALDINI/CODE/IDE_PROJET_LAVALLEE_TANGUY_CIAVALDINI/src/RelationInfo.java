@@ -45,8 +45,8 @@ public class RelationInfo {
 	}
 
 
-	public String[] getType_col() {
-		return type_col;
+	public String getType_col(int indice) {
+		return type_col[indice];
 	}
 
 

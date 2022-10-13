@@ -6,7 +6,9 @@ public class Record {
 	
 	public Record(RelationInfo relInfo) {
 		this.relInfo=relInfo;
+		
 	}
+	
 	
 	public RelationInfo getRelInfo() {
 		return relInfo;
@@ -20,4 +22,11 @@ public class Record {
 	public void setValues(String[] values) {
 		this.values = values;
 	}
+	
+	
+	
+	
 }
+
+
+
