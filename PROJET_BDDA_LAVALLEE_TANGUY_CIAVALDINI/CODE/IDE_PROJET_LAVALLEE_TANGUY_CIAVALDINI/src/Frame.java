@@ -7,7 +7,7 @@ public class Frame {
 	 * Un ensemble de frames = un "buffer pool"
 	 */
 	
-	private ByteBuffer frame;
+	private ByteBuffer buffer;
 	
 	private PageId pageId;
 	private int pin_count;
@@ -28,17 +28,18 @@ public class Frame {
 		this.pin_count = 0;
 		this.isDirty = false;
 		this.pageId = null;
-		frame = null;
 		this.timestamp = 0;
+		buffer = ByteBuffer.allocate(DBParams.pageSize);
+
 	}
 	
 	public Frame(PageId pageId) {
 		this.pin_count = 0;
 		this.isDirty=false;
 		this.pageId = pageId;
-		frame = ByteBuffer.allocate(DBParams.pageSize);
+		//DiskManager.readPage(pageId, buffer);
+		//buffer = ByteBuffer.allocate(DBParams.pageSize);
 		this.timestamp = 0;
-		//DiskManager.readPage(pageId, frame);
 	}
 	
 	
@@ -46,9 +47,12 @@ public class Frame {
 	
 	
 	public Frame(ByteBuffer frame, PageId pageId) {
-		this.frame = frame;
+		this.buffer = frame;
+		this.isDirty=false;
+
 		this.pageId = pageId;
-		
+		this.timestamp = 0;
+
 	}
 
 	public PageId getPageId() {
@@ -59,12 +63,13 @@ public class Frame {
 		this.pageId = pageId;
 	}
 
-	public ByteBuffer getFrame() {
-		return frame;
+	public ByteBuffer getBuffer() {
+        //DiskManager.readPage(pageId, buffer);
+		return buffer;
 	}
 
-	public void setFrame(ByteBuffer frame) {
-		this.frame = frame;
+	public void setBuffer(ByteBuffer buffer) {
+		this.buffer = buffer;
 	}
 
 	public int getPin_count() {

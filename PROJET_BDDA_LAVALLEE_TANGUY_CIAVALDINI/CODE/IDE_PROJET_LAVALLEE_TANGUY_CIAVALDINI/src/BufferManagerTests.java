@@ -1,3 +1,4 @@
+import java.nio.ByteBuffer;
 
 public class BufferManagerTests {
 	
@@ -20,18 +21,21 @@ public class BufferManagerTests {
 	
 	public static void TestGetPage() {
 		
+		//ByteBuffer bb = ByteBuffer.allocate(DBParams.pageSize); // alloue 4096 octets
+		
+		
 		buff.GetPage(p1);
 		//buff.FlushAll();
 		buff.GetPage(p2);
-		buff.FreePage(p1, true);
-		buff.FreePage(p1, true);
-		
+	
 		buff.FreePage(p2, true);
 		buff.FreePage(p2, true);
 
+		
 		buff.GetPage(p3);
 		buff.GetPage(p1);
 	
+		buff.FlushAll();
 		
 	}
 	

@@ -20,6 +20,17 @@ public class DiskManager {
 	static ArrayList<PageId> listeblanche = new ArrayList<PageId>();
 	static ArrayList<PageId> listenoire = new ArrayList<PageId>();
 
+	
+	private static DiskManager INSTANCE = new DiskManager();
+	
+	public static DiskManager getInstance() {
+		if (INSTANCE == null) {
+            INSTANCE = new DiskManager();
+        }
+		return INSTANCE;	
+	}
+	
+	
 	public DiskManager() {
 	}
 	// Constructeurs
@@ -188,8 +199,8 @@ public class DiskManager {
 			fichier.read(buff.array());
 			
 			//Test sur le Main
-			System.out.println(buff.limit());
-			System.out.println("Position 10:"+buff.get(10));
+			//System.out.println(buff.limit());
+			//System.out.println("Position 10:"+buff.get(10));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} //"/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw"
@@ -216,7 +227,7 @@ public class DiskManager {
 			
 			// Test sur le Main
 			fichier.seek(5);
-			System.out.println(fichier.read());
+			//System.out.println(fichier.read());
             
 		} catch (IOException e) {
 			e.printStackTrace();
