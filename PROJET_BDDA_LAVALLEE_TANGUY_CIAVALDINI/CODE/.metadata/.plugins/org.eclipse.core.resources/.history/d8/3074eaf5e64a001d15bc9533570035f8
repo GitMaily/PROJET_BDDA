@@ -1,0 +1,12 @@
+
+public class Record {
+
+	private RelationInfo relInfo; // Relation à laquelle appartient le record
+	private String[] values;
+	public RelationInfo getRelInfo() {
+		return relInfo;
+	}
+	public void setRelInfo(RelationInfo relInfo) {
+		this.relInfo = relInfo;
+	}
+}

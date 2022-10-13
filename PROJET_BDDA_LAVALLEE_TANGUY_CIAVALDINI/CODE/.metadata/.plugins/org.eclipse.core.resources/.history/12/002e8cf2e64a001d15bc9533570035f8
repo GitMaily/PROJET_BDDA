@@ -1,0 +1,6 @@
+
+public class Record {
+
+	private RelationInfo relInfo; // Relation à laquelle appartient le record
+	private String[] values;
+}
