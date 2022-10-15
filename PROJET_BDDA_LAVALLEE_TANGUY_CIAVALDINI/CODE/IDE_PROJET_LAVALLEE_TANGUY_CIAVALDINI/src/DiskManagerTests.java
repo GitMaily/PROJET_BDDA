@@ -4,7 +4,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
 public class DiskManagerTests {
-	static DiskManager disk = new DiskManager();
+	static DiskManager dm = DiskManager.getInstance();
 
 	public static void main(String[] args) {
 
@@ -19,18 +19,18 @@ public class DiskManagerTests {
 	
 	
 	public static void TestAllocPage() {
-		DiskManager.allocPage2();
-		DiskManager.allocPage2();
-		DiskManager.allocPage2();
-		DiskManager.allocPage2();
+		dm.allocPage();
+		dm.allocPage();
+		dm.allocPage();
+		dm.allocPage();
 
 	}
 	
 	public static void TestCreerFichier() {
-		disk.creerFichier();
+		dm.creerFichier();
 	
-		disk.creerFichier();
-		disk.creerFichier();
+		dm.creerFichier();
+		dm.creerFichier();
 
 		
 		
@@ -40,7 +40,7 @@ public class DiskManagerTests {
 		
 	
 
-		System.out.println("Current allocated pages: "+disk.GetCurrentCountAllocPages());
+		System.out.println("Current allocated pages: "+dm.GetCurrentCountAllocPages());
 	}
 	
 	
@@ -54,8 +54,8 @@ public class DiskManagerTests {
 		
 		System.out.println("Test:"+buff.get(5));
 		
-		DiskManager disk = new DiskManager();
-		disk.writePage(id, buff);
+		DiskManager dm = DiskManager.getInstance();
+		dm.writePage(id, buff);
 
 		
 	}

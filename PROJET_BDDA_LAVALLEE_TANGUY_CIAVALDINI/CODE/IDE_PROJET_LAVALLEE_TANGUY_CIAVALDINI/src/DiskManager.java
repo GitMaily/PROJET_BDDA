@@ -78,7 +78,7 @@ public class DiskManager {
 	
 	
 	static Map<Integer, ArrayList<Integer> > dico = new HashMap<Integer, ArrayList<Integer>>(); 
-	static PageId allocPage() {
+	public PageId allocPage() {
 		 int c =0;
 		 
 		  PageId pi = new PageId();
@@ -188,7 +188,7 @@ public class DiskManager {
 	 * @param buff le ByteBuffer (externe) à remplir
 	 */
 	
-	public static void readPage(PageId pageId, ByteBuffer buff) {
+	public void readPage(PageId pageId, ByteBuffer buff) {
 		/*fichier.seek(pageId.PageIdx*4096);
 		for(int i = pageId.PageIdx*4096;i<pageId.PageIdx*4096+4096;i++) {
 			buff.put(fichier.readByte());
@@ -197,7 +197,8 @@ public class DiskManager {
 		try (RandomAccessFile fichier = new RandomAccessFile("F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId
 			fichier.seek(pageId.PageIdx*4096);
 			fichier.read(buff.array());
-			
+            fichier.close();
+
 			//Test sur le Main
 			//System.out.println(buff.limit());
 			//System.out.println("Position 10:"+buff.get(10));
@@ -212,7 +213,7 @@ public class DiskManager {
 	 *  @param pageId position du fichier
 	 *  @param buff le contenu du ByteBuffer à écrire dans un fichier
 	 */
-	public static void writePage(PageId pageId, ByteBuffer buff) {
+	public void writePage(PageId pageId, ByteBuffer buff) {
 
 		try (RandomAccessFile fichier = new RandomAccessFile("F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId
 			/*
@@ -226,9 +227,9 @@ public class DiskManager {
 
 			
 			// Test sur le Main
-			fichier.seek(5);
+			//fichier.seek(5);
 			//System.out.println(fichier.read());
-            
+            fichier.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} //"/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw"

@@ -23,17 +23,23 @@ public class BufferManager {
 		return INSTANCE;	
 	}
 	
-	BufferManager()
+	public BufferManager()
 	{
 		
 		this.dm = DiskManager.getInstance();
 		init();
 		
-		
-		
-		
 	}
 	
+	public List<Frame> getListFrames() {
+		return ListFrames;
+	}
+
+	/**
+	 * 
+	 * Initialise le buffer pool.
+	 * Alloue dans chaque frame un buffer de taille DBParam.pageSize.
+	 */
 	private void init() {
 		ListFrames = new ArrayList<Frame>(DBParams.frameCount);
 		for (int i=0; i<DBParams.frameCount;i++) {
@@ -45,24 +51,21 @@ public class BufferManager {
 	
 	
 	
-	/*
-	 * Répondre à une demande de page venant des couches plus hautes, et donc
-	 * retourner un des buffers associés à une frame. 
-	 * 
-	 * S’occuper du remplacement du contenu d’une frame si besoin (LRU)
-	 * 
-	 * 
+	/**
+	 * Répond à une demande de page venant des couches plus hautes.
+	 * S’occupe du remplacement du contenu d’une frame si besoin (application du LRU).
+
+	 * @param pageId La page du ByteBuffer demandé
+	 * @return Le ByteBuffer associé à la page entrée en argument.
+
 	 */
 	public ByteBuffer GetPage(PageId pageId) {
 		numero_tache++;
 
 		
-		System.out.println("Size de ListFrames: "+ListFrames.size());
 		
 		// Vérifie si on veut accéder à une page déjà existante!
-		int i = 0;
 		for(Frame frame : ListFrames) {
-			i++;
 			if(frame.getPageId() == pageId) {
 				frame.setPin_count(frame.getPin_count()+1);
 				//ListFrames.get(i-1).setPin_count(frame.getPin_count()+1);
@@ -73,49 +76,18 @@ public class BufferManager {
 		
 
 		// Vérifie si une case est libre ! Place la page dans cette case si c'est le cas
-		int j = 0;
 		for(Frame frame : ListFrames) {
-			j++;
 
 			if(frame.getPageId( )== null) {
 				
-
 				frame.setPageId(pageId);
 				frame.setPin_count(1);
 				frame.setDirty(false);
-				DiskManager.readPage(pageId, frame.getBuffer());
-				//DiskManager.readPage(pageId, frame.getBuffer());
-				/*frame.setPin_count(1);
-				frame.setPageId(pageId);
-				ListFrames.set(j-1,new Frame(pageId)); // Remplace la case vide
+				dm.readPage(pageId, frame.getBuffer());
+				
 
-				//DiskManager.readPage(pageId, frame.getBuffer());
-				//frame.setBuffer(frame.getBuffer());
-				//ListFrames.set(j-1,new Frame(pageId,frame.getBuffer())); // Remplace la case vide
-
-				//Frame test = new Frame(pageId,frame.getBuffer());
+				
 				return frame.getBuffer();
-				//return frame.getBuffer();
-				
-				//ListFrames.set(j-1,frame); // Remplace la case vide
-				//ListFrames.get(j-1).setPin_count(1); // Incrémente le pin count
-				
-				//return frame.getBuffer();	
-				//return ListFrames.get(j-1).getBuffer();
- 
-				
-				
-				fremplacer.setPin_count(1);
-				//fremplacer.setDirty(false);
-				DiskManager.readPage(pageId, fremplacer.getFrame());
-				
-				ListFrames.set(j-1, fremplacer);*/
-				
-				//ListFrames.set(j-1,new Frame(pageId)); // Remplace la case vide
-				//ListFrames.get(j-1).setPin_count(frame.getPin_count()+1); // Incrémente le pin count
-				
-				return ListFrames.get(j-1).getBuffer();
-				//return fremplacer.getFrame();
 			}
 				
 		}
@@ -127,31 +99,133 @@ public class BufferManager {
 		// Il faut remplacer parmis les frames existantes.
 		// On doit utiliser la politique de remplacement LRU
 		
-		ArrayList<Frame> ListCandidats = new ArrayList<>();
-		System.out.println("Création de la liste des frames candidates ");
-		System.out.println("Size de candidat: "+ListCandidats.size());
+		//ArrayList<Frame> ListCandidats = new ArrayList<>();
+
 		
-		// On ajoute les candidats dans la liste
-		// Un candidat = une case avec le pin_count à 0.
-		for(Frame frame : ListFrames) {
-			
-			if(frame.getPin_count() == 0 && frame.getTimestamp() != 0) { //  
-				ListCandidats.add(frame);
-				System.out.println("Ajout d'un candicat dans la liste des candidats ! Taille : "+ListCandidats.size());
+		
+		
+		
+		int tps = 0;
+		Frame fremplacer = ListFrames.get(tps);
+
+		/*while(fremplacer.getTimestamp() == 0) {
+			fremplacer = ListFrames.get(++tps);
+		}*/
+		int surcharge = 0;
+		int candidat_elu = 0;
+		for(int i = 0;i < ListFrames.size();i++) {
+			if(ListFrames.get(i).getPin_count() == 0 && ListFrames.get(i).getTimestamp() != 0) { //  1
+				//if() {
+					
+				
+				
+					if(fremplacer.getTimestamp() == 0 || ListFrames.get(i).getTimestamp() <= fremplacer.getTimestamp()) {
+	
+						fremplacer = ListFrames.get(i);
+						candidat_elu = i;
+					}
+				
+				//}
 			}
-			
-			
+			else {
+				surcharge++;
+			}
 		}
 		
+		
+		//TEST 1 
+		/*int indice_min1 = 0;
+
+		for(int i = 0;i < ListFrames.size()-1;i++) {
+			if(ListFrames.get(i).getPin_count() == 0 && ListFrames.get(i).getTimestamp() != 0) { //  1
+				ListCandidats.add(ListFrames.get(i)); // 0 1
+				
+				
+				if(ListCandidats.size() == 1) {
+					ftemps = ListFrames.get(i); // tjrs indice 0
+				}
+				
+				else {
+					
+					if(ftemps.getTimestamp()  > ListCandidats.get(i).getTimestamp()) {
+						ftemps = ListFrames.get(i);
+					}
+					
+				}
+				
+				
+			}
+			
+		}*/
+		
+		
+		
+		// TEST 2
+		// On ajoute les candidats dans la liste
+		// Un candidat = une case avec le pin_count à 0.
+		/*int count = 0;
+		int indice_min = 0;
+		for(Frame frame : ListFrames) {
+			
+			if(frame.getPin_count() == 0 && frame.getTimestamp() != 0) { //  1
+				ListCandidats.add(frame); // 0 1
+				
+				if(ListCandidats.size() == 1) {
+					indice_min = count;
+				}
+				
+				else {
+					for(int candidat = 0;candidat < ListCandidats.size()-1;candidat++) {
+							if(ListCandidats.get(candidat).getTimestamp() < ListCandidats.get(candidat+1).getTimestamp()){
+								indice_min = count;
+								System.out.println("candidat = "+candidat);
+							}
+							else {
+								indice_min = count +1;
+							}
+							
+							
+						
+						
+					}
+				}
+			
+				count++;
+				
+				//System.out.println("Ajout d'un candicat dans la liste des candidats ! Taille : "+ListCandidats.size());
+			}
+			if(ListCandidats.size() != 0) {
+				if(ListCandidats.size() == 1) {
+					indice_min = count;
+				}
+				else {
+				for(int candidat = 0;candidat < ListCandidats.size()-1;candidat++) {
+					if(ListCandidats.get(candidat).getTimestamp() <= ListCandidats.get(candidat+1).getTimestamp()){
+						indice_min = count;
+						System.out.println("candidat = "+candidat);
+						count++;
+					}
+					else {
+						indice_min = count -1;
+					}
+					
+				}
+				
+				}
+			}
+			
+		}*/
+		
+		// TEST 3
 		// On élit le candidat ayant le timestamp le plus petit
-		if(ListCandidats.size() != 0) {
+		/*if(ListCandidats.size() != 0) {
 			int candidat_elu = 0;
 			
-			System.out.println("candidat elu = "+candidat_elu);
+			//System.out.println("candidat elu = "+candidat_elu);
 			
 			for(int candidat = 0;candidat < ListCandidats.size()-1;candidat++) {
 				if(ListCandidats.size() == 1) {
-					candidat_elu = candidat;
+					candidat_elu = count;
 				}
 				
 				else{
@@ -165,19 +239,25 @@ public class BufferManager {
 					}
 				}
 				
-			}
-			
-			Frame fremplacer = ListFrames.get(candidat_elu);
+			}*/
+		if(surcharge != ListFrames.size()) {
+
 			
 			if (fremplacer.isDirty())
-				DiskManager.writePage(fremplacer.getPageId(), fremplacer.getBuffer());
+				dm.writePage(fremplacer.getPageId(), fremplacer.getBuffer());
 			
 			fremplacer.setPin_count(1);
 			fremplacer.setDirty(false);
-			DiskManager.readPage(pageId, fremplacer.getBuffer());
-			
+			fremplacer.setPageId(pageId);
+			fremplacer.setTimestamp(0);
+			dm.readPage(pageId, fremplacer.getBuffer());
+			ListFrames.set(candidat_elu, fremplacer);
+		
 			//ListFrames.set(candidat_elu,new Frame(pageId)); // Remplace la page dans la case élue
 			//ListFrames.get(candidat_elu).setPin_count(ListFrames.get(candidat_elu).getPin_count()+1);
+			
+			
+			
 			
 			return ListFrames.get(candidat_elu).getBuffer();
 			
@@ -197,7 +277,7 @@ public class BufferManager {
 		
 		}
 		else {
-			System.out.println("La liste de candidat est vide, toutes les frames sont en cours d'utilisation ! Remplacement impossible...");
+			System.out.println("Aucun candidat, toutes les frames sont en cours d'utilisation ! Remplacement impossible...");
 
 		}
 		return null;
@@ -211,30 +291,36 @@ public class BufferManager {
 	}
 	
 	
-	/* Décrémenter le pin_count
-	 * Actualiser le flag dirty de la page
-	 * (et aussi potentiellement actualiser des informations concernant la politique de remplacement).
+	/**
+	 * Libère la page entrée en argument. Utilise la politique de remplacement LRU.
+	 * @param pageId La page à libérer
+	 * @param valdirty Le dirty voulu à actualiser
 	 */
 	public void FreePage(PageId pageId, boolean valdirty) {
 		numero_tache++;
 		for(int i=0; i<ListFrames.size();i++) {
-			if(ListFrames.get(i).getPageId()!=null) { // On vérifie que la case n'est pas vide
-				if(ListFrames.get(i).getPageId() == pageId) { // On vérifie que la page demandée à libérer correspond bien à l'itérateur
-					if(ListFrames.get(i).getPin_count()==0) { // On vérifie si le pin_count est à 0
+			// On vérifie que la case n'est pas vide
+			if(ListFrames.get(i).getPageId()!=null) { 
+				// On vérifie que la page demandée à libérer correspond bien à l'itérateur
+				if(ListFrames.get(i).getPageId() == pageId) { 
+					// Cas page non utilisée
+					// On vérifie si la page est contenue dans la frame : si le pin_count est à 0 alors la frame n'est pas utilisée
+					if(ListFrames.get(i).getPin_count()==0) { 
 						System.out.println("pin count à 0");
 						System.out.println("Erreur de page, on ne peut pas libérer la case car elle n'est pas utilisée !");
 					return;
 					}
+					
+					// Cas page utilisée
 					else {
 						Frame temps = ListFrames.get(i);
 						temps.setPin_count(temps.getPin_count()-1);
 						temps.setDirty(valdirty);
+						// Si le pin_count est à 0 après l'avoir décrémenté, on ajoute un timestamp.
 						if(temps.getPin_count()==0) {
-							//System.out.println("Après avoir décrémenté, le pin_count est à 0");
-							//System.out.println("On ajoute un timestamp");
+							
 							temps.setTimestamp(numero_tache);
-						//ListFrames.remove(temps);
-						//ListFrames.add(temps);
+					
 						//return;
 						}
 						ListFrames.set(i, temps);
@@ -248,13 +334,13 @@ public class BufferManager {
 		return;
 	}
 	
-	/* écriture de toutes les pages dont le flag dirty = 1 sur disque
-	 * remise à 0 de tous les flags/informations et contenus des buffers (buffer pool « vide »)
+	/** 
+	 * Ecrit toutes les pages dont le flag dirty est true sur le disque. Remet à 0 toutes les informations des frames et contenus du bufferpool.
 	 */
 	public void FlushAll() {
 		for (int i=0; i<ListFrames.size();i++) {
 			if(ListFrames.get(i).isDirty()==true) {
-				DiskManager.writePage(ListFrames.get(i).getPageId(), ListFrames.get(i).getBuffer());
+				dm.writePage(ListFrames.get(i).getPageId(), ListFrames.get(i).getBuffer());
 			}
 		}
 		ListFrames.clear();
