@@ -6,12 +6,16 @@ public class RelationInfo {
 	private String[] nom_col; // le nom des colonnes
 	private String[] type_col; // le types des colonnes
 	
+	private PageId headerPageId; // l'identifiant de la HeaderPage de la relation
+	
 	// le constructeur de la relationInfo
-	public RelationInfo(String nom, int nb_col, String[] nom_col, String[] type_col) {
+	public RelationInfo(String nom, int nb_col, String[] nom_col, String[] type_col, PageId headerPageId) {
 		this.nom=nom;
 		this.nb_col=nb_col;
 		this.nom_col=nom_col;
 		this.type_col=type_col;
+		
+		this.headerPageId = headerPageId;
 	}
 
 
@@ -52,5 +56,15 @@ public class RelationInfo {
 
 	public void setType_col(String[] type_col) {
 		this.type_col = type_col;
+	}
+
+
+	public PageId getHeaderPageId() {
+		return headerPageId;
+	}
+
+
+	public void setHeaderPageId(PageId headerPageId) {
+		this.headerPageId = headerPageId;
 	}
 }

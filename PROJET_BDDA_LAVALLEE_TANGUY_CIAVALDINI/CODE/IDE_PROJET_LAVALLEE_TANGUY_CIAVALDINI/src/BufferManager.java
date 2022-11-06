@@ -4,18 +4,14 @@ import java.util.List;
 
 public class BufferManager {
 	
-	// Ne comporte qu'une seule et unique instance
 	
 	public PageId pageId;
-	
-	
 	private static int numero_tache;
-	
-	
 	private List<Frame> ListFrames; // buffer pool
 	private DiskManager dm;
-	private static BufferManager INSTANCE = new BufferManager();
 	
+	// Ne comporte qu'une seule et unique instance
+	private static BufferManager INSTANCE = new BufferManager();
 	public static BufferManager getInstance() {
 		if (INSTANCE == null) {
             INSTANCE = new BufferManager();
@@ -36,7 +32,6 @@ public class BufferManager {
 	}
 
 	/**
-	 * 
 	 * Initialise le buffer pool.
 	 * Alloue dans chaque frame un buffer de taille DBParam.pageSize.
 	 */
@@ -99,12 +94,8 @@ public class BufferManager {
 		// Il faut remplacer parmis les frames existantes.
 		// On doit utiliser la politique de remplacement LRU
 		
-		//ArrayList<Frame> ListCandidats = new ArrayList<>();
+		// ArrayList<Frame> ListCandidats = new ArrayList<>();
 
-		
-		
-		
-		
 		int tps = 0;
 		Frame fremplacer = ListFrames.get(tps);
 
@@ -114,18 +105,12 @@ public class BufferManager {
 		int surcharge = 0;
 		int candidat_elu = 0;
 		for(int i = 0;i < ListFrames.size();i++) {
-			if(ListFrames.get(i).getPin_count() == 0 && ListFrames.get(i).getTimestamp() != 0) { //  1
-				//if() {
-					
-				
-				
-					if(fremplacer.getTimestamp() == 0 || ListFrames.get(i).getTimestamp() <= fremplacer.getTimestamp()) {
-	
-						fremplacer = ListFrames.get(i);
-						candidat_elu = i;
-					}
-				
-				//}
+			if(ListFrames.get(i).getPin_count() == 0 && ListFrames.get(i).getTimestamp() != 0) {
+				if(fremplacer.getTimestamp() == 0 || ListFrames.get(i).getTimestamp() <= fremplacer.getTimestamp()) {
+
+					fremplacer = ListFrames.get(i);
+					candidat_elu = i;
+				}
 			}
 			else {
 				surcharge++;
@@ -133,113 +118,7 @@ public class BufferManager {
 		}
 		
 		
-		//TEST 1 
-		/*int indice_min1 = 0;
-
-		for(int i = 0;i < ListFrames.size()-1;i++) {
-			if(ListFrames.get(i).getPin_count() == 0 && ListFrames.get(i).getTimestamp() != 0) { //  1
-				ListCandidats.add(ListFrames.get(i)); // 0 1
-				
-				
-				if(ListCandidats.size() == 1) {
-					ftemps = ListFrames.get(i); // tjrs indice 0
-				}
-				
-				else {
-					
-					if(ftemps.getTimestamp()  > ListCandidats.get(i).getTimestamp()) {
-						ftemps = ListFrames.get(i);
-					}
-					
-				}
-				
-				
-			}
-			
-		}*/
 		
-		
-		
-		// TEST 2
-		// On ajoute les candidats dans la liste
-		// Un candidat = une case avec le pin_count à 0.
-		/*int count = 0;
-		int indice_min = 0;
-		for(Frame frame : ListFrames) {
-			
-			if(frame.getPin_count() == 0 && frame.getTimestamp() != 0) { //  1
-				ListCandidats.add(frame); // 0 1
-				
-				if(ListCandidats.size() == 1) {
-					indice_min = count;
-				}
-				
-				else {
-					for(int candidat = 0;candidat < ListCandidats.size()-1;candidat++) {
-							if(ListCandidats.get(candidat).getTimestamp() < ListCandidats.get(candidat+1).getTimestamp()){
-								indice_min = count;
-								System.out.println("candidat = "+candidat);
-							}
-							else {
-								indice_min = count +1;
-							}
-							
-							
-						
-						
-					}
-				}
-			
-				count++;
-				
-				//System.out.println("Ajout d'un candicat dans la liste des candidats ! Taille : "+ListCandidats.size());
-			}
-			if(ListCandidats.size() != 0) {
-				if(ListCandidats.size() == 1) {
-					indice_min = count;
-				}
-				else {
-				for(int candidat = 0;candidat < ListCandidats.size()-1;candidat++) {
-					if(ListCandidats.get(candidat).getTimestamp() <= ListCandidats.get(candidat+1).getTimestamp()){
-						indice_min = count;
-						System.out.println("candidat = "+candidat);
-						count++;
-					}
-					else {
-						indice_min = count -1;
-					}
-					
-				}
-				
-				}
-			}
-			
-		}*/
-		
-		// TEST 3
-		// On élit le candidat ayant le timestamp le plus petit
-		/*if(ListCandidats.size() != 0) {
-			int candidat_elu = 0;
-			
-			//System.out.println("candidat elu = "+candidat_elu);
-			
-			for(int candidat = 0;candidat < ListCandidats.size()-1;candidat++) {
-				if(ListCandidats.size() == 1) {
-					candidat_elu = count;
-				}
-				
-				else{
-					if(ListCandidats.get(candidat).getTimestamp() <= ListCandidats.get(candidat+1).getTimestamp()){
-						candidat_elu = candidat;
-						System.out.println("candidat = "+candidat);
-					
-					}
-					else {
-						candidat_elu = candidat+1;
-					}
-				}
-				
-			}*/
 		if(surcharge != ListFrames.size()) {
 
 			
@@ -282,11 +161,6 @@ public class BufferManager {
 		}
 		return null;
 		
-		
-		
-		
-		
-	
 		
 	}
 	
