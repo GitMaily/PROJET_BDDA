@@ -1,5 +1,3 @@
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class DBManager {
 	private static DBManager INSTANCE = new DBManager();
@@ -14,11 +12,11 @@ public class DBManager {
 		
 	}
 	
-	public void Init() throws ClassNotFoundException, IOException {
+	public void Init() {
 		Catalog.getInstance().Init();
 	}
 	
-	public void Finish() throws FileNotFoundException, IOException {
+	public void Finish() {
 		Catalog.getInstance().Finish();
 		BufferManager.getInstance().FlushAll();
 	}

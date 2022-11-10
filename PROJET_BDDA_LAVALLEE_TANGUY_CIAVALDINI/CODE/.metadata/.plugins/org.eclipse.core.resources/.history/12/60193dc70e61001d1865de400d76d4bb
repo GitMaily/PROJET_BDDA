@@ -5,26 +5,27 @@ public class RelationInfo {
 	private String nom; //nom de la relation
 	private int nb_col; // le nombre de colonnes
 	private ArrayList<ColInfo> nom_col; // le nom des colonnes
-	
 	private PageId header; // le types des colonnes
 	
 	private PageId headerPageId; // l'identifiant de la HeaderPage de la relation
 	
 	// le constructeur de la relationInfo
-
-	public RelationInfo(String nom, int nb_col, ArrayList<ColInfo> nom_col) {
+<<<<<<< HEAD
+	public RelationInfo(String nom, int nb_col, ArrayList<ColInfo> nom_col, PageId header) {
 		this.nom=nom;
 		this.nb_col=nb_col;
 		this.nom_col=nom_col;
+		this.setHeader(header);
 		
-	}
-
-	public RelationInfo(String nom, int nb_col, ArrayList<ColInfo> nom_col, PageId headerPageId) {
+=======
+	public RelationInfo(String nom, int nb_col, String[] nom_col, String[] type_col, PageId headerPageId) {
 		this.nom=nom;
 		this.nb_col=nb_col;
 		this.nom_col=nom_col;
+		this.type_col=type_col;
+		
 		this.headerPageId = headerPageId;
-
+>>>>>>> a92a952745c933d729604d28d331f8b50a30cead
 	}
 
 
@@ -68,7 +69,12 @@ public class RelationInfo {
 	}
 
 
+<<<<<<< HEAD
+	
 
+
+	
+=======
 	public PageId getHeaderPageId() {
 		return headerPageId;
 	}
@@ -77,5 +83,5 @@ public class RelationInfo {
 	public void setHeaderPageId(PageId headerPageId) {
 		this.headerPageId = headerPageId;
 	}
-
+>>>>>>> a92a952745c933d729604d28d331f8b50a30cead
 }

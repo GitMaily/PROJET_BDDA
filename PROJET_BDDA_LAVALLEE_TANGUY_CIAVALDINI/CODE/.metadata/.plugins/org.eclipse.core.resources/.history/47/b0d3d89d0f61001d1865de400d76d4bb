@@ -55,7 +55,7 @@ public class Record {
 		String rel;
 		
 		for(int i=0; i<relInfo.getNb_col();i++) {
-			rel= relInfo.getNom_col().get(i).getType_col();
+			rel= relInfo.getType_col()[i];
 			switch (rel) {
 			case "INTEGER" : values.add(i,Integer.toString(buff.position()));
 						buff.position(buff.position()+Integer.BYTES);		

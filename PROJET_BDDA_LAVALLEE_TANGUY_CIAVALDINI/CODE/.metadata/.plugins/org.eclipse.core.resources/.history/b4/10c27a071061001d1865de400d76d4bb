@@ -85,7 +85,6 @@ public class Main {
 			default: DBManager.getInstance().ProcessCommand(commande);
 			}
 		}
-		scanner.close();
 		
 	}
 

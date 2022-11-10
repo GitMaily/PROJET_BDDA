@@ -46,7 +46,7 @@ public class Main {
 	}
 	
 
-	public static void main(String[] args) throws ClassNotFoundException, IOException {
+	public static void main(String[] args) {
 		/*DBParams param = new DBParams("/users/licence/ik05057/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/db.txt",4096,4);
 		
 		System.out.println("le chemin marche ");
@@ -85,7 +85,6 @@ public class Main {
 			default: DBManager.getInstance().ProcessCommand(commande);
 			}
 		}
-		scanner.close();
 		
 	}
 

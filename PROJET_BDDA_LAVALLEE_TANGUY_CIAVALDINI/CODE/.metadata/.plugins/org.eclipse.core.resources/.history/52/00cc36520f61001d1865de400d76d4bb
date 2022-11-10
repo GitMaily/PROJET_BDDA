@@ -19,7 +19,7 @@ public class RelationInfo {
 		
 	}
 
-	public RelationInfo(String nom, int nb_col, ArrayList<ColInfo> nom_col, PageId headerPageId) {
+	public RelationInfo(String nom, int nb_col, ArrayList<ColInfo> nom_col, String[] type_col, PageId headerPageId) {
 		this.nom=nom;
 		this.nb_col=nb_col;
 		this.nom_col=nom_col;
