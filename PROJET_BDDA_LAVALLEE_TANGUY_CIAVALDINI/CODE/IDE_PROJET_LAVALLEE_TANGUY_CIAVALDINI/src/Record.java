@@ -5,6 +5,7 @@ public class Record {
 
 	private RelationInfo relInfo; // Relation à laquelle appartient le record
 	private ArrayList<String> values;
+	private int valeurTotal = 0;
 	
 	public Record(RelationInfo relInfo) {
 		this.relInfo=relInfo;
@@ -31,7 +32,7 @@ public class Record {
 		
 		buff.position(pos);
 		for(int i =0; i< values.size();i++) {
-			type = relInfo.getType_col(i);
+			type = relInfo.getType_col()[i];
 			
 			switch(type) {
 			case "INTEGER" : int vInt = Integer.valueOf(values.get(i));
@@ -54,7 +55,7 @@ public class Record {
 		String rel;
 		
 		for(int i=0; i<relInfo.getNb_col();i++) {
-			rel= relInfo.getType_col(i);
+			rel= relInfo.getType_col()[i];
 			switch (rel) {
 			case "INTEGER" : values.add(i,Integer.toString(buff.position()));
 						buff.position(buff.position()+Integer.BYTES);		
@@ -73,7 +74,10 @@ public class Record {
 			}
 		}
 	}
-
+	
+	public int getWrittenSize(){
+        return valeurTotal;
+    }
 	
 	
 }
