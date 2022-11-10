@@ -1,0 +1,16 @@
+import java.util.ArrayList;
+
+public class CreateTableCommand {
+	/*
+	 * constructeur
+	 * @param chaine - String, commande donnée par utilisateur
+	 */
+	public CreateTableCommand(String chaine) {
+		
+	}
+	String relation;
+	int col;
+	ArrayList<String> nom_col;
+	ArrayList<String> type_col;
+
+}

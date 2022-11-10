@@ -1,0 +1,15 @@
+
+public class DBManager {
+	private static DBManager INSTANCE = new DBManager();
+
+	public static DBManager getInstance() {
+		if (INSTANCE == null) {
+            INSTANCE = new DBManager();
+        }
+		return INSTANCE;	
+	}
+	
+	public static void Init() {
+		Catalog.INSTANCE.Init();
+	}
+}

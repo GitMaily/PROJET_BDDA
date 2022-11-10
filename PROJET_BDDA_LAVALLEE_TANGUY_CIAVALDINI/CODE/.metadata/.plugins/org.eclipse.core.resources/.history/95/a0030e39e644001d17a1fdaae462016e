@@ -1,0 +1,7 @@
+
+public class BufferManager {
+	public static BufferManager INSTANCE;
+	public BufferManager getInstance() {
+		return INSTANCE;
+	}
+}

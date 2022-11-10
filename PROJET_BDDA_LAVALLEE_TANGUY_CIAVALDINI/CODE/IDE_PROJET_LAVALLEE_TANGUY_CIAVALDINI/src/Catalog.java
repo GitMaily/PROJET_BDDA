@@ -5,6 +5,14 @@ public class Catalog {
 	private ArrayList<RelationInfo> listRI; // liste de relation
 	private int compteurRelation; // un compteur de relation
 	
+	private static Catalog INSTANCE = new Catalog();
+	
+	public static Catalog getInstance() {
+		if (INSTANCE == null) {
+            INSTANCE = new Catalog();
+        }
+		return INSTANCE;	
+	}
 	
 	public void Finish() {
 		

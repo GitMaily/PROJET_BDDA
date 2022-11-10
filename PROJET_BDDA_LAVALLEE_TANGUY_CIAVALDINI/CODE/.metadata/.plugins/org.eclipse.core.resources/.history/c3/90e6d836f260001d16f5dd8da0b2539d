@@ -1,0 +1,24 @@
+
+public class DBManager {
+	private static DBManager INSTANCE = new DBManager();
+
+	public static DBManager getInstance() {
+		if (INSTANCE == null) {
+            INSTANCE = new DBManager();
+        }
+		return INSTANCE;	
+	}
+	
+	public void Init() {
+		Catalog.getInstance().Init();
+	}
+	
+	public void Finish() {
+		Catalog.getInstance().Finish();
+		BufferManager.getInstance().FlushAll();
+	}
+	
+	public void ProcessCommand(String commande) {
+		
+	}
+}

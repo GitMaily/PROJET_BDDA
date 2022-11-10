@@ -1,0 +1,9 @@
+import java.io.Serializable;
+
+public class ColInfo implements Serializable {
+
+	public ColInfo(String nom_col, String type_col) {
+		this.nom_col = nom_col;
+		this.type_col = type_col;
+	}
+}
