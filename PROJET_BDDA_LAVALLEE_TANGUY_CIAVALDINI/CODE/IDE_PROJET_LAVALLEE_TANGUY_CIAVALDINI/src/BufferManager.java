@@ -11,7 +11,7 @@ public class BufferManager {
 	private DiskManager dm;
 	
 	// Ne comporte qu'une seule et unique instance
-	private static BufferManager INSTANCE = new BufferManager();
+	public static BufferManager INSTANCE = new BufferManager();
 	public static BufferManager getInstance() {
 		if (INSTANCE == null) {
             INSTANCE = new BufferManager();
@@ -224,6 +224,17 @@ public class BufferManager {
 		
 	}
 	
-	
+	/*
+	 * Reinitialise le BufferManager lors de la saisie de la commande DROPDB
+	 */
+	public void reinitialiser(){
+		for(Frame frame : ListFrames) {
+			frame.setPin_count(0);
+			frame.setDirty(false);
+			frame.setPageId(null);
+			frame.setBuffer(ByteBuffer.allocate(DBParams.pageSize));
+			frame.setTimestamp(0);
+		}
+	}
 
 }

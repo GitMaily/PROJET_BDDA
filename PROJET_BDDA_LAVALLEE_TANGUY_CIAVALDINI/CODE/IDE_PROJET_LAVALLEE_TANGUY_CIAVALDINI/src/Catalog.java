@@ -13,7 +13,7 @@ public class Catalog {
 	private int compteurRelation; // un compteur de relation
 	private String path = DBParams.DBPath + "/catalog.sv";
 	
-	private static Catalog INSTANCE = new Catalog();
+	static Catalog INSTANCE = new Catalog();
 	
 	public static Catalog getInstance() {
 		if (INSTANCE == null) {
@@ -104,5 +104,13 @@ public class Catalog {
 
 	public void setCompteurRelation(int compteurRelation) {
 		this.compteurRelation = compteurRelation;
+	}
+
+	/*
+	 * Réinitialise le Catalogue lors de la saisie de la commande DROPDB
+	 */
+	public void reinitialiser(){
+		listRI.clear();
+		compteurRelation = 0;
 	}
 }

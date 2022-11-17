@@ -21,7 +21,7 @@ public class DiskManager {
 	static ArrayList<PageId> listenoire = new ArrayList<PageId>();
 
 	
-	private static DiskManager INSTANCE = new DiskManager();
+	static DiskManager INSTANCE = new DiskManager();
 	
 	public static DiskManager getInstance() {
 		if (INSTANCE == null) {
@@ -284,8 +284,12 @@ public class DiskManager {
 	}
 
 
-
-
+	/*
+	 * Reinitialise le DiskManager lors de la saisie de la commande DROPDB
+	 */
+	public void reinitialiser(){
+		countpage = 0;
+	}
 
 
 

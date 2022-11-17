@@ -24,6 +24,20 @@ public class DBManager {
 	}
 	
 	public void ProcessCommand(String commande) {
-		
+		switch(commande){
+			case "CREATE TABLE":
+				CreateTableCommand c = new CreateTableCommand(commande);
+				c.execute();
+			break;
+			case "DROPDB":
+				DropDBCommand.execute();
+			break;
+			case "INSERT":
+				InsertCommande.execute();
+			break;
+			case "SELECT":
+				SelectCommand.execute();
+			break;
+		}
 	}
 }

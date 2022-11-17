@@ -27,7 +27,7 @@ public class CreateTableCommand {
 		}
 	}
 	
-	public void Execute() {
+	public void execute() {
 		PageId  HeaderPage = FileManager.getInstance().createNewHeaderPage();
 		ArrayList<ColInfo> listeColInfo = new ArrayList<ColInfo>(nb_col);
 		ColInfo col;
