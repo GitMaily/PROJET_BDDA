@@ -1,8 +1,0 @@
-
-public class CreateTableCommand {
-	String relation;
-	int col;
-	String[] nom_col;
-	String[] type_col;
-
-}

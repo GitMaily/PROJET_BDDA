@@ -37,7 +37,7 @@ public class DiskManager {
 	// Constructeurs
 	public DiskManager(ByteBuffer bb) {
 		//page2 = new byte[4096];
-		this.page = bb;
+		this.setPage(bb);
 	}
 	
 	
@@ -289,6 +289,18 @@ public class DiskManager {
 	 */
 	public void reinitialiser(){
 		countpage = 0;
+	}
+
+
+
+	public ByteBuffer getPage() {
+		return page;
+	}
+
+
+
+	public void setPage(ByteBuffer page) {
+		this.page = page;
 	}
 
 

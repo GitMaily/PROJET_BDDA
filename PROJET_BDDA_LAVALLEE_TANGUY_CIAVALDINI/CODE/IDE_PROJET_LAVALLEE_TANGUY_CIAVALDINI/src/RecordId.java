@@ -1,8 +1,16 @@
 
 public class RecordId {
-	
 	private PageId pageId; // la page à laquelle appartient le record
-	private int slotIdx; // l'indice de la case du slot directory qui pointe vers le record
+	private int slotIdx;
+	
+	
+	public RecordId(PageId pageId, int slotIdx) {
+		super();
+		this.pageId = pageId;
+		this.slotIdx = slotIdx;
+	}
+	// l'indice de la case du slot directory qui pointe vers le record
+	
 	public PageId getPageId() {
 		return pageId;
 	}

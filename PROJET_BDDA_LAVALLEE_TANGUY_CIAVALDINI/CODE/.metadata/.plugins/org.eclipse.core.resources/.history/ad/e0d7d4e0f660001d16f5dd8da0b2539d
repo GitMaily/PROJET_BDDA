@@ -1,8 +1,0 @@
-
-public class CreateTableCommand {
-	String relation;
-	int col;
-	ArrayList<String> nom_col;
-	ArrayList<String> type_col;
-
-}

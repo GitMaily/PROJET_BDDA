@@ -246,4 +246,9 @@ private static FileManager INSTANCE = new FileManager();
 		return listeDePageIds;
 
 	}
+	
+	public RecordId InsertRecordInRel (Record r) {
+		return writeRecordToDataPage(r, getfreeDataPageId(r.getRelInfo(), r.getWrittenSize()));
+	}
+	
 }

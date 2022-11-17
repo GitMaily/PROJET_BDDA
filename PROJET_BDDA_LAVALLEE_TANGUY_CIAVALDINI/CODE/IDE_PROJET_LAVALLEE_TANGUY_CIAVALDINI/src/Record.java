@@ -3,12 +3,19 @@ import java.util.ArrayList;
 
 public class Record {
 
+	public RecordId ri;
+
 	private RelationInfo relInfo; // Relation à laquelle appartient le record
 	private ArrayList<String> values;
 	
 	public Record(RelationInfo relInfo) {
 		this.relInfo=relInfo;
 		
+	}
+	public Record(RelationInfo relInfo, ArrayList<String> values) {
+		super();
+		this.relInfo = relInfo;
+		this.values = values;
 	}
 	
 	

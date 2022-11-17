@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 
 public class InsertCommande {
-    String nomRelation;
-    ArrayList<String> valeurCol;
+     static String nomRelation;
+     static ArrayList<String> valeurCol;
 
     public InsertCommande(String commande){
-        this.valeurCol = new ArrayList<>();
+        InsertCommande.valeurCol = new ArrayList<>();
 
         String [] liste_commande = commande.split(" ");
-        this.nomRelation=liste_commande[2];
+        InsertCommande.nomRelation=liste_commande[2];
 
         String [] valeurs = liste_commande[3].split(",");
         for(String val : valeurs){
@@ -17,11 +17,15 @@ public class InsertCommande {
     }
 
     public static void execute(){
-        //Record r = new Record(nomRelation,valeurCol);
-        //à continuer
-
-
-
+        Record r = new Record(Catalog.getInstance().GetRelationInfo(nomRelation), valeurCol);
+        r.ri = FileManager.getInstance().InsertRecordInRel(r);
+        DeleteValCol();
     }
+    
+    private static void DeleteValCol() {
+    	for(int i=0; i<valeurCol.size();i++) {
+    		valeurCol.remove(i);
+    	}
+    }		
 }
 
