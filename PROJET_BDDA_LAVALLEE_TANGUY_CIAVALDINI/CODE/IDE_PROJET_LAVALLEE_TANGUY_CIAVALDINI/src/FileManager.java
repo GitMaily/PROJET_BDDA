@@ -69,34 +69,42 @@ private static FileManager INSTANCE = new FileManager();
 	public PageId addDataPage(RelationInfo relInfo) {
 		PageId pi = DiskManager.getInstance().allocPage();
 		
-		// Méthode avec un tableau de byte
-		
-		/*byte[] buffer = BufferManager.getInstance().GetPage(pi).array();
-		// On écrit un entier 0 au 4088e et 4092e (donc 4*2 octets utilisés)
-		System.out.println(buffer.length);
-		for(int i =buffer.length-8;i<buffer.length;i+=4) {
-			buffer[i] = (int)0;
-		}*/
-		
-		// Méthode avec ByteByffer (meilleure?)
+		/* Création du DataPage */
 		
 		ByteBuffer bb = BufferManager.getInstance().GetPage(pi);
-		bb.putInt(bb.capacity()-Integer.BYTES*2, 0);
-		bb.putInt(bb.capacity()-Integer.BYTES, 0);
+		
+		// Ecrire 2 entiers égal à 0 à la fin de la page
+		bb.putInt(DBParams.pageSize -Integer.BYTES*2, 0);
+		bb.putInt(DBParams.pageSize-Integer.BYTES, 0); 
 
-		
-		// Actualisation des informations de la HeaderPage
-		
-		PageId headerPage = new PageId(relInfo.getHeaderPageId().getFileIdx(),relInfo.getHeaderPageId().getPageIdx());
-		
-		ByteBuffer bbHeader = BufferManager.getInstance().GetPage(headerPage);
-		// On incrémente l'entier N correspondant au nombre de DataPage
-		bbHeader.putInt(0,bbHeader.getInt(0)+1);
-		// On met à jour 
-		bbHeader.putInt(bbHeader.getInt(0)* Integer.BYTES,DiskManager.getInstance().GetCurrentCountAllocPages());
-		
+		int m = bb.getInt(DBParams.pageSize - Integer.BYTES*2); // M = nb d'entrées slot dir
+		int posDispo = bb.getInt(DBParams.pageSize-Integer.BYTES); // = 0 ici
+
 		BufferManager.getInstance().FreePage(pi, true);
-		BufferManager.getInstance().FreePage(headerPage, true);
+
+	    /* Actualisation du HeaderPage */
+		
+		//PageId headerPage = new PageId(relInfo.getHeaderPageId().getFileIdx(),relInfo.getHeaderPageId().getPageIdx());
+		
+		ByteBuffer bbHeader = BufferManager.getInstance().GetPage(relInfo.getHeaderPageId());
+		
+		// On incrémente l'entier N correspondant au nombre de DataPage
+		bbHeader.putInt(0,bb.getInt(0)+1);
+		
+		// On place l'Id du DataPage ajouté (donc 2*4 octets + 4 octets)
+		int posIdDataPageIdxFile = Integer.BYTES*bbHeader.get(0);
+		int posIdDataPageIdxPage = Integer.BYTES*bbHeader.get(0) + Integer.BYTES;
+		bbHeader.putInt(posIdDataPageIdxFile, pi.getFileIdx());
+		bbHeader.putInt(posIdDataPageIdxPage, pi.getPageIdx());
+
+		// On place le nombre d'octets libres pour la dataPage ajoutée
+		int posNbOctetsLibres = Integer.BYTES*bbHeader.get(0) + Integer.BYTES*2;
+		int tailleSlotDir = Integer.BYTES*2 + (Integer.BYTES*2)*m;
+		
+		
+		bb.putInt(posNbOctetsLibres, DBParams.pageSize- posDispo - tailleSlotDir);
+		
+		BufferManager.getInstance().FreePage(relInfo.getHeaderPageId(), true);
 
 		
 		return pi;
@@ -118,8 +126,11 @@ private static FileManager INSTANCE = new FileManager();
 		ByteBuffer bbHeader = BufferManager.getInstance().GetPage(freePage);
 
 		// On cherche pour chaque info des DataPage dans le HeaderPage, laquelle des DataPage a de l'espace disponible pour insérer le Record de taille sizeRecord
-		for(int i = 0;i<bbHeader.get(0);i++) {
-			if(bbHeader.getInt(i*Integer.BYTES) >= sizeRecord) { // On a trouvé de l'espace disponible dans la page de RelationInfo correspondante
+		for(int i = 1;i<bbHeader.get(0);i++) {
+			// modulo 12e byte
+			if(bbHeader.getInt(i*Integer.BYTES*3) >= sizeRecord) { // On a trouvé de l'espace disponible dans la page de RelationInfo correspondante
+				freePage.setFileIdx(bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES*2 ));
+				freePage.setPageIdx(bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES*1 ));
 				return freePage;
 			}
 		}
@@ -130,21 +141,109 @@ private static FileManager INSTANCE = new FileManager();
 	}
 	
 	/**
-	 * Ecrit un Record dans une DataPage
+	 * Ecrit un Record dans une DataPage. Pas de vérification d'espace disponible.
 	 * @param record Le record à écrire
 	 * @param pageId La pageId où l'on veut écrire le Record
 	 * @return Le RecordId de l'enregistrement dans la DataPage identifiée par pageId
 	 */
 	public RecordId writeRecordToDataPage(Record record, PageId pageId) {
 		
-		// On suppose que la page dispose d'assez d'espace disponible pour l'insertion (on ne vérifie pas)
-		
 		ByteBuffer bb = BufferManager.getInstance().GetPage(pageId);
 		
-		bb.get(0);
-		record.writeToBuffer(bb, 0);
+		// On recherche la position libre du DataPage pour l'écriture du record : le dernier entier stocké dans le slot directory 
+		int posDispo = bb.getInt(DBParams.pageSize-Integer.BYTES);
+		// Ecriture du record à partir de la postion d'espace disponible
+		record.writeToBuffer(bb, posDispo);
 		
-		return null;
 		
+		/* Actualisation de la DataPage */
+		
+		int m = bb.getInt(DBParams.pageSize - Integer.BYTES*2); // M
+		
+	    int positionSlot = DBParams.pageSize-Integer.BYTES*2 - m*Integer.BYTES*2; // position du début du Record
+	    
+	    // On actualise la position du début du Record
+	    bb.putInt(positionSlot,posDispo);
+	    // On actualise la taille du record, située juste un Integer après
+	    bb.putInt(positionSlot+Integer.BYTES, record.getWrittenSize());
+	    
+	    // Incrémente d'un slot dans M = nb d'entrées slot dir
+	    bb.putInt(DBParams.pageSize-Integer.BYTES*2,++m);
+	   
+		// On actualise la nouvelle position d'espace disponible du DataPage
+	    int newPosDispo = posDispo+record.getWrittenSize();
+	    bb.putInt(DBParams.pageSize-Integer.BYTES,newPosDispo);
+	    
+	    
+		BufferManager.getInstance().FreePage(pageId, true);
+		
+	    /* Actualisation du HeaderPage */
+		
+		ByteBuffer bbHeader = BufferManager.getInstance().GetPage(pageId);
+		// Recherche du Id DataPage, mise à jour du nombre d'octets libres
+		int libres = 0;
+		for(int i = 1;i<bbHeader.get(0);i++) {
+			if(bbHeader.get((i*Integer.BYTES*3) - Integer.BYTES*2) == pageId.getFileIdx() && bbHeader.get((i*Integer.BYTES*3) - Integer.BYTES) == pageId.getFileIdx()) {
+				libres = bbHeader.getInt(i*Integer.BYTES*3);
+				i = bbHeader.getInt(0);
+			}
+		}
+		int tailleSlotDir = Integer.BYTES*2 + (Integer.BYTES*2)*m;
+		
+		bbHeader.putInt(libres, DBParams.pageSize- newPosDispo - tailleSlotDir);
+		
+		BufferManager.getInstance().FreePage(pageId, true);
+		RecordId rid = new RecordId(pageId, positionSlot);
+		
+		return rid;
+		
+	}
+	
+	/**
+	 * Renvoie la liste des records stockés dans la page identifiée par pageId
+	 * @param relInfo Une relationInfo
+	 * @param pageId Un pageId
+	 * @return Un ArrayList contenant les records de la page
+	 */
+	public ArrayList<Record> getRecordsInDataPage(RelationInfo relInfo, PageId pageId) {
+		ArrayList<Record> listeDeRecords = new ArrayList<Record>();
+		
+		ByteBuffer bbDataPage = BufferManager.getInstance().GetPage(pageId);
+		
+		int m = bbDataPage.getInt(DBParams.pageSize - Integer.BYTES * 2);
+		for(int i = 0;i<m;i++) {
+			Record rec = new Record(relInfo);
+			rec.readFromBuffer(bbDataPage, i);
+			listeDeRecords.add(rec);
+			
+
+		}
+		
+		BufferManager.getInstance().FreePage(pageId, true);
+		
+		return listeDeRecords;
+	}
+	
+	
+	/**
+	 * Renvoie la liste des PageIds des dataPages, tels qu'ils figurent dans la HeaderPage.
+	 * @param relInfo Une relationInfo
+	 * @return un ArrayList contenant les PageId des DataPage
+	 */
+	public ArrayList<PageId> getAllDataPages(RelationInfo relInfo){
+		ArrayList<PageId> listeDePageIds = new ArrayList<PageId>();
+		
+		ByteBuffer bbHeaderPage = BufferManager.getInstance().GetPage(relInfo.getHeaderPageId());
+		
+		for(int i = 1;i<bbHeaderPage.get(0);i++) {
+			int posIdDataPageIdxFile = Integer.BYTES*i;
+			int posIdDataPageIdxPage = Integer.BYTES*i + Integer.BYTES;
+			
+			PageId pi = new PageId(bbHeaderPage.getInt(posIdDataPageIdxFile),bbHeaderPage.getInt(posIdDataPageIdxPage));
+			listeDePageIds.add(pi);
+		}
+		
+		return listeDePageIds;
+
 	}
 }

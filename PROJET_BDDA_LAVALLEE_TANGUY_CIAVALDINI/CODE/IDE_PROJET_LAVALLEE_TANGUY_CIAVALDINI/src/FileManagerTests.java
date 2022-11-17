@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class FileManagerTests {
 
@@ -5,7 +6,9 @@ public class FileManagerTests {
 		
 		
 		PageId id = new PageId();
-		RelationInfo rel = new RelationInfo("Test", 0, args, args);
+		
+		ArrayList<ColInfo> al = new ArrayList<ColInfo>();
+		RelationInfo rel = new RelationInfo("Test", 5, al, id);
 		id = FileManager.getInstance().addDataPage(rel);
 		
 	}
