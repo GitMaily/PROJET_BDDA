@@ -5,7 +5,6 @@ public class Record {
 
 	private RelationInfo relInfo; // Relation à laquelle appartient le record
 	private ArrayList<String> values;
-	private int valeurTotal = 0;
 	
 	public Record(RelationInfo relInfo) {
 		this.relInfo=relInfo;
@@ -76,7 +75,21 @@ public class Record {
 	}
 	
 	public int getWrittenSize(){
-        return valeurTotal;
+		int res = 0;
+		ArrayList<ColInfo> CI = relInfo.getNom_col();
+		
+		for(int i = 0; i < CI.size(); i++) {
+			switch(CI.get(i).getType_col()) {
+			case("INTEGER"):
+			case("REAL"):
+				res+= 8; // Taille d'un int ou float + la taile de leur adresse
+			default:
+				res += values.get(i).length() * 2; // Taille du string
+				res += 4; // taille de l'adresse du string
+			}
+		}
+		res +=4; // adresse de fin
+        return res;
     }
 	
 	
