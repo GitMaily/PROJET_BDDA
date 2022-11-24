@@ -92,13 +92,13 @@ private static FileManager INSTANCE = new FileManager();
 		bbHeader.putInt(0,bb.getInt(0)+1);
 		
 		// On place l'Id du DataPage ajouté (donc 2*4 octets + 4 octets)
-		int posIdDataPageIdxFile = Integer.BYTES*bbHeader.get(0);
-		int posIdDataPageIdxPage = Integer.BYTES*bbHeader.get(0) + Integer.BYTES;
+		int posIdDataPageIdxFile = Integer.BYTES*bbHeader.getInt(0);
+		int posIdDataPageIdxPage = Integer.BYTES*bbHeader.getInt(0) + Integer.BYTES;
 		bbHeader.putInt(posIdDataPageIdxFile, pi.getFileIdx());
 		bbHeader.putInt(posIdDataPageIdxPage, pi.getPageIdx());
 
 		// On place le nombre d'octets libres pour la dataPage ajoutée
-		int posNbOctetsLibres = Integer.BYTES*bbHeader.get(0) + Integer.BYTES*2;
+		int posNbOctetsLibres = Integer.BYTES*bbHeader.getInt(0) + Integer.BYTES*2;
 		int tailleSlotDir = Integer.BYTES*2 + (Integer.BYTES*2)*m;
 		
 		
@@ -126,7 +126,7 @@ private static FileManager INSTANCE = new FileManager();
 		ByteBuffer bbHeader = BufferManager.getInstance().GetPage(freePage);
 
 		// On cherche pour chaque info des DataPage dans le HeaderPage, laquelle des DataPage a de l'espace disponible pour insérer le Record de taille sizeRecord
-		for(int i = 1;i<bbHeader.get(0);i++) {
+		for(int i = 1;i<bbHeader.getInt(0);i++) {
 			// modulo 12e byte
 			if(bbHeader.getInt(i*Integer.BYTES*3) >= sizeRecord) { // On a trouvé de l'espace disponible dans la page de RelationInfo correspondante
 				freePage.setFileIdx(bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES*2 ));
