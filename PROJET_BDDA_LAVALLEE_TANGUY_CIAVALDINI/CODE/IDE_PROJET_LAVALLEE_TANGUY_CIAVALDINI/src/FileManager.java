@@ -252,4 +252,35 @@ private static FileManager INSTANCE = new FileManager();
 		return listeDePageIds;
 
 	}
+	
+	/**
+	 * Insertion d'un record dans une relation.
+	 * @param record un Record
+	 * @return un RecordId
+	 */
+	public RecordId InsertRecordInRel (Record record) {
+		return writeRecordToDataPage(record, getfreeDataPageId(record.getRelInfo(), record.getWrittenSize()));
+	}
+	
+	/**
+	 * Liste tous les records dans une relation.
+	 * @param relInfo
+	 * @return La liste des records de la relation
+	 */
+	public ArrayList<Record> getAllRecords(RelationInfo relInfo){
+		ArrayList<PageId> listeDePageIds = new ArrayList<PageId>();
+		listeDePageIds = getAllDataPages(relInfo);
+		
+		ArrayList<Record> listeDeRecords = new ArrayList<Record>();
+		
+		for(PageId pid : listeDePageIds) {
+			listeDeRecords = getRecordsInDataPage(relInfo,pid);
+
+			for(Record rec : listeDeRecords) {
+				listeDeRecords.add(rec);
+			}
+		}		
+		
+		return listeDeRecords;
+	}
 }
