@@ -182,9 +182,11 @@ private static FileManager INSTANCE = new FileManager();
 		ByteBuffer bbHeader = BufferManager.getInstance().GetPage(pageId);
 		// Recherche du Id DataPage, mise à jour du nombre d'octets libres
 		int libres = 0;
-		for(int i = 1;i<bbHeader.get(0);i++) {
-			if(bbHeader.get((i*Integer.BYTES*3) - Integer.BYTES*2) == pageId.getFileIdx() && bbHeader.get((i*Integer.BYTES*3) - Integer.BYTES) == pageId.getFileIdx()) {
-				libres = bbHeader.getInt(i*Integer.BYTES*3);
+		for(int i = 1;i<bbHeader.getInt(0);i++) {
+			if(bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES*2) == pageId.getFileIdx() && bbHeader.get((i*Integer.BYTES*3) - Integer.BYTES) == pageId.getFileIdx()) {
+				//libres = bbHeader.getInt(i*Integer.BYTES*3);
+				//bbHeader.position();
+				libres = i*Integer.BYTES*3;
 				i = bbHeader.getInt(0);
 			}
 		}
@@ -234,21 +236,20 @@ private static FileManager INSTANCE = new FileManager();
 		ArrayList<PageId> listeDePageIds = new ArrayList<PageId>();
 		
 		ByteBuffer bbHeaderPage = BufferManager.getInstance().GetPage(relInfo.getHeaderPageId());
+		int posIdDataPageIdxFile = Integer.BYTES;
+		int posIdDataPageIdxPage = Integer.BYTES *2 ;
 		
-		for(int i = 1;i<bbHeaderPage.get(0);i++) {
-			int posIdDataPageIdxFile = Integer.BYTES*i;
-			int posIdDataPageIdxPage = Integer.BYTES*i + Integer.BYTES;
+		for(int i = 1;i<bbHeaderPage.getInt(0);i++) {
 			
 			PageId pi = new PageId(bbHeaderPage.getInt(posIdDataPageIdxFile),bbHeaderPage.getInt(posIdDataPageIdxPage));
 			listeDePageIds.add(pi);
+			posIdDataPageIdxFile += Integer.BYTES*3;
+			posIdDataPageIdxPage += Integer.BYTES*4;
 		}
+		
+		BufferManager.getInstance().FreePage(relInfo.getHeaderPageId(), true);
 		
 		return listeDePageIds;
 
 	}
-	
-	public RecordId InsertRecordInRel (Record r) {
-		return writeRecordToDataPage(r, getfreeDataPageId(r.getRelInfo(), r.getWrittenSize()));
-	}
-	
 }
