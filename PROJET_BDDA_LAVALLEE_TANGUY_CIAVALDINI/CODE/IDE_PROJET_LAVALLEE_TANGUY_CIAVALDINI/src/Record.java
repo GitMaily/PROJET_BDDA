@@ -8,8 +8,10 @@ public class Record {
 	private RelationInfo relInfo; // Relation à laquelle appartient le record
 	private ArrayList<String> values;
 	
+	
 	public Record(RelationInfo relInfo) {
 		this.relInfo=relInfo;
+		this.values= new ArrayList<String>();
 		
 	}
 	public Record(RelationInfo relInfo, ArrayList<String> values) {
@@ -31,6 +33,9 @@ public class Record {
 	public void setValues(ArrayList<String> values) {
 		this.values = values;
 	}
+	
+	
+
 	
 	public void writeToBuffer(ByteBuffer buff, int pos) {
 		
@@ -81,6 +86,8 @@ public class Record {
 		}
 	}
 	
+	
+	
 	public int getWrittenSize(){
 		int res = 0;
 		ArrayList<ColInfo> CI = relInfo.getNom_col();
@@ -88,19 +95,19 @@ public class Record {
 		for(int i = 0; i < CI.size(); i++) {
 			switch(CI.get(i).getType_col()) {
 			case("INTEGER"):
+				res += 4; // t'aille d'un int
+				break;
 			case("REAL"):
-				res+= 8; // Taille d'un int ou float + la taile de leur adresse
+				res+= 4; // Taille d'un float
+				break;
 			default:
-				res += values.get(i).length() * 2; // Taille du string
-				res += 4; // taille de l'adresse du string
+				res += (values.get(i).length())*2; // Taille du string
 			}
 		}
-		res +=4; // adresse de fin
         return res;
     }
 	
 	
 }
-
 
 
