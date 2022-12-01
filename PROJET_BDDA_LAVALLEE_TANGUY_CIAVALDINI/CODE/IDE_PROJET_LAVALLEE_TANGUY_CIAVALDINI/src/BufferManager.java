@@ -27,6 +27,10 @@ public class BufferManager {
 		
 	}
 	
+	/**
+	 * Getter de la liste des frames
+	 * @return La liste des frames
+	 */
 	public List<Frame> getListFrames() {
 		return ListFrames;
 	}
@@ -35,7 +39,7 @@ public class BufferManager {
 	 * Initialise le buffer pool.
 	 * Alloue dans chaque frame un buffer de taille DBParam.pageSize.
 	 */
-	private void init() {
+	public void init() {
 		ListFrames = new ArrayList<Frame>(DBParams.frameCount);
 		for (int i=0; i<DBParams.frameCount;i++) {
 			ListFrames.add(new Frame());
@@ -63,7 +67,6 @@ public class BufferManager {
 		for(Frame frame : ListFrames) {
 			if(frame.getPageId() == pageId) {
 				frame.setPin_count(frame.getPin_count()+1);
-				//ListFrames.get(i-1).setPin_count(frame.getPin_count()+1);
 				return frame.getBuffer();
 			}
 		}
@@ -80,28 +83,20 @@ public class BufferManager {
 				frame.setDirty(false);
 				dm.readPage(pageId, frame.getBuffer());
 				
-
-				
 				return frame.getBuffer();
 			}
 				
 		}
 
-		
-		System.out.println("Application de LRU!!");
+		System.out.println("Application de LRU !");
 		
 		// Dans ce cas, la page demandée n'est pas déjà existante, et ne trouve pas de place dans le buffer pool
 		// Il faut remplacer parmis les frames existantes.
 		// On doit utiliser la politique de remplacement LRU
 		
-		// ArrayList<Frame> ListCandidats = new ArrayList<>();
-
 		int tps = 0;
 		Frame fremplacer = ListFrames.get(tps);
 
-		/*while(fremplacer.getTimestamp() == 0) {
-			fremplacer = ListFrames.get(++tps);
-		}*/
 		int surcharge = 0;
 		int candidat_elu = 0;
 		for(int i = 0;i < ListFrames.size();i++) {
@@ -116,9 +111,7 @@ public class BufferManager {
 				surcharge++;
 			}
 		}
-		
-		
-		
+				
 		if(surcharge != ListFrames.size()) {
 
 			
@@ -132,27 +125,8 @@ public class BufferManager {
 			dm.readPage(pageId, fremplacer.getBuffer());
 			ListFrames.set(candidat_elu, fremplacer);
 		
-			//ListFrames.set(candidat_elu,new Frame(pageId)); // Remplace la page dans la case élue
-			//ListFrames.get(candidat_elu).setPin_count(ListFrames.get(candidat_elu).getPin_count()+1);
-			
-			
-			
-			
 			return ListFrames.get(candidat_elu).getBuffer();
 			
-			/*for(int frame_elu = 0;frame_elu<ListFrames.size();frame_elu++) {
-				
-				System.out.println("print frame elu : "+ListFrames.get(frame_elu).getTimestamp());
-				System.out.println("print candidat elu : "+ListCandidats.get(candidat_elu).getTimestamp());
-				
-				// On  vérifie que c'est bien celui qui a le timestamp concerné
-				if(ListFrames.get(frame_elu).getTimestamp() == ListCandidats.get(candidat_elu).getTimestamp()) {
-					
-					ListFrames.set(frame_elu,new Frame(pageId)); // Remplace la page dans la case élue
-					ListFrames.get(frame_elu).setPin_count(ListFrames.get(frame_elu).getPin_count()+1);
-					return ListFrames.get(frame_elu).getFrame();
-				}
-			}*/
 		
 		}
 		else {
@@ -160,7 +134,6 @@ public class BufferManager {
 
 		}
 		return null;
-		
 		
 	}
 	
@@ -224,7 +197,7 @@ public class BufferManager {
 		
 	}
 	
-	/*
+	/**
 	 * Reinitialise le BufferManager lors de la saisie de la commande DROPDB
 	 */
 	public void reinitialiser(){

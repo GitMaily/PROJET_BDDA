@@ -6,8 +6,8 @@ public class CreateTableCommand {
 	int nb_col;
 	ArrayList<String> nom_col;
 	ArrayList<String> type_col;
-/*
-	 * constructeur
+	/**
+	 * Constructeur effectuant le parsing de la commande 
 	 * @param chaine - String, commande donnée par utilisateur
 	 */
 	public CreateTableCommand(String commande) {

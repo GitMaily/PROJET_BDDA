@@ -45,29 +45,24 @@ public class Main {
 	
 
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
-		/*DBParams param = new DBParams("/users/licence/ik05057/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/db.txt",4096,4);
+		DBParams param = new DBParams("/users/licence/il01193/Bureau/PROJET_BDDA_PERSO/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/",4096,4);
 		
-		System.out.println("le chemin marche ");
-		System.out.println(param.getPageSize());
-	
-	*/
-
+		param.setDBPath("/users/licence/il01193/Bureau/PROJET_BDDA_PERSO/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/");
 		
+		//DropDBCommand.execute();
 		
-		DiskManager dm = new DiskManager();
+			
+		//DiskManager dm = new DiskManager();
 	
 		//dm.creerFichierTexte();
 		//dm.lireFichier();
 		//dm.creerFichierTest();
 		//dm.creerFichierBinaire();
-		dm.creerFichier();
+		//dm.creerFichier();
 		//dm.allocPage();
-		dm.readPage(null, null);
-		
-		
+		//dm.readPage(null, null);
 		
 		//ne pas toucher fait partie du projet et pas d un test ET mettre avant les parametres framecount pagesize ect
-		
 		
 		DBManager.getInstance().Init();
 		

@@ -10,8 +10,14 @@ public class InsertCommande {
         String [] liste_commande = commande.split(" ");
         InsertCommande.nomRelation=liste_commande[2];
 
-        String [] valeurs = liste_commande[3].split(",");
+        String [] valeurs = liste_commande[4].split(",");
         for(String val : valeurs){
+        	if(val.startsWith("(")) {
+        		val = val.substring(1);
+        	}
+        	if(val.endsWith(")")) {
+        		val = val.substring(0, val.length()-1);
+        	}
             valeurCol.add(val);
         }
     }
