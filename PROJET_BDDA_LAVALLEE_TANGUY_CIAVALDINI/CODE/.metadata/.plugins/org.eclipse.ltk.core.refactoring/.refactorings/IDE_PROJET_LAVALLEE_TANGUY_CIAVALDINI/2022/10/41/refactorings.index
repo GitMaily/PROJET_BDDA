@@ -1,9 +1,0 @@
-1665584519824	Delete element
-1665585443035	Encapsulate field 'nom'
-1665585478366	Encapsulate field 'nb_col'
-1665585483480	Encapsulate field 'nom_col'
-1665585488031	Encapsulate field 'type_col'
-1665586876566	Encapsulate field 'listRI'
-1665587134505	Encapsulate field 'compteurRelation'
-1665659129070	Encapsulate field 'relInfo'
-1665659134717	Encapsulate field 'values'

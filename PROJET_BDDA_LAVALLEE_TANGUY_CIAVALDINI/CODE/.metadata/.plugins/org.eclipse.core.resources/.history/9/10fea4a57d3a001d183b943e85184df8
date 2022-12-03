@@ -1,8 +1,0 @@
-
-public class PageId {
-	public int FileIdx;
-	public boolean PageIdx;
-	
-	
-
-}

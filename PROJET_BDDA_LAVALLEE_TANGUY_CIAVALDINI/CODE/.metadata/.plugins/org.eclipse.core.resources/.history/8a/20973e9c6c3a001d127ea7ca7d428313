@@ -1,9 +1,0 @@
-public class DBParams {
-	public static String DBPath = "/users/licence/ik05057/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/db.txt";
-	public static int pageSize= 4096;
-	public static int maxPagesPerFile=4;
-
-	
-	
-	
-}

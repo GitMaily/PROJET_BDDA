@@ -1,5 +1,0 @@
-
-public class Record {
-
-	private RelationInfo relInfo; // Relation auquelle appartient le record
-}

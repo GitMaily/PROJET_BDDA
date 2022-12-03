@@ -1,8 +1,0 @@
-
-public class Frame {
-	int pint_count;
-	int flag_dirty;
-	int buffer;
-	
-	PageId page;
-}
