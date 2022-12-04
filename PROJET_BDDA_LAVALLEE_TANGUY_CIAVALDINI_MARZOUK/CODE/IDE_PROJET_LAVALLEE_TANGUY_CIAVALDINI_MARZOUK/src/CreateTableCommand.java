@@ -22,7 +22,15 @@ public class CreateTableCommand {
 		
 		for(String colonne: col) {
 			String[] splitted = colonne.split(":");
+			if(splitted[0].startsWith("(")) {
+				splitted[0] = splitted[0].substring(1);
+        	}
+        	
 			nom_col.add(splitted[0]);
+			
+			if(splitted[1].endsWith("))")) {
+				splitted[1] = splitted[1].substring(0, splitted[1].length()-1);
+			}
 			type_col.add(splitted[1]);
 		}
 	}
@@ -40,6 +48,11 @@ public class CreateTableCommand {
 		RelationInfo relinfo = new RelationInfo(this.relation,this.nb_col, listeColInfo, HeaderPage);
 		
 		Catalog.getInstance().AddRelationInfo(relinfo);
-		Catalog.getInstance().GetRelationInfo(relation);
+		
+		//System.out.println(Catalog.getInstance().GetRelationInfo(relation).toString());
+	}
+	
+	public String toString() {
+		return Catalog.getInstance().GetRelationInfo(relation).toString();
 	}
 }

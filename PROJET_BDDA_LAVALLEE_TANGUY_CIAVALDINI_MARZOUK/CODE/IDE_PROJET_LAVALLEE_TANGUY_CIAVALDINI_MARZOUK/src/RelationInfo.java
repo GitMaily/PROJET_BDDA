@@ -26,8 +26,26 @@ public class RelationInfo {
 		this.headerPageId = headerPageId;
 
 	}
+	
+	public String afficherNomCol() {
+		StringBuilder sb = new StringBuilder();
+		for(ColInfo colInfo : nom_col) {
+			sb.append("["+colInfo.getNom_col()+"]"+" de type: "+colInfo.getType_col());
+			sb.append("\t");
+		}
+		
+		return sb.toString();
+	}
+	
+	public String toStringTest() {
+		return nom+" (nom)\n"+nb_col+"(nb_col)\n"+afficherNomCol();
+	}
 
-
+	public String toString() {
+		return nom+" (nom relation)\n"+afficherNomCol();
+	}
+	
+	
 	public String getNom() {
 		return nom;
 	}

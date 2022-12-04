@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 
 public class InsertCommande {
-     static String nomRelation;
-     static ArrayList<String> valeurCol;
+     String nomRelation;
+     ArrayList<String> valeurCol;
 
     public InsertCommande(String commande){
-        InsertCommande.valeurCol = new ArrayList<>();
+        this.valeurCol = new ArrayList<>();
 
         String [] liste_commande = commande.split(" ");
-        InsertCommande.nomRelation=liste_commande[2];
+        this.nomRelation=liste_commande[2];
 
         String [] valeurs = liste_commande[4].split(",");
         for(String val : valeurs){
@@ -22,16 +22,26 @@ public class InsertCommande {
         }
     }
 
-    public static void execute(){
+    public void execute(){
         Record r = new Record(Catalog.getInstance().GetRelationInfo(nomRelation), valeurCol);
-        r.ri = FileManager.getInstance().InsertRecordInRel(r);
-        DeleteValCol();
+        FileManager.getInstance().InsertRecordInRel(r); // r.ri = 
+        
+        System.out.println(r.toString());
+        
+        //DeleteValCol();
+        System.out.println();
     }
     
-    private static void DeleteValCol() {
-    	for(int i=0; i<valeurCol.size();i++) {
+    private void DeleteValCol() {
+    	valeurCol.removeAll(valeurCol);
+    	
+    	/*for(int i=0; i<valeurCol.size();i++) {
     		valeurCol.remove(i);
-    	}
-    }		
+    	}*/
+    }	
+    
+    public String toString() {
+		return Catalog.getInstance().GetRelationInfo(nomRelation).toString();
+	}
 }
 

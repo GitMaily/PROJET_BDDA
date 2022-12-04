@@ -35,6 +35,19 @@ public class Record {
 	}
 	
 	
+	public String afficherValues() {
+		StringBuilder sb = new StringBuilder();
+		for(String val : values) {
+			sb.append(val);
+			sb.append("\t\t\t\t");
+		}
+		
+		return sb.toString();
+	}
+	
+	public String toString() {
+		return afficherValues();
+	}
 
 	
 	public void writeToBuffer(ByteBuffer buff, int pos) {
@@ -54,8 +67,15 @@ public class Record {
 			buff.putFloat(vFloat);
 			break;
 			
-			default : int vString = Integer.valueOf(values.get(i).substring(8).replace(")", ""));
-			buff.putInt(vString);
+			default : /*int vString = Integer.valueOf(values.get(i));
+			buff.putInt(vString);*/
+				
+				String vString = String.valueOf(values.get(i));
+				for(int j = 0;j<vString.length();j++) {
+					buff.putChar(vString.charAt(j));
+					
+				}
+				//buff.putChar(vString.charAt(i));
 			}
 		}
 	}
@@ -75,7 +95,7 @@ public class Record {
 			case "REAL" :  values.add(i,Float.toString(buff.getFloat(buff.position())));
 						buff.position(buff.position()+Float.BYTES);
 			break;
-			
+			 
 			default : int tmp = Integer.parseInt(rel.substring(8).replace(")", ""));
 				StringBuffer sb = new StringBuffer();
 				for(int j = 0; j<tmp; j++) {
@@ -90,9 +110,11 @@ public class Record {
 	
 	public int getWrittenSize(){
 		int res = 0;
-		ArrayList<ColInfo> CI = relInfo.getNom_col();
+		//ArrayList<ColInfo> CI = relInfo.getNom_col();
 		
-		for(int i = 0; i < CI.size(); i++) {
+		ArrayList<ColInfo> CI = new ArrayList<ColInfo>();
+		CI = relInfo.getNom_col();
+		for(int i = 0; i < CI.size()-1; i++) { // -1?
 			switch(CI.get(i).getType_col()) {
 			case("INTEGER"):
 				res += 4; // t'aille d'un int
@@ -102,10 +124,12 @@ public class Record {
 				break;
 			default:
 				res += (values.get(i).length())*2; // Taille du string
-			}
+			} 
 		}
         return res;
     }
+	
+	
 	
 	
 }

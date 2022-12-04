@@ -22,9 +22,21 @@ public class Catalog {
 		return INSTANCE;	
 	}
 	
+	public Catalog() {
+		try {
+			Init();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
     /**
-     * sauvegarde les informations du Catalog dans un fichier nommé Catalog.sv.
+     * Sauvegarde les informations du Catalog dans un fichier nommé Catalog.sv.
      * 
      * @throws IOException 
      * @throws FileNotFoundException 
@@ -48,13 +60,14 @@ public class Catalog {
     }
     
     /**
-     * code qui lit les informations du fichier Catalog.sv et remplit le Catalog avec ces informations.
+     * Lit les informations du fichier Catalog.sv et remplit le Catalog avec ces informations.
      * 
      * @throws FileNotFoundException
      * @throws IOException
      * @throws ClassNotFoundException
      */
 	public void Init() throws FileNotFoundException, IOException, ClassNotFoundException {
+		listRI = new ArrayList<RelationInfo>();
 		
 		File f = new File(path); // path = DBParams.DBPath + "/catalog.sv" (le chemin vers le fichier catalog.sv)
 		if(f.exists()) {
@@ -67,17 +80,23 @@ public class Catalog {
 		}
 	}
 	
-	//pour ajouter une relation a la liste des relations
+	/**
+	 * Ajoute une relation à la liste des relations.
+	 * @param RI - La relation à ajouter
+	 */
 	public void AddRelationInfo (RelationInfo RI) {
 		listRI.add(RI);
 	}
 	
-	/*On rentre un nom et ça nous renvoie la relation 
-	assiocié dans la liste des relations sinon renvoie null*/
+	/**
+	 * On rentre un nom et ça nous renvoie 
+	 * @param nomRI - Le nom de la relation demandée
+	 * @return La relation assiociée dans la liste des relations, null sinon
+	 */
 	public RelationInfo GetRelationInfo (String nomRI) {
 		int indice = -1;
 		for (int i =0; i<listRI.size(); i++) {
-			if(nomRI == listRI.get(i).getNom()) {
+			if(nomRI.equals(listRI.get(i).getNom())) {
 				indice = i;
 				break;
 			}
@@ -106,7 +125,7 @@ public class Catalog {
 		this.compteurRelation = compteurRelation;
 	}
 
-	/*
+	/**
 	 * Réinitialise le Catalogue lors de la saisie de la commande DROPDB
 	 */
 	public void reinitialiser(){
