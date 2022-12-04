@@ -6,18 +6,18 @@ public class Record {
 	public RecordId ri;
 
 	private RelationInfo relInfo; // Relation à laquelle appartient le record
-	private ArrayList<String> values;
+	static ArrayList<String> values;
 	
 	
 	public Record(RelationInfo relInfo) {
 		this.relInfo=relInfo;
-		this.values= new ArrayList<String>();
+		Record.values= new ArrayList<String>();
 		
 	}
 	public Record(RelationInfo relInfo, ArrayList<String> values) {
 		super();
 		this.relInfo = relInfo;
-		this.values = values;
+		Record.values = values;
 	}
 	
 	
@@ -31,7 +31,7 @@ public class Record {
 		return values;
 	}
 	public void setValues(ArrayList<String> values) {
-		this.values = values;
+		Record.values = values;
 	}
 	
 	

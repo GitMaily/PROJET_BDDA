@@ -12,14 +12,14 @@ public class SelectCondition {
 		this.valcomparaison= valcomparaison;
 	}
 	
-	public boolean VerifCondition(String ValRecord)
+	public boolean VerifCondition(int ValRecord)
 	{
 		switch(comp) {
-		case "=": return valcomparaison.equals(ValRecord);
-		case "<": return ValRecord.compareTo(valcomparaison)<0;
-		case ">": return ValRecord.compareTo(valcomparaison)>0;
-		case "<=": return ValRecord.compareTo(valcomparaison)<=0;
-		case ">=": return ValRecord.compareTo(valcomparaison)>=0;
+		case "=": return Integer.valueOf(valcomparaison)== ValRecord;
+		case "<": return Integer.valueOf(valcomparaison)< ValRecord;
+		case ">": return Integer.valueOf(valcomparaison)> ValRecord;
+		case "<=": return Integer.valueOf(valcomparaison)<= ValRecord;
+		case ">=": return Integer.valueOf(valcomparaison)>= ValRecord;
 		default: System.out.println("comparateur incorrect");
 				return false;
 		}
