@@ -40,6 +40,7 @@ public class CommandTests {
 		
 		ic1.execute();
 		
+
 		
 		/*System.out.println(ic2.toString());
 

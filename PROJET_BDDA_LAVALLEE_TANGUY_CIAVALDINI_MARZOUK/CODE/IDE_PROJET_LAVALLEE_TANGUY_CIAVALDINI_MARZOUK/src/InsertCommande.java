@@ -28,7 +28,7 @@ public class InsertCommande {
         
         System.out.println(r.toString());
         
-        //DeleteValCol();
+        DeleteValCol();
         System.out.println();
     }
     

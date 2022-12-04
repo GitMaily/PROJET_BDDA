@@ -96,9 +96,11 @@ public class Record {
 						buff.position(buff.position()+Float.BYTES);
 			break;
 			 
-			default : int tmp = Integer.parseInt(rel.substring(8).replace(")", ""));
+			//marche pas
+			default : Character tmp = Character.valueOf(buff.getChar(buff.position()));
 				StringBuffer sb = new StringBuffer();
-				for(int j = 0; j<tmp; j++) {
+				sb.append(tmp);
+				for(int j = 0; j<buff.position(); j+=Character.BYTES) {
 					sb.append(buff.getChar(j));
 				}
 				values.add(sb.toString());
@@ -114,7 +116,7 @@ public class Record {
 		
 		ArrayList<ColInfo> CI = new ArrayList<ColInfo>();
 		CI = relInfo.getNom_col();
-		for(int i = 0; i < CI.size()-1; i++) { // -1?
+		for(int i = 0; i < CI.size(); i++) { // -1?
 			switch(CI.get(i).getType_col()) {
 			case("INTEGER"):
 				res += 4; // t'aille d'un int

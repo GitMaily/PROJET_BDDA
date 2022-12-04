@@ -23,5 +23,9 @@ public class RecordId {
 	public void setSlotIdx(int slotIdx) {
 		this.slotIdx = slotIdx;
 	}
+	
+	public String toString() {
+		return pageId.toString()+" slotIdx:"+slotIdx;
+	}
 
 }

@@ -14,7 +14,6 @@ public class PageId {
 	
 	
 	public PageId() {
-		// TODO Auto-generated constructor stub
 	}
 
 
@@ -33,6 +32,9 @@ public class PageId {
 	}
 	
 	
+	public String toString() {
+		return "("+FileIdx+","+PageIdx+")";
+	}
 	
 	
 }
