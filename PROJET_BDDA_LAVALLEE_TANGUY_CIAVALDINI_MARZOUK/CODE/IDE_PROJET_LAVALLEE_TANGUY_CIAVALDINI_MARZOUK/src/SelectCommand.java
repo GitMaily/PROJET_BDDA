@@ -42,7 +42,17 @@ public class SelectCommand {
     			 boolean resultat = true;
     			 while(i<condition.size() && resultat) {
     				 int indiceCol = liste_condi().get(i).getIndice();
-    				 resultat= liste_condi().get(i).VerifCondition(indiceCol);// a un doute sur la forme Integer.valueOf(Record.values.get(indiceCol)) pas toucher execute pas finis
+    				 String type = Record.getRelInfo().getNom_col().get(i).getType_col(); // methode mis en static et la variable qui va avec pour acces , pas reussi autrement
+    				 switch(type) {
+    				 case "INTEGER":resultat= liste_condi().get(i).VerifCondition(indiceCol);
+    				 break;
+    				 case "REAL": resultat= liste_condi().get(i).VerifCondition(indiceCol);
+    				 break;
+    				 default:resultat= liste_condi().get(i).VerifCondition(indiceCol);
+    				 break;
+    				 }
+    				 
+    				 i++;
     			 }
     			 if(resultat) {
     				 recordR.add(allRecords.get(i));

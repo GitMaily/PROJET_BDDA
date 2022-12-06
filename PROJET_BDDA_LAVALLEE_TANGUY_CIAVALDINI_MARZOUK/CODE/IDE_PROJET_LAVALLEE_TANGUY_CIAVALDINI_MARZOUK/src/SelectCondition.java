@@ -15,11 +15,33 @@ public class SelectCondition {
 	public boolean VerifCondition(int ValRecord)
 	{
 		switch(comp) {
-		case "=": return Integer.valueOf(valcomparaison)== ValRecord;
-		case "<": return Integer.valueOf(valcomparaison)< ValRecord;
-		case ">": return Integer.valueOf(valcomparaison)> ValRecord;
-		case "<=": return Integer.valueOf(valcomparaison)<= ValRecord;
-		case ">=": return Integer.valueOf(valcomparaison)>= ValRecord;
+		case "=": return ValRecord==Integer.valueOf(valcomparaison);
+		case "<": return ValRecord<Integer.valueOf(valcomparaison);
+		case ">": return ValRecord>Integer.valueOf(valcomparaison);
+		case "<=": return ValRecord<=Integer.valueOf(valcomparaison);
+		case ">=": return ValRecord>=Integer.valueOf(valcomparaison);
+		default: System.out.println("comparateur incorrect");
+				return false;
+		}
+	}
+	
+	public boolean VerifCondition(String ValRecord) {
+		if (comp=="=") {
+			return this.valcomparaison.equals(ValRecord);
+		}
+		else {
+			System.out.println("Comparateur incorrect");
+			return false;
+		}
+	}
+	
+	public boolean VerifCondition(float ValRecord) {
+		switch(comp) {
+		case "=": return  ValRecord==Float.valueOf(valcomparaison);
+		case "<": return ValRecord<Float.valueOf(valcomparaison);
+		case ">": return ValRecord>Float.valueOf(valcomparaison);
+		case "<=": return ValRecord<=Float.valueOf(valcomparaison);
+		case ">=": return ValRecord>=Float.valueOf(valcomparaison);
 		default: System.out.println("comparateur incorrect");
 				return false;
 		}

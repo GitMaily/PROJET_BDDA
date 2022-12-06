@@ -5,7 +5,7 @@ public class Record {
 
 	public RecordId ri;
 
-	private RelationInfo relInfo; // Relation à laquelle appartient le record
+	public static RelationInfo relInfo; // Relation à laquelle appartient le record
 	static ArrayList<String> values;
 	
 	
@@ -21,7 +21,7 @@ public class Record {
 	}
 	
 	
-	public RelationInfo getRelInfo() {
+	public static RelationInfo getRelInfo() {
 		return relInfo;
 	}
 	public void setRelInfo(RelationInfo relInfo) {
