@@ -33,10 +33,12 @@ public class DBManager {
 				DropDBCommand.execute();
 			break;
 			case "INSERT":
-				InsertCommande.execute();
+				InsertCommande ic = new InsertCommande(commande);
+				ic.execute();
 			break;
 			case "SELECT":
-				SelectCommand.execute();
+				SelectCommand sc = new SelectCommand(commande);
+				sc.execute();
 			break;
 		}
 	}

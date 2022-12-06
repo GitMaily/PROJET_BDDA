@@ -1,8 +1,9 @@
 
 public class CommandTests {
 	public static void main(String []args) {
-		insertCommandTest();
+		//insertCommandTest();
 		
+		selectCommandTest();
 		//createTableTest();
 		
 		//dropDBTest();
@@ -49,6 +50,15 @@ public class CommandTests {
 
 		ic3.execute();*/
 
+	}
+	
+	private static void selectCommandTest() {
+		createTableTest();
+		SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Cours=IF3BDDA\n"
+				+ "AND Note>=8\n"
+				+ "AND Note<10");
+		
+		sc.execute();
 	}
 
 }

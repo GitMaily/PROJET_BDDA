@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 public class SelectCommand {
 	
-	private static String nomRel;
-	private static ArrayList<Record> recordR;
-	private static String[] cmd;
+	private String nomRel;
+	private ArrayList<Record> recordR;
+	private String[] cmd;
 	
 	public SelectCommand (String saisie) {
 		recordR=new ArrayList<>();
@@ -19,13 +19,16 @@ public class SelectCommand {
 	private void spliter(String command) {
 		cmd = command.split("WHERE");
 		String [] tamp = cmd[0].split(" ");
-		SelectCommand.nomRel=tamp[3];
+		this.nomRel=tamp[3];
+		
 	}
 	
 	
 	
-	
-    public static void execute(){
+	/**
+	 * 
+	 */
+    public void execute(){
     	ArrayList<Record> allRecords = null;
 		ArrayList<SelectCondition> condition = new ArrayList<SelectCondition>();//fonction a faire 
 
@@ -61,7 +64,7 @@ public class SelectCommand {
     
    
     
-    private static int donneIndiceCol (String NomCol) {
+    private   int donneIndiceCol (String NomCol) {
         RelationInfo r = Catalog.getInstance().GetRelationInfo(nomRel);
 
         for (int i = 0; i< r.getNb_col(); i++) {
@@ -73,7 +76,7 @@ public class SelectCommand {
     }
     
     
-    private static SelectCondition SeparateurDeCommande (String commande) {
+    private  SelectCondition SeparateurDeCommande (String commande) {
     	int indice = 0;
     	String operateur = null;
     	String value = null;
@@ -99,7 +102,7 @@ public class SelectCommand {
     
     
     
-    public static  ArrayList<SelectCondition> liste_condi(){
+    public  ArrayList<SelectCondition> liste_condi(){
     	String[] condi = cmd[1].split("AND");
     	
     	ArrayList<SelectCondition> l_c = new ArrayList<>();
