@@ -15,7 +15,7 @@ public class Readcsv {
 		f = new File(nomfichier);
 		
 		ligne = new ArrayList<>();
-		dvgcssghdfc
+		
 	}
 	
 	public ArrayList<String> lireCsv() throws IOException{
@@ -28,7 +28,13 @@ public class Readcsv {
 		}
 		
 		bfrrd.close();
-	
+		return ligne;
+	}
+
+	public void affiche(){
+		for(int i=0; i<ligne.size();i++){
+			System.out.println("ligne"+ i+1 + " : "+ligne.get(i));
+		}
 	}
 	
 
