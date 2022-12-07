@@ -77,7 +77,7 @@ public class SelectCommand {
     private   int donneIndiceCol (String NomCol) {
         RelationInfo r = Catalog.getInstance().GetRelationInfo(nomRel);
 
-        for (int i = 0; i< r.getNb_col(); i++) {
+        for (int i = 0; i< r.getNb_col(); i++) { // a revoir
         	if(r.getNom_col().get(i).getNom_col().equals(nomRel)) {
         		return i;
         	}
@@ -95,7 +95,7 @@ public class SelectCommand {
     	for(int i=0; i<SelectCondition.getComparateur().length;i++) {
     		if(commande.contains(SelectCondition.getComparateur()[i])) {
     			String condi[] = commande.split(SelectCondition.getComparateur()[i]);
-    			indice = donneIndiceCol(condi[1].substring(0,condi[1].length()-1));//a revoir si cela compile (sinon ajouyer getindicecolonne)
+    			indice = donneIndiceCol(condi[0].substring(1));//a revoir si cela compile (sinon ajouyer getindicecolonne)
     			operateur = SelectCondition.getComparateur()[i];
     			if(condi[1].contains(" ")) {
     				value = condi[1].substring(0, condi[i].length()-1);

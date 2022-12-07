@@ -52,9 +52,9 @@ public class CreateTableCommand {
 		//System.out.println(Catalog.getInstance().GetRelationInfo(relation).toString());
 	}
 	
-	public String toString() {
+	/*public String toString() {
 		return Catalog.getInstance().GetRelationInfo(relation).toString();
-	}
+	}*/ 
 
 	public String getRelation(){
 		return relation;
@@ -64,7 +64,7 @@ public class CreateTableCommand {
 		return nb_col;
 	}
 
-	public void setNb_Col(nb_col){
+	public void setNb_Col(int nb_col){
 		this.nb_col=nb_col;
 	}
 

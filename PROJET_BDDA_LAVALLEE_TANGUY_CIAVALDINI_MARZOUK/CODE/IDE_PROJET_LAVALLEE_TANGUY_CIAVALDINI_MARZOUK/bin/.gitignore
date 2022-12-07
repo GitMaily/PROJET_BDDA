@@ -19,11 +19,3 @@
 /RelationInfo.class
 /SelectCommand.class
 /TestCatalog.class
-/.classpath
-/.gitignore
-/.project
-/InsertCommandTest.class
-/RecordIterator.class
-/SelectCondition.class
-/TestRecord.class
-/CommandTests.class
