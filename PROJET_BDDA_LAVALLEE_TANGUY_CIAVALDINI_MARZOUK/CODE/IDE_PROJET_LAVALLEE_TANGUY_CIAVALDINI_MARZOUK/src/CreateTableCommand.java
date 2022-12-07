@@ -55,4 +55,38 @@ public class CreateTableCommand {
 	public String toString() {
 		return Catalog.getInstance().GetRelationInfo(relation).toString();
 	}
+
+	public String getRelation(){
+		return relation;
+	}
+
+	public int getNb_Col(){
+		return nb_col;
+	}
+
+	public void setNb_Col(nb_col){
+		this.nb_col=nb_col;
+	}
+
+	public ArrayList<String> getNom_col(){
+		return nom_col;
+	}
+
+	public void setNom_col(ArrayList<String> nom_col){
+		this.nom_col = nom_col;
+	}
+
+	public ArrayList<String> getType_col(){
+		return type_col;
+	}
+
+	public void setType_col(ArrayList<String> type_col){
+		this.type_col=type_col;
+	}
+
+	public String toString(){
+		return "CREATE TABLE ( nom relation: "+relation+", nombreColonnes=" + nb_col+ ", nomColonnes=" + nomColonnes + ", type de Colonnes=" + type_col + ")";
+	}
+
+
 }
