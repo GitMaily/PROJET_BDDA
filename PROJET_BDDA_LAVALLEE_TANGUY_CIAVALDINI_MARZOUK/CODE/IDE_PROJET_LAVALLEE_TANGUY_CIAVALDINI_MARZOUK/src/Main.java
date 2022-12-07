@@ -66,18 +66,22 @@ public class Main {
 		
 		DBManager.getInstance().Init();
 		
-		boolean fin = false;
+		
 		Scanner scanner = new Scanner (System.in);
-		while(fin!=true) {
+		while(!scanner.equals("EXIT")) {
 			String commande = scanner.nextLine();
 			
-			switch(commande) {
-			case "EXIT": DBManager.getInstance().Finish();
-						fin = true;
-						break;
-			default: DBManager.getInstance().ProcessCommand(commande);
+			if(commande=="EXIT") {
+				DBManager.getInstance().Finish();
+				break;
+			}
+			else{ 
+				DBManager.getInstance().ProcessCommand(commande);
 			}
 		}
+
+		DBManager.getInstance().Finish();
+
 		scanner.close();
 		
 	}
