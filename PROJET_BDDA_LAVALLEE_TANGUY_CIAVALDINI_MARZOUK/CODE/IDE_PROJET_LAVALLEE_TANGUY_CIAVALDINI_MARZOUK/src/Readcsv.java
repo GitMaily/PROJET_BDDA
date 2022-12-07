@@ -15,7 +15,7 @@ public class Readcsv {
 		f = new File(nomfichier);
 		
 		ligne = new ArrayList<>();
-		
+		dvgcssghdfc
 	}
 	
 	public ArrayList<String> lireCsv() throws IOException{
