@@ -85,7 +85,7 @@ public class CreateTableCommand {
 	}
 
 	public String toString(){
-		return "CREATE TABLE ( nom relation: "+relation+", nombreColonnes=" + nb_col+ ", nomColonnes=" + nomColonnes + ", type de Colonnes=" + type_col + ")";
+		return "CREATE TABLE"+relation+", nom colonne:" + nom_col+ ", type colonne=" + type_col + ", nombre de Colonnes=" + nb_col + ")";
 	}
 
 
