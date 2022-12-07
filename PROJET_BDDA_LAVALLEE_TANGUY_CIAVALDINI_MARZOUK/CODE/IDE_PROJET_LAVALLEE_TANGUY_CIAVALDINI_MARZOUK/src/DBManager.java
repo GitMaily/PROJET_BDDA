@@ -33,8 +33,15 @@ public class DBManager {
 				DropDBCommand.execute();
 			break;
 			case "INSERT":
-				InsertCommande ic = new InsertCommande(commande);
-				ic.execute();
+				if(commande.contains("FILECONTENTS")){
+					InsertFichier infic = new InsertFichier(commande);
+					infic.insererFichier();
+				}
+				else{
+					InsertCommande ic = new InsertCommande(commande);
+					ic.execute();
+				}
+				
 			break;
 			case "SELECT":
 				SelectCommand sc = new SelectCommand(commande);
