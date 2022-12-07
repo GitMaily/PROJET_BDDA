@@ -178,7 +178,7 @@ private static FileManager INSTANCE = new FileManager();
 		int libres = 0;
 		System.out.println(bbHeader.getInt(0));
 		for(int i = 1;i<bbHeader.getInt(0);i++) {
-			if(bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES*2) == pageId.getFileIdx() && bbHeader.get((i*Integer.BYTES*3) - Integer.BYTES) == pageId.getFileIdx()) {
+			if(bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES*2) == pageId.getFileIdx() && bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES) == pageId.getPageIdx()) {
 				//libres = bbHeader.getInt(i*Integer.BYTES*3);
 				//bbHeader.position();
 				libres = i*Integer.BYTES*3;
