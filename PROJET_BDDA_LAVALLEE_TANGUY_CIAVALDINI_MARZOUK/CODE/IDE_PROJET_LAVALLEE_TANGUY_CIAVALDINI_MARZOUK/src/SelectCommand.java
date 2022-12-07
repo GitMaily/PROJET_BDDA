@@ -95,7 +95,7 @@ public class SelectCommand {
     	for(int i=0; i<SelectCondition.getComparateur().length;i++) {
     		if(commande.contains(SelectCondition.getComparateur()[i])) {
     			String condi[] = commande.split(SelectCondition.getComparateur()[i]);
-    			indice = donneIndiceCol(condi[1].substring(0,condi[1].length()-1));
+    			indice = donneIndiceCol(condi[1].substring(0,condi[1].length()-1));//a revoir si cela compile (sinon ajouyer getindicecolonne)
     			operateur = SelectCondition.getComparateur()[i];
     			if(condi[1].contains(" ")) {
     				value = condi[1].substring(0, condi[i].length()-1);
