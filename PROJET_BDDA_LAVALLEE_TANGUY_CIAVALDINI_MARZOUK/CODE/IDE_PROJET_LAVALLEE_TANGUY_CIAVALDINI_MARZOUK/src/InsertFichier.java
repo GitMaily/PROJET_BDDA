@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class InsertFichier {
@@ -13,38 +15,30 @@ public class InsertFichier {
 	
 	
 	
-	private void remplirValRecord() {
+	private void remplirValRecord() throws FileNotFoundException {
 		Readcsv l_c;
+		l_c = new Readcsv(NomFichier);
+		ValRecord = new ArrayList<>();
 		try{
-			l_c = new lireCsv(NomFichier);
-			ValRecord = new ArrayList<>();
-			try{
-				ValRecord= l_c.lireCsv();
-			}catch(IOException e) {
-                e.printStackTrace();
-            }
-		}catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+			ValRecord= l_c.lireCsv();
+		}catch(IOException e) {
+		    e.printStackTrace();
+		}
 		
 	}
 	
-	private void remplirCmd(){
+	private void remplirCmd() throws IOException{
 		for(int i =0; i>ValRecord.size();i++){
 			String entree = "INSERT INTO" + this.nomRel +"VALUES (";
-			String sasir = chaine + ValRecord.get(i);
-			try{
-				InsertCommande ic = new InsertCommande(sasir);
-				ic.execute();
-			}catch (IOException e) {
-  	          e.printStackTrace(); 
-			}
+			String sasir = entree + ValRecord.get(i);
+			InsertCommande ic = new InsertCommande(sasir);
+			ic.execute();
 		}
 	}
 		
 
 
-	public void insererFichier() {
+	public void insererFichier() throws IOException {
 
 		remplirValRecord();
 		remplirCmd();
@@ -69,6 +63,6 @@ public class InsertFichier {
 	}
 
 	public String toString(){
-		return this.nomRel+" "+ this.nomFichier;
+		return this.nomRel+" "+ this.NomFichier;
 	}
 }

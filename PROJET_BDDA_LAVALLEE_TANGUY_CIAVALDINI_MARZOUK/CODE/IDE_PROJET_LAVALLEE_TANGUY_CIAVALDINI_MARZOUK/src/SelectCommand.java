@@ -44,11 +44,11 @@ public class SelectCommand {
     				 int indiceCol = liste_condi().get(i).getIndice();
     				 String type = allRecords.get(i).getRelInfo().getNom_col().get(i).getType_col(); // methode mis en static et la variable qui va avec pour acces , pas reussi autrement
     				 switch(type) {
-    				 case "INTEGER":resultat= liste_condi().get(i).VerifCondition(indiceCol);
+    				 case "INTEGER":resultat= liste_condi().get(i).VerifCondition(Integer.valueOf(indiceCol));
     				 break;
-    				 case "REAL": resultat= liste_condi().get(i).VerifCondition(indiceCol);
+    				 case "REAL": resultat= liste_condi().get(i).VerifCondition(Float.valueOf(indiceCol));
     				 break;
-    				 default:resultat= liste_condi().get(i).VerifCondition(indiceCol);
+    				 default:resultat= liste_condi().get(i).VerifCondition(String.valueOf(indiceCol));
     				 break;
     				 }
     				 
@@ -105,7 +105,9 @@ public class SelectCommand {
     			indice = donneIndiceCol(condi[0].substring(1));//a revoir si cela compile (sinon ajouyer getindicecolonne)
     			operateur = SelectCondition.getComparateur()[i];
     			if(condi[1].contains(" ")) {
-    				value = condi[1].substring(0, condi[i].length()-1);
+    				//value = condi[1].substring(0, condi[i].length()-1);
+    				value = condi[1].trim();
+    			
     			}
     			else {
     				value = condi[1]; 

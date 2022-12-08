@@ -23,7 +23,7 @@ public class DBManager {
 		BufferManager.getInstance().FlushAll();
 	}
 	
-	public void ProcessCommand(String commande) {
+	public void ProcessCommand(String commande) throws IOException {
 		switch(commande){
 			case "CREATE TABLE":
 				CreateTableCommand c = new CreateTableCommand(commande);

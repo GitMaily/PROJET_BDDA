@@ -61,9 +61,7 @@ public class CommandTests {
 	private static void selectCommandTest() {
 		createTableTest();
 		insertCommandTest();
-		SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Cours=IF3BDDA\n"
-				+ "AND Note>=8\n"
-				+ "AND Note<10");
+		SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Cours=IF3BDDA AND Note>=10 AND Note<17");
 		
 		sc.execute();
 	}
