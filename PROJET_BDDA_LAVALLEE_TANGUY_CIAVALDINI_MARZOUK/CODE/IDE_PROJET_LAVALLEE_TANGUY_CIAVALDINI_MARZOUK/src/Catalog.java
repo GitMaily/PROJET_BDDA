@@ -5,10 +5,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Catalog {
+
+public class Catalog implements Serializable {
 		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3473937835247764563L;
 	private ArrayList<RelationInfo> listRI; // liste de relation
 	private int compteurRelation; // un compteur de relation
 	private String path = DBParams.DBPath + "/catalog.sv";
@@ -23,21 +29,11 @@ public class Catalog {
 	}
 	
 	public Catalog() {
-		try {
-			Init();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
 	}
 	
-
     /**
      * Sauvegarde les informations du Catalog dans un fichier nommé Catalog.sv.
-     * 
      * @throws IOException 
      * @throws FileNotFoundException 
      */
@@ -67,14 +63,16 @@ public class Catalog {
      * @throws ClassNotFoundException
      */
 	public void Init() throws FileNotFoundException, IOException, ClassNotFoundException {
-		listRI = new ArrayList<RelationInfo>();
+		
 		
 		File f = new File(path); // path = DBParams.DBPath + "/catalog.sv" (le chemin vers le fichier catalog.sv)
 		if(f.exists()) {
 			
 			FileInputStream fileInput = new FileInputStream(f);
 			ObjectInputStream objIn = new ObjectInputStream(fileInput);
-			objIn.readObject();
+			
+			Catalog.INSTANCE = (Catalog)objIn.readObject();
+			//objIn.readObject();
 			fileInput.close();
 			objIn.close();
 		}
@@ -98,7 +96,7 @@ public class Catalog {
 		for (int i =0; i<listRI.size(); i++) {
 			if(nomRI.equals(listRI.get(i).getNom())) {
 				indice = i;
-				break;
+				
 			}
 		}
 		if(indice != -1) {
