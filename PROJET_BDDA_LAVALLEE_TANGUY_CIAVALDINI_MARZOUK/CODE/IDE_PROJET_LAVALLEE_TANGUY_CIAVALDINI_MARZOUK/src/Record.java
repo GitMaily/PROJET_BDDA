@@ -10,13 +10,13 @@ public class Record {
 	
 	
 	public Record(RelationInfo relInfo) {
-		this.relInfo=relInfo;
+		Record.relInfo=relInfo;
 		Record.values= new ArrayList<String>();
 		
 	}
 	public Record(RelationInfo relInfo, ArrayList<String> values) {
 		super();
-		this.relInfo = relInfo;
+		Record.relInfo = relInfo;
 		Record.values = values;
 	}
 	
@@ -25,14 +25,15 @@ public class Record {
 		return relInfo;
 	}
 	public void setRelInfo(RelationInfo relInfo) {
-		this.relInfo = relInfo;
+		Record.relInfo = relInfo;
 	}
 	public ArrayList<String> getValues() {
 		return values;
-	}
+	} 
 	public void setValues(ArrayList<String> values) {
 		Record.values = values;
 	}
+	
 	
 	
 	public String afficherValues() {
@@ -50,65 +51,82 @@ public class Record {
 	}
 
 	
+	
+	
 	public void writeToBuffer(ByteBuffer buff, int pos) {
 		
 		String type;
-		
+		/**
+		 * cette variable sera mis à jour avec un +4 octet a chaque fois nouvelle itération de la boucle
+		 * elle correspond a la position des pointeur dans le buffer au début
+		 */
+		int position = 0; // taille en octet des pointeur et donc leur position à chacun
+		int totalVal = (1+relInfo.getNb_col()) * 4; //nombre total de case + 1 * 4 octet
+		/**
+		 * cette variable sera mis a jour avec le nombre d'octet de chaque valeur ajouté au buffer
+		 */
+		int tailleValeurAjouter = 0; // taille en octet des valeur ajouté au buffer
+		int adresseValeurPointer = pos + totalVal + tailleValeurAjouter;
 		buff.position(pos);
 		for(int i =0; i< values.size();i++) {
+			buff.position(pos+position); // on set la position dans le buffer au début pour ajouter le pointeur
+			buff.putInt((1+relInfo.getNb_col() * 4) + tailleValeurAjouter); // On met dans le buffer l'adresse de la valeur pointé 
+			position +=4;
 			type = relInfo.getNom_col().get(i).getType_col();
 			
 			switch(type) {
 			case "INTEGER" : int vInt = Integer.valueOf(values.get(i));
-			buff.putInt(vInt);
+			buff.putInt(pos+adresseValeurPointer,vInt);// a l'adresse de la position de la valeur, on ajoute la valeur
+			tailleValeurAjouter+=4;
 			break;
 			
 			case "REAL" : float vFloat = Float.valueOf(values.get(i));
-			buff.putFloat(vFloat);
+			buff.putFloat(pos+adresseValeurPointer,vFloat); // a l'adresse de la position de la valeur, on ajoute la valeur
+			tailleValeurAjouter+=4;
 			break;
 			
-			default : /*int vString = Integer.valueOf(values.get(i));
-			buff.putInt(vString);*/
+			default :
+			String vString = String.valueOf(values.get(i));
+			for(int j = 0, vCharOctet = 0;j<vString.length();j++, vCharOctet+=2) { //
+				buff.putChar(pos+adresseValeurPointer+vCharOctet,vString.charAt(j)); // a l'adresse de la position de la valeur, on ajoute chaque char avec une boucle
 				
-				String vString = String.valueOf(values.get(i));
-				for(int j = 0;j<vString.length();j++) {
-					buff.putChar(vString.charAt(j));
-					
-				}
-				//buff.putChar(vString.charAt(i));
+			}
+			tailleValeurAjouter += vString.length()*2;
+			}
+			if (i == (values.size()-1)) {
+				buff.putInt(pos+position, (1+relInfo.getNb_col()*4) + tailleValeurAjouter);
 			}
 		}
 	}
 	
-
+	
+	
 	void readFromBuffer(ByteBuffer buff, int pos) {
 		buff.position(pos);
-		String rel;
+		String chaine;
+		String type;
+		int Emplacement;
+		int position = 0;
+		int totalVal = (1+relInfo.getNb_col()) * 4; //nombre total de case + 1 * 4 octet
 		
 		for(int i=0; i<relInfo.getNb_col();i++) {
-			rel= relInfo.getNom_col().get(i).getType_col();
-			switch (rel) {
-			case "INTEGER" : values.add(i,Integer.toString(buff.position()));
-						buff.position(buff.position()+Integer.BYTES);		
+			type= relInfo.getNom_col().get(i).getType_col();
+			position = pos + totalVal; // on démarre a la premiere adresse des valeurs
+			switch (type) {
+			case "INTEGER" : values.add(String.valueOf(buff.getInt(pos+position)));	
+			position += 4;
 			break;
 			
-			case "REAL" :  values.add(i,Float.toString(buff.getFloat(buff.position())));
-						buff.position(buff.position()+Float.BYTES);
+			case "REAL" :  values.add(String.valueOf(buff.getFloat(pos+position)));
+			position +=4;
 			break;
 			 
-			//marche pas
-			default : Character tmp = Character.valueOf(buff.getChar(buff.position()));
-				StringBuffer sb = new StringBuffer();
-				sb.append(tmp);
-				for(int j = 0; j<buff.position(); j+=Character.BYTES) {
-					sb.append(buff.getChar(j));
-				}
-				values.add(sb.toString());
+			default :;
+				
+				
 			}
 		}
 	}
-	
-	
 	
 	public int getWrittenSize(){
 		int res = 0;
@@ -130,10 +148,6 @@ public class Record {
 		}
         return res;
     }
-	
-	
-	
-	
 }
 
 
