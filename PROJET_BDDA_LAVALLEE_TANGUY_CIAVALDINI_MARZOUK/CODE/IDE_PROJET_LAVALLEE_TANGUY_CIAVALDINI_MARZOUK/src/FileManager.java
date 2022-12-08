@@ -270,15 +270,17 @@ private static FileManager INSTANCE = new FileManager();
 		listeDePageIds = getAllDataPages(relInfo);
 		
 		ArrayList<Record> listeDeRecords = new ArrayList<Record>();
+		ArrayList<Record> listeAllRecords = new ArrayList<Record>();
+		
 		
 		for(PageId pid : listeDePageIds) {
 			listeDeRecords = getRecordsInDataPage(relInfo,pid);
 
 			for(Record rec : listeDeRecords) {
-				listeDeRecords.add(rec);
+				listeAllRecords.add(rec);
 			}
 		}		
 		
-		return listeDeRecords;
+		return listeAllRecords;
 	}
 }

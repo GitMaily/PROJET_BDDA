@@ -42,7 +42,7 @@ public class SelectCommand {
     			 boolean resultat = true;
     			 while(i<condition.size() && resultat) {
     				 int indiceCol = liste_condi().get(i).getIndice();
-    				 String type = Record.getRelInfo().getNom_col().get(i).getType_col(); // methode mis en static et la variable qui va avec pour acces , pas reussi autrement
+    				 String type = allRecords.get(i).getRelInfo().getNom_col().get(i).getType_col(); // methode mis en static et la variable qui va avec pour acces , pas reussi autrement
     				 switch(type) {
     				 case "INTEGER":resultat= liste_condi().get(i).VerifCondition(indiceCol);
     				 break;
@@ -64,7 +64,14 @@ public class SelectCommand {
     	}
     	//affiche , NAN SANS DEC, ducoup pas toucher svp 
         for(int i=0; i<recordR.size(); i++) {
-        	System.out.println(recordR.get(i).toString()+ " ; ");
+        	if( i == recordR.size()-1) {
+            	System.out.println(recordR.get(i).toString()+ ".");
+
+        	}
+        	else {
+            	System.out.println(recordR.get(i).toString()+ " ; ");
+
+        	}
         	
         }
         System.out.println("Total records= "+ recordR.size());
