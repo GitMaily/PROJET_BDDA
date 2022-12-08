@@ -11,12 +11,19 @@ public class DiskManagerTests {
 		//TestEcriturePage(0);
 		//TestLecturePage(0);
 		
-		TestCreerFichier();
+		//TestCreerFichier();
 
+		//TestAllocPage();
+		//TestCountAllocPage();
+		
+		
 		TestAllocPage();
-		TestCountAllocPage();
 	}
 	
+	
+	public static void TestAllocPage2() {
+		dm.allocPage2();
+	}
 	
 	public static void TestAllocPage() {
 		dm.allocPage();
@@ -26,15 +33,7 @@ public class DiskManagerTests {
 
 	}
 	
-	public static void TestCreerFichier() {
-		dm.creerFichier();
 	
-		dm.creerFichier();
-		dm.creerFichier();
-
-		
-		
-	}
 	
 	public static void TestCountAllocPage() {
 		

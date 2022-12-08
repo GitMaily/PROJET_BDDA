@@ -39,13 +39,15 @@ public class FileManagerTests {
 		return headerPage;
 	}
 	
-	public static void addDataPageTest() {
+	public static PageId addDataPageTest() {
 		
 		RelationInfo rel = creationRelationInfoContexte();
 		PageId pi = FileManager.getInstance().addDataPage(rel);
 
 
 		System.out.println(pi.toString());
+		
+		return pi;
 		
 	}
 	
@@ -81,8 +83,11 @@ public class FileManagerTests {
 	
 	public static void writeRecordToDataPageTest1() {
 		RelationInfo rel = creationRelationInfoContexte();
-
+		PageId pi = addDataPageTest();
+		System.out.println("addDataPageTest pageId toString = "+pi.toString());
 		PageId freePage = getFreeDataPageIdTest();
+		System.out.println("getFreeDataPageIdTest freePage toString = "+pi.toString());
+
 		ArrayList<String> values = new ArrayList<String>();
 		values.add("Ileana");
 		values.add("BDDA");
@@ -182,10 +187,10 @@ public class FileManagerTests {
 	public static void getAllRecordsTest() {
 		RelationInfo rel = creationRelationInfoContexte();
 
-		ArrayList<Record> recs = new ArrayList<Record>();
+		//ArrayList<Record> recs = new ArrayList<Record>();
 		ArrayList<Record> records = getRecordsInDataPageTest();
 		records = FileManager.getInstance().getAllRecords(rel);
-		for(Record rec : recs) {
+		for(Record rec : records) {
 			System.out.println(rec.toString());
 		}
 	}

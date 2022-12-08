@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -6,12 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DiskManager {
-
-	// Attributs
-	
-	/* On ne peut utiliser qu'une seule instance
-	 * il faut choisir entre ByteBuffer et byte[]
-	 */
 
 	private ByteBuffer page;
 	
@@ -30,46 +26,33 @@ public class DiskManager {
 		return INSTANCE;	
 	}
 	
+	/**
+	 * Crée un fichier vide, alloue un ByteBuffer de 4096 octets
+	 * @param pi Le PageId du fichier à créer
+	 */
+	public void creerFichier(PageId pi) {
+		
+		String path = "C:\\Users\\milly\\Desktop\\PROJET_BDDA\\PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK\\DB";
 
-	
-	public DiskManager() {
-	}
-	// Constructeurs
-	public DiskManager(ByteBuffer bb) {
-		//page2 = new byte[4096];
-		this.setPage(bb);
-	}
-	
-	
-	
-	public void creerFichier() {
-		
-		
 		try {
-			RandomAccessFile fichier = new RandomAccessFile("F"+fileId+".bdda","rw");
+			RandomAccessFile fichier = new RandomAccessFile(path + File.separator+"F"+pi.getFileIdx()+".bdda","rw"); //DBParams.DBpath
             //fichier.setLength(DBParams.maxPagesPerFile*DBParams.pageSize);
 
 
 			ByteBuffer bb = ByteBuffer.allocate(DBParams.pageSize); // alloue 4096 octets
 			
-			bb.put(4095, (byte) 32);
-			
-			System.out.println(bb.limit());
-            
-            System.out.println(bb.get(4095));
-            
-            
-            
+			bb.put(4095-2, (byte) 32);
+		
             fichier.seek(fichier.length());
-            fichier.writeByte(bb.get(4095));
+            //fichier.writeByte(bb.get(4095));
+            fichier.write(bb.array());
             
-            System.out.println(fichier.length());
-            
-            fichier.seek(0);
-            System.out.println("Dernier élément: "+fichier.readByte());
-
+            //Tests fichier complet
+            //fichier.seek(4*4096-4);
+            //fichier.writeByte(5);
             
             fichier.close();
+            
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -77,6 +60,165 @@ public class DiskManager {
 
 	}
 	
+	
+	public PageId allocPage2() {
+		
+		//String path = DBParams.DBPath;  //"C:\\Users\\milly\\Desktop\\PROJET_BDDA\\PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK\\DB"
+
+		String path = "C:\\Users\\milly\\Desktop\\PROJET_BDDA\\PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK\\DB";
+		File file = new File(path); // DBParams.DBPath 
+		
+		File [] f = file.listFiles();
+		PageId pi = new PageId();
+		
+		
+		int count = 0;
+
+		boolean complets = false;
+		for(int i = 0;i<f.length;i++) {
+			if(f[i].getName().endsWith(".bdda")) {
+				int fileIdx = Integer.valueOf(f[i].getName().substring(1,f[i].getName().length()-5));
+
+				if(f[i].length() <= DBParams.pageSize ) {
+					pi = new PageId(fileIdx,1);
+					System.out.println("Page = 1");
+					
+					i = f.length;
+					
+				}
+				else if(f[i].length() <= DBParams.pageSize*2 ) {
+					pi = new PageId(fileIdx,2);
+					System.out.println("Page = 2");
+					i = f.length;
+
+					
+				}
+				else if(f[i].length() <= DBParams.pageSize*3 ) {
+					pi = new PageId(fileIdx,3);
+					System.out.println("Page = 3");
+					i = f.length;
+
+				}
+				else {
+					complets = true;
+					count++;
+				}
+				
+				
+			}
+		}
+		
+		if(complets != true) {
+			try {
+				
+				
+				RandomAccessFile fichier = new RandomAccessFile(path +File.separator+ "F"+pi.getFileIdx()+".bdda","rw"); //DBParams.DBpath
+				ByteBuffer bb = ByteBuffer.allocate(DBParams.pageSize); // alloue 4096 octets
+				bb.put(4096-4, (byte) 32);
+	            fichier.seek(fichier.length());
+	            fichier.write(bb.array());
+				
+				fichier.close();
+				
+				return pi;
+			
+			
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+		}
+		else {
+			// Le fichier est plein (4*4096)
+			// créer nouveau fichier
+			pi.setFileIdx(count);
+			
+			creerFichier(pi);
+			
+			return pi;
+			
+		}
+		
+		
+		
+
+		/*StringBuffer sb = new StringBuffer();
+		for(File fs : f) {
+			if(fs.getName().endsWith(".bdda")) {
+				sb.append(fs.getName()+"\t");
+				System.out.println("Liste des fichiers .bdda : "+sb.toString());
+
+				System.out.println("fs length"+fs.length());
+				
+				if(fs.length() >= DBParams.maxPagesPerFile*DBParams.pageSize ) {  //DBParams.maxPagesPerFile*DBParams.pageSize
+					// Le fichier est plein (4*4096)
+					// créer nouveau fichier
+					
+					
+					/////////////////////////////
+					
+					
+					pi.setFileIdx(Integer.valueOf(fs.getName().substring(1,fs.getName().length()-5))+1);
+					
+					creerFichier(pi);
+					
+					return pi;
+					
+				}
+				else { // il reste de la place
+					try {
+						pi.setFileIdx(Integer.valueOf(fs.getName().substring(1,fs.getName().length()-5)));
+						
+						// Chercher cb de Pages allouées... Pas sûre qu'il faut faire comme ça mais ça marche :D
+						if(fs.length() <= DBParams.pageSize) {
+							pi.setPageIdx(1);
+							System.out.println("Page 1");
+						}
+						else if(fs.length() <= DBParams.pageSize*2) {
+							pi.setPageIdx(2);
+							System.out.println("Page 2");
+
+						}
+						else if(fs.length() <= DBParams.pageSize*3) {
+							pi.setPageIdx(3);
+							System.out.println("Page 3");
+
+						}
+						
+						RandomAccessFile fichier = new RandomAccessFile(path + "\\F"+pi.getFileIdx()+".bdda","rw"); //DBParams.DBpath
+						ByteBuffer bb = ByteBuffer.allocate(DBParams.pageSize); // alloue 4096 octets
+						bb.put(4096-4, (byte) 32);
+			            fichier.seek(fichier.length());
+			            fichier.write(bb.array());
+						
+						fichier.close();
+						
+						return pi;
+					
+					
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} 
+
+
+				}
+				
+
+			}
+			
+			
+		}*/
+		
+		// Aucun fichier .bdda, création d'un nouveau fichier
+		pi.setFileIdx(0);
+		pi.setPageIdx(0);
+		creerFichier(pi);
+		
+		return pi;
+	}
 	
 	static Map<Integer, ArrayList<Integer> > dico = new HashMap<Integer, ArrayList<Integer>>(); 
 	public PageId allocPage() {
@@ -190,19 +332,13 @@ public class DiskManager {
 	 */
 	
 	public void readPage(PageId pageId, ByteBuffer buff) {
-		/*fichier.seek(pageId.PageIdx*4096);
-		for(int i = pageId.PageIdx*4096;i<pageId.PageIdx*4096+4096;i++) {
-			buff.put(fichier.readByte());
-		}*/
+	
 		
 		try (RandomAccessFile fichier = new RandomAccessFile("F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId
 			fichier.seek(pageId.PageIdx*4096);
 			fichier.read(buff.array());
             fichier.close();
 
-			//Test sur le Main
-			//System.out.println(buff.limit());
-			//System.out.println("Position 10:"+buff.get(10));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} //"/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/test.txt","rw"
@@ -217,19 +353,11 @@ public class DiskManager {
 	public void writePage(PageId pageId, ByteBuffer buff) {
 
 		try (RandomAccessFile fichier = new RandomAccessFile("F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId
-			/*
-			for(int i = pageId.PageIdx;i<buff.limit();i++) {
-				fichier.seek(pageId.getPageIdx()*4096);
-				fichier.write(buff.get(i));
-			}*/
+			
 			
 			fichier.seek(pageId.PageIdx*4096); // On se place à la position de la page, donc page*byte-ième position
 			fichier.write(buff.array()); // puis on écrit le contenu du buff dans le fichier
 
-			
-			// Test sur le Main
-			//fichier.seek(5);
-			//System.out.println(fichier.read());
             fichier.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -247,34 +375,7 @@ public class DiskManager {
 	}
 		
 		
-/*
-	public class Delete_File(){
-	
-}
-    public static void main(String[] args)
-    {
-     try{
 
-      File file = new File("c:\\fichier.log");
-
-      if(file.delete()){
-       System.out.println(file.getName() + " est supprimé.");
-      }else{
-       System.out.println("Opération de suppression echouée");
-      }
-                File dossier = new File("c:\\dossier_log");
-
-      if(dossier.delete()){
-       System.out.println(dossier.getName() + " est supprimé.");
-      }else{
-       System.out.println("Opération de suppression echouée");
-      }
-
-     }catch(Exception e){
-      e.printStackTrace();
-     }
-    }
-}*/
 	
 
 

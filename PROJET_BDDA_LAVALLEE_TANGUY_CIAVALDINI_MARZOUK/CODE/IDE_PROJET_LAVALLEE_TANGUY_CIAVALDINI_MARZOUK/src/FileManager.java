@@ -171,13 +171,14 @@ private static FileManager INSTANCE = new FileManager();
 	     *  Actualisation du HeaderPage 
 	     */
 		
-		//ByteBuffer bbHeader = BufferManager.getInstance().GetPage(pageId);
+		// Débuguer ici
 		ByteBuffer bbHeader = BufferManager.getInstance().GetPage(record.getRelInfo().getHeaderPageId());
 
+		System.out.println("record headerPageId ========== "+record.getRelInfo().getHeaderPageId().toString());
 		// Recherche du Id DataPage, mise à jour du nombre d'octets libres
 		int libres = 0;
 		System.out.println(bbHeader.getInt(0));
-		for(int i = 1;i<bbHeader.getInt(0);i++) {
+		for(int i = 1;i<=bbHeader.getInt(0);i++) {
 			if(bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES*2) == pageId.getFileIdx() && bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES) == pageId.getPageIdx()) {
 				//libres = bbHeader.getInt(i*Integer.BYTES*3);
 				//bbHeader.position();
@@ -236,7 +237,7 @@ private static FileManager INSTANCE = new FileManager();
 		int posIdDataPageIdxFile = Integer.BYTES;
 		int posIdDataPageIdxPage = Integer.BYTES *2 ;
 		
-		for(int i = 1;i<bbHeaderPage.getInt(0);i++) {
+		for(int i = 0;i<bbHeaderPage.getInt(0);i++) {
 			
 			PageId pi = new PageId(bbHeaderPage.getInt(posIdDataPageIdxFile),bbHeaderPage.getInt(posIdDataPageIdxPage));
 			listeDePageIds.add(pi);
