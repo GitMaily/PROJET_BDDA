@@ -46,8 +46,9 @@ public class TestRecord {
         }
 
         System.out.println(sb.toString());
-		//r.readFromBuffer(buff, 0);
-		
+		System.out.println("\nvaleur avant read : " + r.afficherValues());
+        r.readFromBuffer(buff, 0);
+        System.out.println("\nvaleur après read : " +r.afficherValues());
 		
 	}
 	

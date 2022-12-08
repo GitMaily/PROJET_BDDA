@@ -66,7 +66,6 @@ public class Record {
 		 * cette variable sera mis a jour avec le nombre d'octet de chaque valeur ajouté au buffer
 		 */
 		int tailleValeurAjouter = 0; // taille en octet des valeur ajouté au buffer
-		int adresseValeurPointer = pos + totalVal + tailleValeurAjouter;
 		buff.position(pos);
 		for(int i =0; i< values.size();i++) {
 			buff.position(pos+position); // on set la position dans le buffer au début pour ajouter le pointeur
@@ -76,19 +75,19 @@ public class Record {
 			
 			switch(type) {
 			case "INTEGER" : int vInt = Integer.valueOf(values.get(i));
-			buff.putInt(pos+adresseValeurPointer,vInt);// a l'adresse de la position de la valeur, on ajoute la valeur
+			buff.putInt(pos+ totalVal + tailleValeurAjouter,vInt);// a l'adresse de la position de la valeur, on ajoute la valeur
 			tailleValeurAjouter+=4;
 			break;
 			
 			case "REAL" : float vFloat = Float.valueOf(values.get(i));
-			buff.putFloat(pos+adresseValeurPointer,vFloat); // a l'adresse de la position de la valeur, on ajoute la valeur
+			buff.putFloat(pos+ totalVal + tailleValeurAjouter,vFloat); // a l'adresse de la position de la valeur, on ajoute la valeur
 			tailleValeurAjouter+=4;
 			break;
 			
 			default :
 			String vString = String.valueOf(values.get(i));
 			for(int j = 0, vCharOctet = 0;j<vString.length();j++, vCharOctet+=2) { //
-				buff.putChar(pos+adresseValeurPointer+vCharOctet,vString.charAt(j)); // a l'adresse de la position de la valeur, on ajoute chaque char avec une boucle
+				buff.putChar(pos+totalVal+tailleValeurAjouter+vCharOctet,vString.charAt(j)); // a l'adresse de la position de la valeur, on ajoute chaque char avec une boucle
 				
 			}
 			tailleValeurAjouter += vString.length()*2;
@@ -103,9 +102,10 @@ public class Record {
 	
 	void readFromBuffer(ByteBuffer buff, int pos) {
 		buff.position(pos);
-		String chaine;
 		String type;
-		int Emplacement;
+		int emplacementChaine;
+		ArrayList<Character> tableauDeChar;
+		char[] tableauDeCharVrai;
 		int position = 0;
 		int totalVal = (1+relInfo.getNb_col()) * 4; //nombre total de case + 1 * 4 octet
 		
@@ -113,17 +113,27 @@ public class Record {
 			type= relInfo.getNom_col().get(i).getType_col();
 			position = pos + totalVal; // on démarre a la premiere adresse des valeurs
 			switch (type) {
-			case "INTEGER" : values.add(String.valueOf(buff.getInt(pos+position)));	
-			position += 4;
+			case "INTEGER" : values.add(String.valueOf(buff.getInt(position)));	
+			totalVal += 4;
 			break;
 			
-			case "REAL" :  values.add(String.valueOf(buff.getFloat(pos+position)));
-			position +=4;
+			case "REAL" :  values.add(String.valueOf(buff.getFloat(position)));
+			totalVal +=4;
 			break;
 			 
-			default :;
+			default : emplacementChaine = buff.getInt(pos + (i*4) + 4) - buff.getInt(pos + (i*4)); //grâce au pointeur, on récupère l'adresse des emplacement de la chaine  
 				
-				
+				tableauDeChar = new ArrayList<Character>();
+				for(int j = pos + totalVal; j < pos + totalVal + emplacementChaine; j+= 2 /*+2 car chaque lettre vaut 2 octets*/) {
+					
+					tableauDeChar.add(buff.getChar(j));
+				}
+				tableauDeCharVrai = new char[tableauDeChar.size()];
+				for(int j = 0, x = 0; j<tableauDeCharVrai.length; j++, x++) {
+					tableauDeCharVrai[x] = tableauDeChar.get(j);
+				}
+				values.add(new String(tableauDeCharVrai));
+				totalVal+=emplacementChaine;
 			}
 		}
 	}
