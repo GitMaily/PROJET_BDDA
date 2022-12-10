@@ -18,7 +18,7 @@ public class TestRecord {
 		ci.add(colonne2);
 		//ci.add(colonne3);
 		ci.add(colonne4);
-		RelationInfo ri = new RelationInfo("Etudiant", 2, ci, id);
+		RelationInfo ri = new RelationInfo("Etudiant", ci, id);
 		
 		//création du record
 		//Record r = new Record(ri);

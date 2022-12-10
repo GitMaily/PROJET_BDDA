@@ -12,16 +12,16 @@ public class RelationInfo {
 	
 	// le constructeur de la relationInfo
 
-	public RelationInfo(String nom, int nb_col, ArrayList<ColInfo> nom_col) {
+	public RelationInfo(String nom, ArrayList<ColInfo> nom_col) {
 		this.nom=nom;
-		this.nb_col=nb_col;
+		this.nb_col=nom_col.size();
 		this.nom_col=nom_col;
 		
 	}
 
-	public RelationInfo(String nom, int nb_col, ArrayList<ColInfo> nom_col, PageId headerPageId) {
+	public RelationInfo(String nom, ArrayList<ColInfo> nom_col, PageId headerPageId) {
 		this.nom=nom;
-		this.nb_col=nb_col;
+		this.nb_col=nom_col.size();
 		this.nom_col=nom_col;
 		this.headerPageId = headerPageId;
 

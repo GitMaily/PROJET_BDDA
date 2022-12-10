@@ -17,7 +17,7 @@ public class Catalog implements Serializable {
 	private static final long serialVersionUID = 3473937835247764563L;
 	private ArrayList<RelationInfo> listRI; // liste de relation
 	private int compteurRelation; // un compteur de relation
-	private String path = DBParams.DBPath + "/catalog.sv";
+	private String path = DBParams.DBPath + File.separator +"catalog.sv";
 	
 	static Catalog INSTANCE = new Catalog();
 	
@@ -29,7 +29,11 @@ public class Catalog implements Serializable {
 	}
 	
 	public Catalog() {
-		
+		try {
+			Init();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
     /**
@@ -63,7 +67,8 @@ public class Catalog implements Serializable {
      * @throws ClassNotFoundException
      */
 	public void Init() throws FileNotFoundException, IOException, ClassNotFoundException {
-		
+		listRI = new ArrayList<RelationInfo>();
+
 		
 		File f = new File(path); // path = DBParams.DBPath + "/catalog.sv" (le chemin vers le fichier catalog.sv)
 		if(f.exists()) {
@@ -71,7 +76,8 @@ public class Catalog implements Serializable {
 			FileInputStream fileInput = new FileInputStream(f);
 			ObjectInputStream objIn = new ObjectInputStream(fileInput);
 			
-			Catalog.INSTANCE = (Catalog)objIn.readObject();
+			//Catalog.INSTANCE = (Catalog)objIn.readObject();
+			
 			//objIn.readObject();
 			fileInput.close();
 			objIn.close();
@@ -86,7 +92,7 @@ public class Catalog implements Serializable {
 		listRI.add(RI);
 	}
 	
-	/**
+	/** 
 	 * On rentre un nom et ça nous renvoie 
 	 * @param nomRI - Le nom de la relation demandée
 	 * @return La relation assiociée dans la liste des relations, null sinon

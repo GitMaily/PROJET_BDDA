@@ -1,5 +1,11 @@
 import java.nio.ByteBuffer;
 
+/**
+ * Classe permettant d'utiliser un Iterator pour les jointures
+ * Ne sera pas utilisée, je l'ai seulement vaguement implémentée pour voir de toute façon
+ * @author Maily
+ *
+ */
 public class RecordIterator {
 	private RelationInfo relInfo;
 	private PageId pageId;

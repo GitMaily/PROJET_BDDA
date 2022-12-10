@@ -5,33 +5,33 @@ public class Record {
 
 	public RecordId ri;
 
-	public static RelationInfo relInfo; // Relation à laquelle appartient le record
-	static ArrayList<String> values;
+	public RelationInfo relInfo; // Relation à laquelle appartient le record
+	private ArrayList<String> values;
 	
 	
 	public Record(RelationInfo relInfo) {
-		Record.relInfo=relInfo;
-		Record.values= new ArrayList<String>();
+		this.relInfo=relInfo;
+		this.values= new ArrayList<String>();
 		
 	}
 	public Record(RelationInfo relInfo, ArrayList<String> values) {
 		super();
-		Record.relInfo = relInfo;
-		Record.values = values;
+		this.relInfo = relInfo;
+		this.values = values;
 	}
 	
 	
-	public static RelationInfo getRelInfo() {
+	public RelationInfo getRelInfo() {
 		return relInfo;
 	}
 	public void setRelInfo(RelationInfo relInfo) {
-		Record.relInfo = relInfo;
+		this.relInfo = relInfo;
 	}
 	public ArrayList<String> getValues() {
 		return values;
 	} 
 	public void setValues(ArrayList<String> values) {
-		Record.values = values;
+		this.values = values;
 	}
 	
 	
@@ -40,7 +40,7 @@ public class Record {
 		StringBuilder sb = new StringBuilder();
 		for(String val : values) {
 			sb.append(val);
-			sb.append("\t\t\t\t");
+			sb.append("");
 		}
 		
 		return sb.toString();
@@ -121,7 +121,12 @@ public class Record {
 			totalVal +=4;
 			break;
 			 
-			default : emplacementChaine = buff.getInt(pos + (i*4) + 4) - buff.getInt(pos + (i*4)); //grâce au pointeur, on récupère l'adresse des emplacement de la chaine  
+			default : 
+				
+				System.out.println(buff.getInt(pos + (i*4) + 4));
+				System.out.println(buff.getInt(pos + (i*4)));
+
+				emplacementChaine = buff.getInt(pos + (i*4) + 4) - buff.getInt(pos + (i*4)); //grâce au pointeur, on récupère l'adresse des emplacement de la chaine  
 				
 				tableauDeChar = new ArrayList<Character>();
 				for(int j = pos + totalVal; j < pos + totalVal + emplacementChaine; j+= 2 /*+2 car chaque lettre vaut 2 octets*/) {

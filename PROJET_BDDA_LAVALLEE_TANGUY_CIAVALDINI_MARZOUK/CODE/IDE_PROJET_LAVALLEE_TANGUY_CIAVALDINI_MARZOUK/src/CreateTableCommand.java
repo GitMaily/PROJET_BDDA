@@ -45,7 +45,7 @@ public class CreateTableCommand {
 			listeColInfo.add(col);
 		}
 		
-		RelationInfo relinfo = new RelationInfo(this.relation,this.nb_col, listeColInfo, HeaderPage);
+		RelationInfo relinfo = new RelationInfo(this.relation, listeColInfo, HeaderPage);
 		
 		Catalog.getInstance().AddRelationInfo(relinfo);
 		

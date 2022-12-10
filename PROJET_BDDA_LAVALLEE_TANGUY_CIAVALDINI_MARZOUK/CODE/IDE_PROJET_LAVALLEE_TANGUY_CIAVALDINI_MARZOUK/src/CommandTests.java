@@ -1,13 +1,12 @@
 
 public class CommandTests {
 	public static void main(String []args) {
-		//insertCommandTest();
-		//dropDBTest();
+		dropDBTest();
 		
-		selectCommandTest();
 		//createTableTest();
-		
-		
+		insertCommandTest();
+		//selectCommandTest();
+
 	}
 	
 	private static void dropDBTest() {
@@ -28,6 +27,7 @@ public class CommandTests {
 		//tc.execute();
 		//tc1.execute();
 		tc3.execute();
+		System.out.println(tc3.toString());
 
 		//System.out.println(tc.toString());
 
@@ -61,7 +61,7 @@ public class CommandTests {
 	private static void selectCommandTest() {
 		createTableTest();
 		insertCommandTest();
-		SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Cours=IF3BDDA AND Note>=10 AND Note<17");
+		SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Cours=IF3BDDA AND Note>=10 AND Note<18");
 		
 		sc.execute();
 	}

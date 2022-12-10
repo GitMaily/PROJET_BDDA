@@ -5,7 +5,7 @@ public class TestCatalog {
 		
 		public static void addRelationTest() throws ClassNotFoundException, IOException{
 			Catalog.getInstance().Init();
-			RelationInfo RI = new RelationInfo("Etudiant", 0, null);
+			RelationInfo RI = new RelationInfo("Etudiant",null);
 			Catalog.getInstance().AddRelationInfo(RI);
 			Catalog.getInstance().Finish();
 		}

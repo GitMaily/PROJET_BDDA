@@ -1,6 +1,6 @@
 public class DBParams {
 	
-	public static String DBPath;
+	public static String DBPath = "C:\\Users\\milly\\Desktop\\PROJET_BDDA\\PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK\\DB";
 	public static int pageSize = 4096;
 	public static int maxPagesPerFile = 4;
 	

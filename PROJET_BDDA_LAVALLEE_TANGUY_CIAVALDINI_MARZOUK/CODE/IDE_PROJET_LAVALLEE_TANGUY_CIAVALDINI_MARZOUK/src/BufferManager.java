@@ -8,10 +8,16 @@ public class BufferManager {
 	public PageId pageId;
 	private static int numero_tache;
 	private List<Frame> ListFrames; // buffer pool
-	private DiskManager dm;
 	
-	// Ne comporte qu'une seule et unique instance
+	/**
+	 *  L'instance unique du BufferManager
+	 */
 	public static BufferManager INSTANCE = new BufferManager();
+	
+	/**
+	 * Ne comporte qu'une seule et unique instance
+	 * @return L'instance unique du BufferManager
+	 */
 	public static BufferManager getInstance() {
 		if (INSTANCE == null) {
             INSTANCE = new BufferManager();
@@ -22,7 +28,6 @@ public class BufferManager {
 	public BufferManager()
 	{
 		
-		this.dm = DiskManager.getInstance();
 		init();
 		
 	}
@@ -63,7 +68,9 @@ public class BufferManager {
 
 		
 		
-		// Vérifie si on veut accéder à une page déjà existante!
+		/**
+		 *  Vérifie si on veut accéder à une page déjà existante!
+		 */
 		for(Frame frame : ListFrames) {
 			if(frame.getPageId() == pageId) {
 				frame.setPin_count(frame.getPin_count()+1);
@@ -73,7 +80,9 @@ public class BufferManager {
 
 		
 
-		// Vérifie si une case est libre ! Place la page dans cette case si c'est le cas
+		/**
+		 * Vérifie si une case est libre ! Place la page dans cette case si c'est le cas
+		 */
 		for(Frame frame : ListFrames) {
 
 			if(frame.getPageId( )== null) {
@@ -81,18 +90,21 @@ public class BufferManager {
 				frame.setPageId(pageId);
 				frame.setPin_count(1);
 				frame.setDirty(false);
-				dm.readPage(pageId, frame.getBuffer());
+				DiskManager.getInstance().readPage(pageId, frame.getBuffer());
 				
 				return frame.getBuffer();
 			}
 				
 		}
 
-		System.out.println("Application de LRU !");
+		System.out.println("Application de LRU");
 		
-		// Dans ce cas, la page demandée n'est pas déjà existante, et ne trouve pas de place dans le buffer pool
-		// Il faut remplacer parmis les frames existantes.
-		// On doit utiliser la politique de remplacement LRU
+		/**
+		 *  Dans ce cas, la page demandée n'est pas déjà existante, et ne trouve pas de place dans le buffer pool
+		 *  Il faut remplacer parmis les frames existantes.
+		 *	On doit utiliser la politique de remplacement LRU
+		 */
+		
 		
 		int tps = 0;
 		Frame fremplacer = ListFrames.get(tps);
@@ -116,13 +128,13 @@ public class BufferManager {
 
 			
 			if (fremplacer.isDirty())
-				dm.writePage(fremplacer.getPageId(), fremplacer.getBuffer());
+				DiskManager.getInstance().writePage(fremplacer.getPageId(), fremplacer.getBuffer());
 			
 			fremplacer.setPin_count(1);
 			fremplacer.setDirty(false);
 			fremplacer.setPageId(pageId);
 			fremplacer.setTimestamp(0);
-			dm.readPage(pageId, fremplacer.getBuffer());
+			DiskManager.getInstance().readPage(pageId, fremplacer.getBuffer());
 			ListFrames.set(candidat_elu, fremplacer);
 		
 			return ListFrames.get(candidat_elu).getBuffer();
@@ -187,7 +199,7 @@ public class BufferManager {
 	public void FlushAll() {
 		for (int i=0; i<ListFrames.size();i++) {
 			if(ListFrames.get(i).isDirty()==true) {
-				dm.writePage(ListFrames.get(i).getPageId(), ListFrames.get(i).getBuffer());
+				DiskManager.getInstance().writePage(ListFrames.get(i).getPageId(), ListFrames.get(i).getBuffer());
 			}
 		}
 		ListFrames.clear();

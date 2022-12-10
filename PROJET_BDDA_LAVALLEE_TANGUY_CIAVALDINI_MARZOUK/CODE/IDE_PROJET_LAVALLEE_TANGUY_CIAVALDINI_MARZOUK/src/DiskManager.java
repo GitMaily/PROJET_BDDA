@@ -31,8 +31,8 @@ public class DiskManager {
 	 * @param pi Le PageId du fichier à créer
 	 */
 	public void creerFichier(PageId pi) {
-		
-		String path = "C:\\Users\\milly\\Desktop\\PROJET_BDDA\\PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK\\DB";
+		String path = DBParams.DBPath;
+		//String path = "C:\\Users\\milly\\Desktop\\PROJET_BDDA\\PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK\\DB";
 
 		try {
 			RandomAccessFile fichier = new RandomAccessFile(path + File.separator+"F"+pi.getFileIdx()+".bdda","rw"); //DBParams.DBpath
@@ -61,11 +61,11 @@ public class DiskManager {
 	}
 	
 	
-	public PageId allocPage2() {
+	public PageId allocPage() {
 		
-		//String path = DBParams.DBPath;  //"C:\\Users\\milly\\Desktop\\PROJET_BDDA\\PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK\\DB"
+		String path = DBParams.DBPath;  //"C:\\Users\\milly\\Desktop\\PROJET_BDDA\\PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK\\DB"
 
-		String path = "C:\\Users\\milly\\Desktop\\PROJET_BDDA\\PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK\\DB";
+		//String path = "C:\\Users\\milly\\Desktop\\PROJET_BDDA\\PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK\\DB";
 		File file = new File(path); // DBParams.DBPath 
 		
 		File [] f = file.listFiles();
@@ -81,21 +81,29 @@ public class DiskManager {
 
 				if(f[i].length() <= DBParams.pageSize ) {
 					pi = new PageId(fileIdx,1);
-					System.out.println("Page = 1");
-					
+					//System.out.println("Page = 1");
+					System.out.println(pi.toString());
+					countpage++;
+
 					i = f.length;
 					
 				}
 				else if(f[i].length() <= DBParams.pageSize*2 ) {
 					pi = new PageId(fileIdx,2);
-					System.out.println("Page = 2");
+					//System.out.println("Page = 2");
+					System.out.println(pi.toString());
+					countpage++;
+
 					i = f.length;
 
 					
 				}
 				else if(f[i].length() <= DBParams.pageSize*3 ) {
 					pi = new PageId(fileIdx,3);
-					System.out.println("Page = 3");
+					//System.out.println("Page = 3");
+					System.out.println(pi.toString());
+					countpage++;
+
 					i = f.length;
 
 				}
@@ -107,7 +115,7 @@ public class DiskManager {
 				
 			}
 		}
-		
+		// Aucun fichier
 		if(complets != true) {
 			try {
 				
@@ -119,7 +127,7 @@ public class DiskManager {
 	            fichier.write(bb.array());
 				
 				fichier.close();
-				
+				countpage++;
 				return pi;
 			
 			
@@ -135,7 +143,8 @@ public class DiskManager {
 			pi.setFileIdx(count);
 			
 			creerFichier(pi);
-			
+			countpage++;
+
 			return pi;
 			
 		}
@@ -221,12 +230,11 @@ public class DiskManager {
 	}
 	
 	static Map<Integer, ArrayList<Integer> > dico = new HashMap<Integer, ArrayList<Integer>>(); 
-	public PageId allocPage() {
+	public PageId allocPage2() {
 		 int c =0;
 		 
 		  PageId pi = new PageId();
 
-		// TODO Auto-generated method stub
 		 /*etape 1 , verifie que le dictionnaire est vide 
 			 * si oui alors creer premeir FICHIER et l initialise (la clé) à zéro +
 			 * sinon parcour (for ou while) le dico en cherchant une case de valeur vide
@@ -244,7 +252,7 @@ public class DiskManager {
 				pi.FileIdx=0;
 				pi.PageIdx=0;
 
-				//creerFichier();
+				creerFichier(pi);
 				fileId++;
 				countpage++;
 				
@@ -290,7 +298,7 @@ public class DiskManager {
 							else if(dico.get(key).contains(3)==false) {
 								dico.computeIfAbsent(key, k -> new ArrayList<>()).add(3, 3);
 								pi.PageIdx=3;
-								countpage++;
+ 								countpage++;
 
 								return pi;
 							}
@@ -310,7 +318,7 @@ public class DiskManager {
 				if(c==dico.size()){
 						dico.computeIfAbsent(dico.size(), k -> new ArrayList<>()).add(0);
 						System.out.println("tout les fichier sont complet, creation d'un fichier existant");
-							//creerFichier();
+						creerFichier(pi);
 						fileId++;
 						pi.FileIdx=dico.size()-1;
 						pi.PageIdx=0;
@@ -334,7 +342,7 @@ public class DiskManager {
 	public void readPage(PageId pageId, ByteBuffer buff) {
 	
 		
-		try (RandomAccessFile fichier = new RandomAccessFile("F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId
+		try (RandomAccessFile fichier = new RandomAccessFile(DBParams.DBPath+File.separator+"F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId
 			fichier.seek(pageId.PageIdx*4096);
 			fichier.read(buff.array());
             fichier.close();
@@ -352,7 +360,8 @@ public class DiskManager {
 	 */
 	public void writePage(PageId pageId, ByteBuffer buff) {
 
-		try (RandomAccessFile fichier = new RandomAccessFile("F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId
+		
+		try (RandomAccessFile fichier = new RandomAccessFile(DBParams.DBPath+File.separator+"F"+pageId.getFileIdx()+".bdda","rw")) { // Ouvre le fichier d'id fileId
 			
 			
 			fichier.seek(pageId.PageIdx*4096); // On se place à la position de la page, donc page*byte-ième position
@@ -365,7 +374,11 @@ public class DiskManager {
 	}
 	
 	
-	public void Deadalloc (PageId pi) {
+	/**
+	 * Désalloue une page. Méthode de listes.
+	 * @param pi - La page à désallouer
+	 */
+	public void Deadalloc2 (PageId pi) {
 
 		dico.get(pi.FileIdx).remove(pi.PageIdx);
 		
@@ -374,8 +387,30 @@ public class DiskManager {
 		countpage--;
 	}
 		
-		
+	
+	/**
+	 * Désalloue une page. Ignore la page (ne jamais la « réutiliser » par la suite)
+	 * @param pageId - La page à désallouer
+	 */
+	public void deallocPage(PageId pageId) {
+		countpage--;
+	}
 
+	public String toString() {
+		String path = DBParams.DBPath;
+		File file = new File(path); // DBParams.DBPath 
+		File [] f = file.listFiles();
+		
+		StringBuffer sb = new StringBuffer();
+		for(int i = 0;i<f.length;i++) {
+			if(f[i].getName().endsWith(".bdda")) {
+				sb.append(f[i].getName()+" : "+f[i].length() + " Ko" + "\n");
+				//System.out.println(f[i].getName()+" : "+f[i].length() + " Ko");
+			}
+		}
+		
+		return sb.toString();
+	}
 	
 
 
@@ -405,5 +440,6 @@ public class DiskManager {
 	}
 
 
+	
 
 }
