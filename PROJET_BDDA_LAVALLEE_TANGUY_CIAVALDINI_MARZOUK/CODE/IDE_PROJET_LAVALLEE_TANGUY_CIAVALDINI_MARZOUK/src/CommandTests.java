@@ -4,8 +4,8 @@ public class CommandTests {
 		dropDBTest();
 		
 		//createTableTest();
-		insertCommandTest();
-		//selectCommandTest();
+		//insertCommandTest();
+		selectCommandTest();
 
 	}
 	
@@ -61,8 +61,9 @@ public class CommandTests {
 	private static void selectCommandTest() {
 		createTableTest();
 		insertCommandTest();
-		SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Cours=IF3BDDA AND Note>=10 AND Note<18");
-		
+		//SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Cours=IF3BDDA AND Note>=10 AND Note<18");
+		SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Cours=IF3BDDA AND Note=16");
+
 		sc.execute();
 	}
 

@@ -2,7 +2,7 @@
 public class SelectCondition {
 
 	private int indice; 
-	private static String[] comparateur = {"=","<",">","<=",">="};  
+	private static String[] comparateur = {"<=",">=","=","<",">"};  
 	private String valcomparaison;
 	private String comp;
 	
@@ -26,7 +26,7 @@ public class SelectCondition {
 	}
 	
 	public boolean VerifCondition(String ValRecord) {
-		if (comp=="=") {
+		if (comp.equals("=")) {
 			return this.valcomparaison.equals(ValRecord);
 		}
 		else {

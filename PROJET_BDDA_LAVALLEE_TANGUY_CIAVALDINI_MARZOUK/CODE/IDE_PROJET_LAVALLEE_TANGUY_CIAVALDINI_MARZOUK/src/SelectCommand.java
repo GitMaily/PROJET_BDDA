@@ -85,7 +85,7 @@ public class SelectCommand {
         RelationInfo r = Catalog.getInstance().GetRelationInfo(nomRel);
 
         for (int i = 0; i< r.getNb_col(); i++) { // a revoir
-        	if(r.getNom_col().get(i).getNom_col().equals(nomRel)) {
+        	if(r.getNom_col().get(i).getNom_col().equals(NomCol)) {
         		return i;
         	}
         }

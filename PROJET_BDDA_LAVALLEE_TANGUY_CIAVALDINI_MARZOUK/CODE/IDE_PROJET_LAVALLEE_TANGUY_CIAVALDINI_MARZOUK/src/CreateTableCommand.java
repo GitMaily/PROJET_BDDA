@@ -10,7 +10,7 @@ public class CreateTableCommand {
 	 * Constructeur effectuant le parsing de la commande 
 	 * @param chaine - String, commande donnée par utilisateur
 	 */
-	public CreateTableCommand(String commande) {
+ 	public CreateTableCommand(String commande) {
 		nom_col = new ArrayList<String>();
 		type_col =new ArrayList<String>();
 		
@@ -28,9 +28,14 @@ public class CreateTableCommand {
         	
 			nom_col.add(splitted[0]);
 			
-			if(splitted[1].endsWith("))")) {
+			if(splitted[1].contains("INTEGER") && splitted[1].endsWith(")")) {
 				splitted[1] = splitted[1].substring(0, splitted[1].length()-1);
 			}
+			else if(splitted[1].contains("VARCHAR") && splitted[1].endsWith("))")) {
+				splitted[1] = splitted[1].substring(0, splitted[1].length()-1);
+			}
+			
+		
 			type_col.add(splitted[1]);
 		}
 	}
@@ -85,7 +90,7 @@ public class CreateTableCommand {
 	}
 
 	public String toString(){
-		return "CREATE TABLE"+relation+", nom colonne:" + nom_col+ ", type colonne=" + type_col + ", nombre de Colonnes=" + nb_col + ")";
+		return "CREATE TABLE"+relation+", nom colonne:" + nom_col+ ", type colonne=" + type_col + ", nombre de Colonnes=" + nb_col;
 	}
 
 
