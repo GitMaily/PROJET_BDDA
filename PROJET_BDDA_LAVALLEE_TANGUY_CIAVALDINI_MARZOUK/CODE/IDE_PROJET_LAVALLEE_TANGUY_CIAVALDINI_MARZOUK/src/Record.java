@@ -87,6 +87,7 @@ public class Record {
 			default :
 			String vString = String.valueOf(values.get(i));
 			for(int j = 0, vCharOctet = 0;j<vString.length();j++, vCharOctet+=2) { //
+				//System.out.println("adresse :"+(pos+totalVal+tailleValeurAjouter+vCharOctet));
 				buff.putChar(pos+totalVal+tailleValeurAjouter+vCharOctet,vString.charAt(j)); // a l'adresse de la position de la valeur, on ajoute chaque char avec une boucle
 				
 			}
@@ -159,6 +160,7 @@ public class Record {
 				break;
 			default:
 				res += (values.get(i).length())*2; // Taille du string
+				res *= 2;
 			} 
 		}
         return res;

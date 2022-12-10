@@ -164,12 +164,12 @@ private static FileManager INSTANCE = new FileManager();
 		int m = bb.getInt(DBParams.pageSize - Integer.BYTES*2); // M
 		System.out.println("m = "+m);
 		System.out.println(DBParams.pageSize - Integer.BYTES*2);
-	    int positionSlot = (DBParams.pageSize-Integer.BYTES*2) - (m+1)*Integer.BYTES*1; // position du début du Record
-	    
+	    //int positionSlot = (DBParams.pageSize-Integer.BYTES*2) - (m+1)*Integer.BYTES*1; // position du début du Record
+	    int positionSlot = (DBParams.pageSize - Integer.BYTES*2)- (m+1)*Integer.BYTES*2;
 	    // On actualise la position du début du Record
-	    bb.putInt(positionSlot-Integer.BYTES,posDispo);
+	    bb.putInt(positionSlot,posDispo);
 	    // On actualise la taille du record, située juste un Integer après
-	    bb.putInt(positionSlot, record.getWrittenSize());
+	    bb.putInt(positionSlot+Integer.BYTES, record.getWrittenSize());
 	    
 	    // Incrémente d'un slot dans M = nb d'entrées slot dir
 	    bb.putInt(DBParams.pageSize-Integer.BYTES*2,++m);
@@ -195,6 +195,9 @@ private static FileManager INSTANCE = new FileManager();
 		int libres = 0;
 		//System.out.println(bbHeader.getInt(0));
 		for(int i = 1;i<=bbHeader.getInt(0);i++) {
+			System.out.println("pos courant fileIdx : "+((i*Integer.BYTES*3) - Integer.BYTES*2));
+			System.out.println("pos courant pageIdx : "+((i*Integer.BYTES*3) - Integer.BYTES));
+
 			if(bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES*2) == pageId.getFileIdx() && bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES) == pageId.getPageIdx()) {
 				//libres = bbHeader.getInt(i*Integer.BYTES*3);
 				//bbHeader.position();
@@ -209,6 +212,7 @@ private static FileManager INSTANCE = new FileManager();
 		
 		bbHeader.putInt(libres, DBParams.pageSize- newPosDispo - tailleSlotDir);
 		
+		System.out.println("Calcul new pos libre: "+(DBParams.pageSize- newPosDispo - tailleSlotDir));
 		 
 		BufferManager.getInstance().FreePage(record.getRelInfo().getHeaderPageId(), true);
 		RecordId rid = new RecordId(pageId, positionSlot- Integer.BYTES);
