@@ -97,7 +97,7 @@ public class BufferManager {
 				
 		}
 
-		System.out.println("Application de LRU");
+		//System.out.println("Application de LRU");
 		
 		/**
 		 *  Dans ce cas, la page demandée n'est pas déjà existante, et ne trouve pas de place dans le buffer pool

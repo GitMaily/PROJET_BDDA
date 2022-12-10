@@ -244,12 +244,17 @@ public class FileManagerTests {
 	
 	public static void getAllDataPagesTest(RelationInfo rel) {
 
+		System.out.println("***** Affichage de tous les DataPages *****");
 		ArrayList<PageId> pids = new ArrayList<PageId>();
 		pids = FileManager.getInstance().getAllDataPages(rel);
 		
 		for(PageId pid : pids) {
 			System.out.println(pid.toString());
+			
 		}
+		
+		System.out.println();
+
 	}
 	
 	public static void insertRecordInRelTest(Record record, PageId freePage) {
@@ -295,6 +300,7 @@ public class FileManagerTests {
 	}
 	
 	public static void getAllRecordsTest(RelationInfo rel, ArrayList<Record> records) {
+		System.out.println("***** Affichage de tous les Records existants dans la db *****");
 
 		//ArrayList<Record> recs = new ArrayList<Record>();
 		records = FileManager.getInstance().getAllRecords(rel);
@@ -310,7 +316,7 @@ public class FileManagerTests {
 		
 		//addDataPage
 		addDataPageTest(rel);
-		//addDataPageTest(rel);
+		addDataPageTest(rel);
 
 		
 		//getFreeDataPageId
@@ -320,14 +326,10 @@ public class FileManagerTests {
 		//writeRecordToDataPageTest(creationRecordContexte(rel),freePage);
 		
 		
-		//PageId freePage2 = getFreeDataPageIdTest(rel);
+		PageId freePage2 = getFreeDataPageIdTest(rel);
 
 		//writeRecordToDataPageTest(creationRecordContexte2(rel),freePage);
 
-		
-		//getRecordsInDataPage
-		//getRecordsInDataPageTest(rel, freePage);
-	
 		
 
 		insertRecordInRelTest(creationRecordContexte(rel), freePage);
@@ -336,16 +338,20 @@ public class FileManagerTests {
 		insertRecordInRelTest(creationRecordContexte4(rel), freePage);
 
 		
+
+		//getRecordsInDataPage
+		ArrayList<Record> records = getRecordsInDataPageTest(rel, freePage);
+	
 		
 		
 		
 		//getAllDataPages
-		
+		getAllDataPagesTest(rel);
 
 		//InsertRecordInRel
 		
 		//getAllRecords
-		
+		getAllRecordsTest(rel,records);
 
 	}
 }

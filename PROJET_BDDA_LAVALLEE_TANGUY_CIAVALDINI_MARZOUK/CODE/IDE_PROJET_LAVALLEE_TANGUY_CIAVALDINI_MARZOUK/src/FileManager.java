@@ -67,7 +67,7 @@ private static FileManager INSTANCE = new FileManager();
 		// On incrémente l'entier N correspondant au nombre de DataPage
 		int n = bbHeader.getInt(0);
 		bbHeader.putInt(0,++n);
-		
+		System.out.println("n = "+n);
 		// On place l'Id du DataPage ajouté (donc 2*4 octets + 4 octets)
 		int posIdDataPageIdxFile = (3*Integer.BYTES*(n-1))+Integer.BYTES; //int posIdDataPageIdxFile = Integer.BYTES*n;
 		int posIdDataPageIdxPage = posIdDataPageIdxFile + Integer.BYTES; //int posIdDataPageIdxPage = Integer.BYTES*n + Integer.BYTES;
@@ -195,9 +195,9 @@ private static FileManager INSTANCE = new FileManager();
 		int libres = 0;
 		//System.out.println(bbHeader.getInt(0));
 		for(int i = 1;i<=bbHeader.getInt(0);i++) {
-			System.out.println("pos courant fileIdx : "+((i*Integer.BYTES*3) - Integer.BYTES*2));
+			/*System.out.println("pos courant fileIdx : "+((i*Integer.BYTES*3) - Integer.BYTES*2));
 			System.out.println("pos courant pageIdx : "+((i*Integer.BYTES*3) - Integer.BYTES));
-
+			*/
 			if(bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES*2) == pageId.getFileIdx() && bbHeader.getInt((i*Integer.BYTES*3) - Integer.BYTES) == pageId.getPageIdx()) {
 				//libres = bbHeader.getInt(i*Integer.BYTES*3);
 				//bbHeader.position();
@@ -233,23 +233,22 @@ private static FileManager INSTANCE = new FileManager();
 		ByteBuffer bbDataPage = BufferManager.getInstance().GetPage(pageId);
 		
 		int m = bbDataPage.getInt(DBParams.pageSize - Integer.BYTES * 2);
-		int positionSlot = (DBParams.pageSize-Integer.BYTES*2) - m*Integer.BYTES*2; // premier Record
-		System.out.println("m = "+m);
-		System.out.println("positionSlot = "+positionSlot);
+		int positionSlot = (DBParams.pageSize-Integer.BYTES*2) - m*Integer.BYTES*2; // pos Record
+		//System.out.println("positionSlot = "+positionSlot);
 
 		
 		Record rec;
 		// 1 pour le premier record
 		for(int i = 1;i <= m; i++) {
 			rec = new Record(relInfo);
-			System.out.println("pos début rec1 = "+bbDataPage.getInt(positionSlot));
-			System.out.println("pos début rec2 = "+bbDataPage.getInt(positionSlot-8));
+			//System.out.println("pos début rec1 = "+bbDataPage.getInt(positionSlot));
+			//System.out.println("pos début rec2 = "+bbDataPage.getInt(positionSlot-8));
 
 			rec.readFromBuffer(bbDataPage, bbDataPage.getInt(positionSlot));
 			positionSlot = (DBParams.pageSize-Integer.BYTES*2) - i*Integer.BYTES*2;
 			listeDeRecords.add(rec);
-			System.out.println(rec.toString());
-			System.out.println("positionSlot = "+positionSlot);
+			//System.out.println(rec.toString());
+			//System.out.println("positionSlot = "+positionSlot);
 
 
 		}
@@ -270,15 +269,11 @@ private static FileManager INSTANCE = new FileManager();
 		ArrayList<PageId> listeDePageIds = new ArrayList<PageId>();
 		
 		ByteBuffer bbHeaderPage = BufferManager.getInstance().GetPage(relInfo.getHeaderPageId());
-		int posIdDataPageIdxFile = Integer.BYTES;
-		int posIdDataPageIdxPage = Integer.BYTES *2 ;
 		
-		for(int i = 0;i<bbHeaderPage.getInt(0);i++) {
-			
-			PageId pi = new PageId(bbHeaderPage.getInt(posIdDataPageIdxFile),bbHeaderPage.getInt(posIdDataPageIdxPage));
+		PageId pi;
+		for(int i = 1, j = Integer.BYTES;i<=bbHeaderPage.getInt(0);i++, j+=Integer.BYTES*3) {
+			pi = new PageId(bbHeaderPage.getInt(j),bbHeaderPage.getInt(j+Integer.BYTES));
 			listeDePageIds.add(pi);
-			posIdDataPageIdxFile += Integer.BYTES*3;
-			posIdDataPageIdxPage += Integer.BYTES*4;
 		}
 		
 		BufferManager.getInstance().FreePage(relInfo.getHeaderPageId(), true);
