@@ -124,8 +124,8 @@ public class Record {
 			 
 			default : 
 				
-				System.out.println(buff.getInt(pos + (i*4) + 4));
-				System.out.println(buff.getInt(pos + (i*4)));
+				//System.out.println(buff.getInt(pos + (i*4) + 4));
+				//System.out.println(buff.getInt(pos + (i*4)));
 
 				emplacementChaine = buff.getInt(pos + (i*4) + 4) - buff.getInt(pos + (i*4)); //grâce au pointeur, on récupère l'adresse des emplacement de la chaine  
 				

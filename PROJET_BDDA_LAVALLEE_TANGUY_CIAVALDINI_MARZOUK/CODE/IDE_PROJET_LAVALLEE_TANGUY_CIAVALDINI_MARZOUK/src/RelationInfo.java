@@ -1,7 +1,12 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class RelationInfo {
+public class RelationInfo implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -47332796009811867L;
 	private String nom; //nom de la relation
 	private int nb_col; // le nombre de colonnes
 	private ArrayList<ColInfo> nom_col; // le nom des colonnes

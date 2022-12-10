@@ -1,6 +1,6 @@
+import java.io.Serializable;
 
-
-public class PageId {
+public class PageId implements Serializable{
 	
 	
 	public  int FileIdx; // id du fichier

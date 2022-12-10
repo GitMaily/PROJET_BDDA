@@ -49,6 +49,9 @@ public class Catalog implements Serializable {
     			
     			FileOutputStream fileOut = new FileOutputStream(f);
     			ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
+    			/*for(RelationInfo ri : listRI) {
+    				objOut.writeObject(ri);
+    			} */   			
     			objOut.writeObject(this);
     			objOut.flush();
     			objOut.close();
@@ -76,7 +79,7 @@ public class Catalog implements Serializable {
 			FileInputStream fileInput = new FileInputStream(f);
 			ObjectInputStream objIn = new ObjectInputStream(fileInput);
 			
-			//Catalog.INSTANCE = (Catalog)objIn.readObject();
+			Catalog.INSTANCE = (Catalog)objIn.readObject();
 			
 			//objIn.readObject();
 			fileInput.close();
@@ -127,6 +130,20 @@ public class Catalog implements Serializable {
 
 	public void setCompteurRelation(int compteurRelation) {
 		this.compteurRelation = compteurRelation;
+	}
+	
+	
+	public String afficherListe() {
+		StringBuffer sb = new StringBuffer();
+		for(RelationInfo ri : listRI) {
+			sb.append(ri.getNom());
+		}
+		
+		return sb.toString();
+	}
+	
+	public String toString() {
+		return afficherListe();
 	}
 
 	/**
