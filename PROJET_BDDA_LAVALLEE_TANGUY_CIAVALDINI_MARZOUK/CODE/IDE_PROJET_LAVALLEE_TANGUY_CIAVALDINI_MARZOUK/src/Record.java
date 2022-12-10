@@ -132,13 +132,13 @@ public class Record {
 				tableauDeChar = new ArrayList<Character>();
 				for(int j = pos + totalVal; j < pos + totalVal + emplacementChaine; j+= 2 /*+2 car chaque lettre vaut 2 octets*/) {
 					
-					tableauDeChar.add(buff.getChar(j));
+					tableauDeChar.add(buff.getChar(j)); // chaque char on le met dans la liste
 				}
-				tableauDeCharVrai = new char[tableauDeChar.size()];
+				tableauDeCharVrai = new char[tableauDeChar.size()]; //grace a la liste on a la taille de la chaine
 				for(int j = 0, x = 0; j<tableauDeCharVrai.length; j++, x++) {
-					tableauDeCharVrai[x] = tableauDeChar.get(j);
+					tableauDeCharVrai[x] = tableauDeChar.get(j); // on met chaque char dans le tableau de char 
 				}
-				values.add(new String(tableauDeCharVrai));
+				values.add(new String(tableauDeCharVrai)); // et le tableau de char on le convertie en string qu'on rajoute dans values
 				totalVal+=emplacementChaine;
 			}
 		}
@@ -153,14 +153,14 @@ public class Record {
 		for(int i = 0; i < CI.size(); i++) { // -1?
 			switch(CI.get(i).getType_col()) {
 			case("INTEGER"):
-				res += 4; // t'aille d'un int
+				res += 8; // t'aille d'un int + taille adresse
 				break;
 			case("REAL"):
-				res+= 4; // Taille d'un float
+				res+= 8; // Taille d'un float + taille adresse 
 				break;
 			default:
 				res += (values.get(i).length())*2; // Taille du string
-				res *= 2;
+				res *= 2; // + taille adresse
 			} 
 		}
         return res;
