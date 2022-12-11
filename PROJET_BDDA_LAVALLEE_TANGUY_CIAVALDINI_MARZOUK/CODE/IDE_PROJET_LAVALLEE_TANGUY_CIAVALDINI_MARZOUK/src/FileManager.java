@@ -67,7 +67,7 @@ private static FileManager INSTANCE = new FileManager();
 		// On incrémente l'entier N correspondant au nombre de DataPage
 		int n = bbHeader.getInt(0);
 		bbHeader.putInt(0,++n);
-		System.out.println("n = "+n);
+		//System.out.println("n = "+n);
 		// On place l'Id du DataPage ajouté (donc 2*4 octets + 4 octets)
 		int posIdDataPageIdxFile = (3*Integer.BYTES*(n-1))+Integer.BYTES; //int posIdDataPageIdxFile = Integer.BYTES*n;
 		int posIdDataPageIdxPage = posIdDataPageIdxFile + Integer.BYTES; //int posIdDataPageIdxPage = Integer.BYTES*n + Integer.BYTES;
@@ -162,8 +162,8 @@ private static FileManager INSTANCE = new FileManager();
 		 */
 		
 		int m = bb.getInt(DBParams.pageSize - Integer.BYTES*2); // M
-		System.out.println("m = "+m);
-		System.out.println(DBParams.pageSize - Integer.BYTES*2);
+		//System.out.println("m = "+m);
+		//System.out.println(DBParams.pageSize - Integer.BYTES*2);
 	    //int positionSlot = (DBParams.pageSize-Integer.BYTES*2) - (m+1)*Integer.BYTES*1; // position du début du Record
 	    int positionSlot = (DBParams.pageSize - Integer.BYTES*2)- (m+1)*Integer.BYTES*2;
 	    // On actualise la position du début du Record
@@ -173,10 +173,10 @@ private static FileManager INSTANCE = new FileManager();
 	    
 	    // Incrémente d'un slot dans M = nb d'entrées slot dir
 	    bb.putInt(DBParams.pageSize-Integer.BYTES*2,++m);
-		System.out.println("m = "+m);
+		//System.out.println("m = "+m);
 
 		
-		System.out.println(bb.getInt(DBParams.pageSize-Integer.BYTES*2));
+		//System.out.println(bb.getInt(DBParams.pageSize-Integer.BYTES*2));
 		// On actualise la nouvelle position d'espace disponible du DataPage
 	    int newPosDispo = posDispo+record.getWrittenSize();
 	    bb.putInt(DBParams.pageSize-Integer.BYTES,newPosDispo);

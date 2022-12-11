@@ -17,7 +17,8 @@ public class CommandTests {
 	private static void createTableTest() {
 		String commande = "CREATE TABLE Profs (X:INTEGER,C2:VARCHAR(5),BLA:VARCHAR(10))";
 		String commande2 = "CREATE TABLE Profs (NOM:VARCHAR(10),UE:VARCHAR(5))";
-		String commande3 = "CREATE TABLE ToutesLesNotes (Cours:VARCHAR(10),Note:INTEGER)";
+		//String commande3 = "CREATE TABLE ToutesLesNotes (Cours:VARCHAR(10),Note:INTEGER)";
+		String commande3 = "CREATE TABLE ToutesLesNotes (Note:REAL,Cours:VARCHAR(10)";
 
 		//CreateTableCommand tc = new CreateTableCommand("CREATE TABLE Profs (X:INTEGER,C2:REAL,BLA:VARCHAR(10))");
 		//CreateTableCommand tc1 = new CreateTableCommand(commande2);
@@ -41,7 +42,9 @@ public class CommandTests {
 		/*InsertCommande ic1 = new InsertCommande("INSERT INTO Profs VALUES (Ileana,BDDA)");
 		InsertCommande ic2 = new InsertCommande("INSERT INTO Profs VALUES (Jean-Guy-Mailly,PROG)");
 		InsertCommande ic3 = new InsertCommande("INSERT INTO Profs VALUES (Crapez,GFE)");*/
-		InsertCommande ic4 = new InsertCommande("INSERT INTO ToutesLesNotes VALUES (IF3BDDA,16)" );
+		
+		System.out.println("Insertion de la commande");
+		InsertCommande ic4 = new InsertCommande("INSERT INTO ToutesLesNotes VALUES (16.0,IF3BDDA)" );
 
 		System.out.println(ic4.toString());
 		
@@ -61,8 +64,10 @@ public class CommandTests {
 	private static void selectCommandTest() {
 		createTableTest();
 		insertCommandTest();
-		//SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Cours=IF3BDDA AND Note>=10 AND Note<18");
-		SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Cours=IF3BDDA AND Note=16");
+		SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Cours=IF3BDDA AND Note>=10 AND Note<=16");
+		//SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Note=16");
+		//SelectCommand sc = new SelectCommand("SELECT * FROM ToutesLesNotes WHERE Cours=IF3BDDA");
+
 
 		sc.execute();
 	}

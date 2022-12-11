@@ -26,7 +26,7 @@ public class InsertCommande {
         Record r = new Record(Catalog.getInstance().GetRelationInfo(nomRelation), valeurCol);
         FileManager.getInstance().InsertRecordInRel(r); // r.ri = 
         
-        System.out.println(r.toString());
+        //System.out.println(r.toString());
         
         DeleteValCol();
         System.out.println();
