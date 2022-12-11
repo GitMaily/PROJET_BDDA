@@ -17,9 +17,9 @@ public class SelectCommand {
 	 * @param command
 	 */
 	private void spliter(String command) {
-		cmd = command.split("WHERE");
-		String [] tamp = cmd[0].split(" ");
-		this.nomRel=tamp[3];
+		cmd = command.split(" ");
+		String tamp = cmd[3];
+		this.nomRel=tamp;
 		
 	}
 	
