@@ -216,7 +216,10 @@ private static FileManager INSTANCE = new FileManager();
 		 
 		BufferManager.getInstance().FreePage(record.getRelInfo().getHeaderPageId(), true);
 		RecordId rid = new RecordId(pageId, positionSlot- Integer.BYTES);
-		
+		record.setRi(new RecordId(pageId, positionSlot- Integer.BYTES));
+		record.getRi().setPageId(rid.getPageId());
+		record.getRi().setSlotIdx(rid.getSlotIdx());
+
 		return rid;
 		
 	}
@@ -269,7 +272,6 @@ private static FileManager INSTANCE = new FileManager();
 		ArrayList<PageId> listeDePageIds = new ArrayList<PageId>();
 		
 		ByteBuffer bbHeaderPage = BufferManager.getInstance().GetPage(relInfo.getHeaderPageId());
-		
 		PageId pi;
 		for(int i = 1, j = Integer.BYTES;i<=bbHeaderPage.getInt(0);i++, j+=Integer.BYTES*3) {
 			pi = new PageId(bbHeaderPage.getInt(j),bbHeaderPage.getInt(j+Integer.BYTES));
@@ -291,6 +293,76 @@ private static FileManager INSTANCE = new FileManager();
 		return writeRecordToDataPage(record, getfreeDataPageId(record.getRelInfo(), record.getWrittenSize()));
 	}
 	
+	
+	public void DeleteRecordInRel(Record record) {
+		ArrayList<PageId> listePageIds = getAllDataPages(record.getRelInfo());
+		
+		
+		for(PageId pi : listePageIds) {
+			removeRecordFromDataPage(record, pi);
+		}
+		//return removeRecordFromDataPage(record); //, getUsedDataPageId(record.getRelInfo().getHeaderPageId()));
+		
+	}
+	
+	private RecordId removeRecordFromDataPage(Record record, PageId pageId) {
+		
+		
+		/**
+		 * Prendre le DataPage
+		 */
+		ByteBuffer bbDataPage = BufferManager.getInstance().GetPage(pageId);
+		
+		/**
+		 * On remplace chaque byte par un 0
+		 */
+		//int index = record.getRi().getSlotIdx();
+		int index = 4056;
+		System.out.println(index);
+	    for(int i = bbDataPage.getInt(index); i < bbDataPage.getInt(index + Integer.BYTES); i++) {
+	    	bbDataPage.put(index++, bbDataPage.get(i));
+	    	bbDataPage.put(i, (byte)0);
+	    }
+	    bbDataPage.position(index);
+		
+		ArrayList<Record> records = new ArrayList<Record>(); 
+		 
+		/**
+		 * On décale toutes les données des autres record écrit a gauche
+		 * jusqu'à l'indice de position début d'espace disponible
+		 */
+		//System.out.println(bbDataPage.getInt(index));
+		//System.out.println(bbDataPage.getInt(DBParams.pageSize-Integer.BYTES));
+		
+		for(int i = bbDataPage.getInt(index);i< bbDataPage.getInt(DBParams.pageSize-Integer.BYTES);i++) {
+			
+			
+			//System.out.println(bbDataPage.getInt(index + Integer.BYTES));			
+			bbDataPage.put(index + Integer.BYTES,bbDataPage.get(i));
+			
+			bbDataPage.put(bbDataPage.getInt(index + Integer.BYTES) , bbDataPage.get(i));
+			index++;
+		}
+		
+		BufferManager.getInstance().FreePage(pageId, true);
+		/**
+		 * Actualiser HeaderPage
+		 * taille
+		 */
+		
+		/**
+		 * Actualiser DataPage slotDir
+		 * taille, M, pos
+		 */
+		
+		
+		return record.getRi();
+	}
+
+	/*private Object getUsedDataPageId(RelationInfo relInfo, Record record) {
+		return null;
+	}*/
+
 	/**
 	 * Liste tous les records dans une relation.
 	 * @param relInfo
@@ -314,4 +386,6 @@ private static FileManager INSTANCE = new FileManager();
 		
 		return listeAllRecords;
 	}
+
+	
 }

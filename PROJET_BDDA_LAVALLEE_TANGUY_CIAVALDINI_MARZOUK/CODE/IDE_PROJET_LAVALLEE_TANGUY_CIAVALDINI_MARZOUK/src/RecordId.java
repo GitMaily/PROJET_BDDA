@@ -3,9 +3,8 @@ public class RecordId {
 	private PageId pageId; // la page à laquelle appartient le record
 	private int slotIdx;
 	
-	
 	public RecordId(PageId pageId, int slotIdx) {
-		super();
+		//super();
 		this.pageId = pageId;
 		this.slotIdx = slotIdx;
 	}

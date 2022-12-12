@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Record {
 
-	public RecordId ri;
+	private RecordId ri;
 
 	public RelationInfo relInfo; // Relation à laquelle appartient le record
 	private ArrayList<String> values;
@@ -12,6 +12,7 @@ public class Record {
 	public Record(RelationInfo relInfo) {
 		this.relInfo=relInfo;
 		this.values= new ArrayList<String>();
+		this.ri = null;
 		
 	}
 	public Record(RelationInfo relInfo, ArrayList<String> values) {
@@ -165,6 +166,12 @@ public class Record {
 		}
         return res;
     }
+	public RecordId getRi() {
+		return ri;
+	}
+	public void setRi(RecordId ri) {
+		this.ri = ri;
+	}
 }
 
 

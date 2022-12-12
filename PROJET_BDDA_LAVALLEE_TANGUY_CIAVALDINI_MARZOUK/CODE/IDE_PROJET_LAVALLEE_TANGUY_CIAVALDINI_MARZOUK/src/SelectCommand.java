@@ -25,6 +25,12 @@ public class SelectCommand {
 		
 	}
 	
+	public ArrayList<Record> getRecordR() {
+		return recordR;
+	}
+	public void setRecordR(ArrayList<Record> recordR) {
+		this.recordR = recordR;
+	}
 	/**
 	 * Permet de vérifier si le record répond à toutes les conditions de la selection, en comparant les valeurs qui ont été split au préalable.
 	 * @param split Le tuple à comparer
@@ -70,11 +76,15 @@ public class SelectCommand {
     				
     				case "INTEGER" : 
     					switch(comparateur) { // Note = 16
-            				case "=": resultat =  (Integer.valueOf(allRecords.get(iterateur).getValues().get(j))) == (Integer.valueOf(newSplit[1].trim())); break;
-            				case "<": resultat =  Integer.valueOf(allRecords.get(iterateur).getValues().get(j)) < (Integer.valueOf(newSplit[1].trim())); break;
-            				case ">": resultat =  (Integer.valueOf(allRecords.get(iterateur).getValues().get(j))) > (Integer.valueOf(newSplit[1].trim())); break;
-            				case "<=": resultat =  (Integer.valueOf(allRecords.get(iterateur).getValues().get(j))) <= (Integer.valueOf(newSplit[1].trim())); break;
-            				case ">=": resultat = (Integer.valueOf(allRecords.get(iterateur).getValues().get(j))) >= (Integer.valueOf(newSplit[1].trim())); break;
+            				case "=": resultat =  (Integer.parseInt(allRecords.get(iterateur).getValues().get(j))) == (Integer.parseInt(newSplit[1].trim())); 
+            				/*System.out.println("On compare :"+Integer.valueOf(allRecords.get(iterateur).getValues().get(j))+" et:"+Integer.valueOf(newSplit[1].trim()));
+            				System.out.println((Integer.parseInt(allRecords.get(iterateur).getValues().get(j))) == (Integer.parseInt(newSplit[1].trim())));
+            				*/
+            				break;
+            				case "<": resultat =  Integer.parseInt(allRecords.get(iterateur).getValues().get(j)) < (Integer.parseInt(newSplit[1].trim())); break;
+            				case ">": resultat =  (Integer.parseInt(allRecords.get(iterateur).getValues().get(j))) > (Integer.parseInt(newSplit[1].trim())); break;
+            				case "<=": resultat =  (Integer.parseInt(allRecords.get(iterateur).getValues().get(j))) <= (Integer.parseInt(newSplit[1].trim())); break;
+            				case ">=": resultat = (Integer.parseInt(allRecords.get(iterateur).getValues().get(j))) >= (Integer.parseInt(newSplit[1].trim())); break;
             				default: System.out.println("comparateur incorrect");
             						resultat = false;
     					}

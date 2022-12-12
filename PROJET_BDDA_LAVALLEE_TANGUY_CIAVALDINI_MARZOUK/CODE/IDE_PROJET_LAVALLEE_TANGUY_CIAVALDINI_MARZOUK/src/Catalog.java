@@ -150,6 +150,11 @@ public class Catalog implements Serializable {
 	 * Réinitialise le Catalogue lors de la saisie de la commande DROPDB
 	 */
 	public void reinitialiser(){
+		File file = new File(DBParams.DBPath+File.separator+"Catalog");
+
+		if(file.exists()) {
+			file.delete();
+		}
 		listRI.clear();
 		compteurRelation = 0;
 	}

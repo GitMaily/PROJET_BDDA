@@ -8,6 +8,7 @@ public class InsertCommande {
     public InsertCommande(String commande){
         this.valeurCol = new ArrayList<>();
 
+        
         String [] liste_commande = commande.split(" ");
         this.nomRelation=liste_commande[2];
         String [] valeurs = null;
@@ -53,7 +54,10 @@ public class InsertCommande {
 
     public void execute(){
         Record r = new Record(Catalog.getInstance().GetRelationInfo(nomRelation), valeurCol);
-        FileManager.getInstance().InsertRecordInRel(r); // r.ri = 
+        RecordId rid = FileManager.getInstance().InsertRecordInRel(r); // r.ri = 
+        r.setRi(rid);
+        r.getRi().setPageId(rid.getPageId());
+        r.getRi().setSlotIdx(rid.getSlotIdx());
         
         DeleteValCol();
     }

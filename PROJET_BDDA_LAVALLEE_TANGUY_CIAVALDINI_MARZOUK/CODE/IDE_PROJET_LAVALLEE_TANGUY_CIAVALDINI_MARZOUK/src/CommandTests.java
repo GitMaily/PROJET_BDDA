@@ -15,6 +15,15 @@ public class CommandTests {
 		sc.execute();
 		System.out.println();
 		
+		
+		System.out.println("SELECT * FROM S WHERE C3=12 AND C1=167");
+		SelectCommand sc2 = new SelectCommand("SELECT * FROM S WHERE C3=12 AND C1=167");
+		sc2.execute();
+		System.out.println();
+		
+		
+		
+		
 	}
 	
 	public static void scenarioTP6() {
@@ -62,16 +71,32 @@ public class CommandTests {
 		
 		dropDBTest();
 		
-		//csvTest();
+		csvTest();
 		
 		//createTableTest();
 		//insertCommandTest();
 		//selectCommandTest();
 		
-		scenarioTP6();
+		//scenarioTP6();
 		//profsTest();
 		
+		//deleteCommandTest();
+		
+		
+		
 	}
+	
+	private static void deleteCommandTest() {
+		csvTest();
+
+		DeleteCommand dc = new DeleteCommand("DELETE * FROM S WHERE C3=12 AND C1=167");
+		dc.execute();
+		
+		SelectCommand sc = new SelectCommand("SELECT * FROM S WHERE C3=12 AND C1=167");
+
+		sc.execute();
+	}
+	
 	
 	private static void dropDBTest() {
 		DropDBCommand.supprimerFichiers();

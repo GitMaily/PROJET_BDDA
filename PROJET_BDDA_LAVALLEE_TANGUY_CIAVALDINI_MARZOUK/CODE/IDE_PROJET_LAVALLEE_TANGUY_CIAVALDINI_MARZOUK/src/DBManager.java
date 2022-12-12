@@ -49,7 +49,13 @@ public class DBManager {
 			case "SELECT":
 				SelectCommand sc = new SelectCommand(commande);
 				sc.execute();
+				
+				
 			break;
+			
+			case "DELETE":
+				DeleteCommand dc = new DeleteCommand(commande);
+				dc.execute();
 		}
 	}
 }
