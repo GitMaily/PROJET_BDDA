@@ -25,7 +25,7 @@ public class SelectCommand {
 	}
 	
 	
-	public boolean comparaison(String split) {
+	public boolean comparaison(String split, int iterateur) {
 		ArrayList<Record> allRecords = null;
 		allRecords= FileManager.getInstance().getAllRecords(Catalog.getInstance().GetRelationInfo(nomRel));
 
@@ -44,7 +44,7 @@ public class SelectCommand {
 				comparateur = comparateurs[i];
 				System.out.println("Itérateur :"+i);
 				System.out.println("comparateur :"+comparateurs[i]);
-				newSplit = split.split(comparateurs[i]); // Cours=IF3BDDA // Note<10 AND Note<18
+				newSplit = split.split(comparateurs[i]); // Cours=IF3BDDA // Note<10 // Note<18
 				//newSplit = cmd[1].split(comparateurs[i]); // Cours // IF3BDDA
 
 				for(String splits : newSplit) {
@@ -62,17 +62,17 @@ public class SelectCommand {
 				
 		int sizeRecords = allRecords.size();
 		boolean resultat = false;
-		for(int i = 0; i < sizeRecords ;i++) { // comparer nom type colonne
+		//for(int i = 0; i < sizeRecords ;i++) { // comparer nom type colonne
 			
-			int nbCol = allRecords.get(i).getRelInfo().getNb_col();
+			int nbCol = allRecords.get(iterateur).getRelInfo().getNb_col();
 			for(int j = 0; j < nbCol ; j ++) {
-				String nomCol = allRecords.get(i).getRelInfo().getNom_col().get(j).getNom_col();
+				String nomCol = allRecords.get(iterateur).getRelInfo().getNom_col().get(j).getNom_col();
 				
 				System.out.println("newSplit[0] ="+newSplit[0]);
 				System.out.println("nomCol ="+nomCol);
 				
 				if(newSplit[0].trim().equals(nomCol)) {
-    				String typeCol = allRecords.get(i).getRelInfo().getNom_col().get(j).getType_col();
+    				String typeCol = allRecords.get(iterateur).getRelInfo().getNom_col().get(j).getType_col();
     				
     				switch(typeCol) {
     				
@@ -80,11 +80,11 @@ public class SelectCommand {
     					//System.out.println("Comparateur :"+comparateur);
     					System.out.println("case : INTEGER");
     					switch(comparateur) { // Note = 16
-            				case "=": resultat =  (Integer.valueOf(allRecords.get(i).getValues().get(j))) == (Integer.valueOf(newSplit[1].trim())); break;
-            				case "<": resultat =  Integer.valueOf(allRecords.get(i).getValues().get(j)) < (Integer.valueOf(newSplit[1].trim())); break;
-            				case ">": resultat =  (Integer.valueOf(allRecords.get(i).getValues().get(j))) > (Integer.valueOf(newSplit[1].trim())); break;
-            				case "<=": resultat =  (Integer.valueOf(allRecords.get(i).getValues().get(j))) <= (Integer.valueOf(newSplit[1].trim())); break;
-            				case ">=": resultat = (Integer.valueOf(allRecords.get(i).getValues().get(j))) >= (Integer.valueOf(newSplit[1].trim())); break;
+            				case "=": resultat =  (Integer.valueOf(allRecords.get(iterateur).getValues().get(j))) == (Integer.valueOf(newSplit[1].trim())); break;
+            				case "<": resultat =  Integer.valueOf(allRecords.get(iterateur).getValues().get(j)) < (Integer.valueOf(newSplit[1].trim())); break;
+            				case ">": resultat =  (Integer.valueOf(allRecords.get(iterateur).getValues().get(j))) > (Integer.valueOf(newSplit[1].trim())); break;
+            				case "<=": resultat =  (Integer.valueOf(allRecords.get(iterateur).getValues().get(j))) <= (Integer.valueOf(newSplit[1].trim())); break;
+            				case ">=": resultat = (Integer.valueOf(allRecords.get(iterateur).getValues().get(j))) >= (Integer.valueOf(newSplit[1].trim())); break;
             				default: System.out.println("comparateur incorrect");
             						resultat = false;
     					}
@@ -95,11 +95,11 @@ public class SelectCommand {
     					System.out.println("case : REAL");
 
     					switch(comparateur) { // Note = 16
-            				case "=": resultat =  (Float.valueOf(allRecords.get(i).getValues().get(j))) == (Float.valueOf(newSplit[1].trim())); break;
-            				case "<": resultat =  Float.valueOf(allRecords.get(i).getValues().get(j)) < (Float.valueOf(newSplit[1].trim())); break;
-            				case ">": resultat =  (Float.valueOf(allRecords.get(i).getValues().get(j))) > (Float.valueOf(newSplit[1].trim())); break;
-            				case "<=": resultat =  (Float.valueOf(allRecords.get(i).getValues().get(j))) <= (Float.valueOf(newSplit[1].trim())); break;
-            				case ">=": resultat = (Float.valueOf(allRecords.get(i).getValues().get(j))) >= (Float.valueOf(newSplit[1].trim())); break;
+            				case "=": resultat =  (Float.valueOf(allRecords.get(iterateur).getValues().get(j))) == (Float.valueOf(newSplit[1].trim())); break;
+            				case "<": resultat =  Float.valueOf(allRecords.get(iterateur).getValues().get(j)) < (Float.valueOf(newSplit[1].trim())); break;
+            				case ">": resultat =  (Float.valueOf(allRecords.get(iterateur).getValues().get(j))) > (Float.valueOf(newSplit[1].trim())); break;
+            				case "<=": resultat =  (Float.valueOf(allRecords.get(iterateur).getValues().get(j))) <= (Float.valueOf(newSplit[1].trim())); break;
+            				case ">=": resultat = (Float.valueOf(allRecords.get(iterateur).getValues().get(j))) >= (Float.valueOf(newSplit[1].trim())); break;
             				default: System.out.println("comparateur incorrect");
             						resultat = false;
             						
@@ -114,7 +114,7 @@ public class SelectCommand {
     						/*System.out.println("new split fin ="+newSplit[0].trim());
     						System.out.println("Valeur string ="+allRecords.get(i).getValues().get(j).trim());
     						*/
-    						resultat = allRecords.get(i).getValues().get(j).trim().equals(newSplit[1].trim());
+    						resultat = allRecords.get(iterateur).getValues().get(j).trim().equals(newSplit[1].trim());
     					}
     					else {
     						System.out.println("Comparateur incorrect");
@@ -127,11 +127,11 @@ public class SelectCommand {
 				
 			}
 			if(resultat == true) {
-				indice = i;
+				//indice = i;
 
 			}
 
-		}
+		//}
 	
 		return resultat;
 	}
@@ -144,7 +144,7 @@ public class SelectCommand {
     	if(cmd.length==2) {
     		allRecords= FileManager.getInstance().getAllRecords(Catalog.getInstance().GetRelationInfo(nomRel));
 
-    		if(cmd[1].contains("AND")) { // Cours=IF3BDDA // Note<10 AND Note<18
+    		if(cmd[1].contains("AND")) { // Cours=IF3BDDA // Note<10 // Note<18
     			String [] splitAND = cmd[1].split("AND");
     			
     			for(int i = 0;i<splitAND.length;i++) {
@@ -152,20 +152,21 @@ public class SelectCommand {
     			}
     			
     			boolean resultatAND = false;
-    			for(int y = 0;y<splitAND.length;y++) {
-    				
-    				resultatAND = comparaison(splitAND[y]);
-    				
-    				if(resultatAND == false) {
-    					y = splitAND.length;
-    				}
+    			for(int j = 0;j<allRecords.size();j++) {
+	    			for(int y = 0;y<splitAND.length;y++) {
+	    				
+	    				resultatAND = comparaison(splitAND[y],j);
+	    				
+	    				if(resultatAND == false) {
+	    					y = splitAND.length;
+	    				}
+	    			}
+	    			
+	    			if(resultatAND == true) {
+	      				 recordR.add(allRecords.get(j));
+	
+	    			}
     			}
-    			
-    			if(resultatAND == true) {
-      				 recordR.add(allRecords.get(indice));
-
-    			}
-    			
     		}
     		
     		else { // Cours=IF3BDDA 
@@ -283,7 +284,7 @@ public class SelectCommand {
         	}
         	
         }
-        System.out.println("Total records= "+ recordR.size());
+        System.out.println("Total records="+ recordR.size());
 	}
 	
 	/**
