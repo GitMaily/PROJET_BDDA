@@ -1,13 +1,14 @@
 import java.util.ArrayList;
 
 public class SelectCommand {
-	
+	private String saisie;
 	private String nomRel;
 	private ArrayList<Record> recordR;
 	private String[] cmd;
-	private static int indice;
+	//private static int indice;
 	
 	public SelectCommand (String saisie) {
+		this.saisie = saisie;
 		recordR=new ArrayList<>();
 	    spliter(saisie);
 	
@@ -24,33 +25,28 @@ public class SelectCommand {
 		
 	}
 	
-	
-	public boolean comparaison(String split, int iterateur) {
+	/**
+	 * Permet de vérifier si le record répond à toutes les conditions de la selection, en comparant les valeurs qui ont été split au préalable.
+	 * @param split Le tuple à comparer
+	 * @param iterateur Le numéro du record dans la liste des records présents dans la relation
+	 * @return true si le record répond à toutes les conditions de la sélection, false sinon
+	 */
+	private boolean comparaison(String split, int iterateur) {
 		ArrayList<Record> allRecords = null;
 		allRecords= FileManager.getInstance().getAllRecords(Catalog.getInstance().GetRelationInfo(nomRel));
 
 		String [] comparateurs = SelectCondition.getComparateur();
 		String [] newSplit = null;
 
-		/*for(int k = 0; k<split.length;k++) {
-			newSplit[k] = split[k];
-		}
-		*/
 		
 		String comparateur = null;
 		for(int i =0;i<comparateurs.length;i++ ) { // i = 2
 			if(split.contains(comparateurs[i])) {
 				
 				comparateur = comparateurs[i];
-				System.out.println("Itérateur :"+i);
-				System.out.println("comparateur :"+comparateurs[i]);
 				newSplit = split.split(comparateurs[i]); // Cours=IF3BDDA // Note<10 // Note<18
-				//newSplit = cmd[1].split(comparateurs[i]); // Cours // IF3BDDA
-
 				for(String splits : newSplit) {
 					splits = splits.trim();
-
-					//System.out.println(splits);
 				}
 			}
 			
@@ -60,7 +56,6 @@ public class SelectCommand {
 			}
 		}
 				
-		int sizeRecords = allRecords.size();
 		boolean resultat = false;
 		//for(int i = 0; i < sizeRecords ;i++) { // comparer nom type colonne
 			
@@ -68,8 +63,6 @@ public class SelectCommand {
 			for(int j = 0; j < nbCol ; j ++) {
 				String nomCol = allRecords.get(iterateur).getRelInfo().getNom_col().get(j).getNom_col();
 				
-				System.out.println("newSplit[0] ="+newSplit[0]);
-				System.out.println("nomCol ="+nomCol);
 				
 				if(newSplit[0].trim().equals(nomCol)) {
     				String typeCol = allRecords.get(iterateur).getRelInfo().getNom_col().get(j).getType_col();
@@ -77,8 +70,6 @@ public class SelectCommand {
     				switch(typeCol) {
     				
     				case "INTEGER" : 
-    					//System.out.println("Comparateur :"+comparateur);
-    					System.out.println("case : INTEGER");
     					switch(comparateur) { // Note = 16
             				case "=": resultat =  (Integer.valueOf(allRecords.get(iterateur).getValues().get(j))) == (Integer.valueOf(newSplit[1].trim())); break;
             				case "<": resultat =  Integer.valueOf(allRecords.get(iterateur).getValues().get(j)) < (Integer.valueOf(newSplit[1].trim())); break;
@@ -91,9 +82,6 @@ public class SelectCommand {
     					break;
 
     				case "REAL" : 
-    					
-    					System.out.println("case : REAL");
-
     					switch(comparateur) { // Note = 16
             				case "=": resultat =  (Float.valueOf(allRecords.get(iterateur).getValues().get(j))) == (Float.valueOf(newSplit[1].trim())); break;
             				case "<": resultat =  Float.valueOf(allRecords.get(iterateur).getValues().get(j)) < (Float.valueOf(newSplit[1].trim())); break;
@@ -108,12 +96,8 @@ public class SelectCommand {
     					break;
     					
     				default:
-    					System.out.println("case : VARCHAR");
-
     					if (comparateur.equals("=")) {
-    						/*System.out.println("new split fin ="+newSplit[0].trim());
-    						System.out.println("Valeur string ="+allRecords.get(i).getValues().get(j).trim());
-    						*/
+    						
     						resultat = allRecords.get(iterateur).getValues().get(j).trim().equals(newSplit[1].trim());
     					}
     					else {
@@ -126,10 +110,6 @@ public class SelectCommand {
 				}
 				
 			}
-			if(resultat == true) {
-				//indice = i;
-
-			}
 
 		//}
 	
@@ -138,12 +118,16 @@ public class SelectCommand {
 	
 	public void execute() { // SELECT * FROM ToutesLesNotes // Cours=IF3BDDA AND Note<10 AND Note<18
 		ArrayList<Record> allRecords = null;
-		
-		String [] comparateurs = SelectCondition.getComparateur();
-	
-    	if(cmd.length==2) {
-    		allRecords= FileManager.getInstance().getAllRecords(Catalog.getInstance().GetRelationInfo(nomRel));
+		allRecords= FileManager.getInstance().getAllRecords(Catalog.getInstance().GetRelationInfo(nomRel));
 
+		/**
+		 * Cas _WHERE_
+		 */
+    	if(cmd.length==2) {
+
+    		/**
+    		 * Cas _AND_ 
+    		 */
     		if(cmd[1].contains("AND")) { // Cours=IF3BDDA // Note<10 // Note<18
     			String [] splitAND = cmd[1].split("AND");
     			
@@ -169,108 +153,37 @@ public class SelectCommand {
     			}
     		}
     		
-    		else { // Cours=IF3BDDA 
+    		else { // Cas SELECT * FROM X WHERE _X_  // Cours=IF3BDDA 
     			
-    			String [] newSplit = null;
-    			String comparateur = null;
-    			for(int i =0;i<comparateurs.length;i++ ) { // i = 2
-    				if(cmd[1].contains(comparateurs[i])) {
-    					
-    					comparateur = comparateurs[i];
-    					System.out.println("Itérateur :"+i);
-    					System.out.println("comparateur :"+comparateurs[i]);
-    					newSplit = cmd[1].split(comparateurs[i]); // Cours // IF3BDDA
-    					
-    					for(int z = 0;z<newSplit.length;z++) {
-    						newSplit[z] = newSplit[z].trim();
-    	    			}
-    					
-    					
-    				}
-    				
-    				if(comparateur != null) {
-        				i = comparateurs.length;
-
-    				}
-        		}
-    					
-    			int sizeRecords = allRecords.size();
     			boolean resultat = false;
-    			for(int i = 0; i < sizeRecords ;i++) { // comparer nom type colonne
-    				
-        			int nbCol = allRecords.get(i).getRelInfo().getNb_col();
-        			for(int j = 0; j < nbCol ; j ++) {
-        				String nomCol = allRecords.get(i).getRelInfo().getNom_col().get(j).getNom_col();
-        				
-    					/*System.out.println("newSplit[0] ="+newSplit[0]);
-    					System.out.println("nomCol ="+nomCol);
-        				*/
-        				if(newSplit[0].trim().equals(nomCol)) {
-            				String typeCol = allRecords.get(i).getRelInfo().getNom_col().get(j).getType_col();
-            				
-            				switch(typeCol) {
-            				
-            				case "INTEGER" : 
-            					//System.out.println("Comparateur :"+comparateur);
-            					System.out.println("case : INTEGER");
-            					switch(comparateur) { // Note = 16
-		            				case "=": resultat =  (Integer.valueOf(allRecords.get(i).getValues().get(j))) == (Integer.valueOf(newSplit[1].trim())); break;
-		            				case "<": resultat =  Integer.valueOf(allRecords.get(i).getValues().get(j)) < (Integer.valueOf(newSplit[1].trim())); break;
-		            				case ">": resultat =  (Integer.valueOf(allRecords.get(i).getValues().get(j))) > (Integer.valueOf(newSplit[1].trim())); break;
-		            				case "<=": resultat =  (Integer.valueOf(allRecords.get(i).getValues().get(j))) <= (Integer.valueOf(newSplit[1].trim())); break;
-		            				case ">=": resultat = (Integer.valueOf(allRecords.get(i).getValues().get(j))) >= (Integer.valueOf(newSplit[1].trim())); break;
-		            				default: System.out.println("comparateur incorrect");
-		            						resultat = false;
-            					}
-            					break;
-
-            				case "REAL" : 
-            					
-            					System.out.println("case : REAL");
-
-            					switch(comparateur) { // Note = 16
-		            				case "=": resultat =  (Float.valueOf(allRecords.get(i).getValues().get(j))) == (Float.valueOf(newSplit[1].trim())); break;
-		            				case "<": resultat =  Float.valueOf(allRecords.get(i).getValues().get(j)) < (Float.valueOf(newSplit[1].trim())); break;
-		            				case ">": resultat =  (Float.valueOf(allRecords.get(i).getValues().get(j))) > (Float.valueOf(newSplit[1].trim())); break;
-		            				case "<=": resultat =  (Float.valueOf(allRecords.get(i).getValues().get(j))) <= (Float.valueOf(newSplit[1].trim())); break;
-		            				case ">=": resultat = (Float.valueOf(allRecords.get(i).getValues().get(j))) >= (Float.valueOf(newSplit[1].trim())); break;
-		            				default: System.out.println("comparateur incorrect");
-		            						resultat = false;
-		            						
-		            						
-            					}
-            					break;
-            					
-            				default:
-            					System.out.println("case : VARCHAR");
-
-            					if (comparateur.equals("=")) {
-            						/*System.out.println("new split fin ="+newSplit[0].trim());
-            						System.out.println("Valeur string ="+allRecords.get(i).getValues().get(j).trim());
-            						*/
-            						resultat = allRecords.get(i).getValues().get(j).trim().equals(newSplit[1].trim());
-            					}
-            					else {
-            						System.out.println("Comparateur incorrect");
-            						resultat = false;
-            					}
-            					
-            				}
-        				
-        				}
-        				
-
-        			}
-        			if(resultat == true) {
-       				 recordR.add(allRecords.get(i));
-       			 	}
     			
+    			for(int j = 0;j<allRecords.size();j++) {
+	    			for(int y = 0;y<cmd.length;y++) {
+	    				
+	    				resultat = comparaison(cmd[1],j);
+	    				
+	    				if(resultat == false) {
+	    					y = cmd.length;
+	    				}
+	    			}
+	    			
+	    			if(resultat == true) {
+	      				 recordR.add(allRecords.get(j));
+	
+	    			}
     			}
-    			
-    		
     		}
-    		
-    		
+    	}
+    	/**
+    	 * Cas SELECT * FROM _X_
+    	 */
+    	else {
+    		for(int i = 0;i<allRecords.size();i++) {
+				if(allRecords.get(i).getRelInfo().getNom().equals(nomRel)) {
+					recordR.add(allRecords.get(i));
+				}
+
+    		}
     	}
     	
     	for(int i=0; i<recordR.size(); i++) {
@@ -411,6 +324,10 @@ public class SelectCommand {
     	
     	return l_c;
     	
+    }
+    
+    public String toString() {
+    	return saisie;
     }
     
     

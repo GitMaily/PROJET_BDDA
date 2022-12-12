@@ -190,7 +190,7 @@ private static FileManager INSTANCE = new FileManager();
 		
 		ByteBuffer bbHeader = BufferManager.getInstance().GetPage(record.getRelInfo().getHeaderPageId());
 
-		System.out.println("record headerPageId ========== "+record.getRelInfo().getHeaderPageId().toString());
+		//System.out.println("record headerPageId ========== "+record.getRelInfo().getHeaderPageId().toString());
 		// Recherche du Id DataPage, mise à jour du nombre d'octets libres
 		int libres = 0;
 		//System.out.println(bbHeader.getInt(0));
@@ -212,7 +212,7 @@ private static FileManager INSTANCE = new FileManager();
 		
 		bbHeader.putInt(libres, DBParams.pageSize- newPosDispo - tailleSlotDir);
 		
-		System.out.println("Calcul new pos libre: "+(DBParams.pageSize- newPosDispo - tailleSlotDir));
+		//System.out.println("Calcul new pos libre: "+(DBParams.pageSize- newPosDispo - tailleSlotDir));
 		 
 		BufferManager.getInstance().FreePage(record.getRelInfo().getHeaderPageId(), true);
 		RecordId rid = new RecordId(pageId, positionSlot- Integer.BYTES);
