@@ -22,11 +22,11 @@ public class CommandTests {
 		ct.execute();
 		
 		InsertCommande ic = new InsertCommande("INSERT INTO R VALUES (1,aab,2)");
-		//ic.execute();
+		ic.execute();
 		InsertCommande ic1 = new InsertCommande("INSERT INTO R VALUES (2,ab,2)");
-		//ic1.execute();
+		ic1.execute();
 		InsertCommande ic2 = new InsertCommande("INSERT INTO R VALUES (1,agh,1)");
-		//ic2.execute();
+		ic2.execute();
 		
 		System.out.println("SELECT * FROM R");
 		SelectCommand sc = new SelectCommand("SELECT * FROM R");
@@ -51,9 +51,15 @@ public class CommandTests {
 		System.out.println("SELECT * FROM R WHERE C1<2");
 		SelectCommand sc4 = new SelectCommand("SELECT * FROM R WHERE C1<2");
 		sc4.execute();
+		
 	}
 	
 	public static void main(String []args) {
+		DBParams.DBPath = args[0];
+		DBParams.frameCount = 2;
+		DBParams.maxPagesPerFile = 4;
+		DBParams.pageSize = 4096;
+		
 		dropDBTest();
 		
 		//csvTest();
@@ -63,7 +69,7 @@ public class CommandTests {
 		//selectCommandTest();
 		
 		scenarioTP6();
-		
+		//profsTest();
 		
 	}
 	
@@ -156,6 +162,48 @@ public class CommandTests {
 		sc1.execute();
 
 		System.out.println();
+
+	}
+	
+	public static void profsTest() {
+		CreateTableCommand ct = new CreateTableCommand("CREATE TABLE Profs (NOM:VARCHAR(10),UE:VARCHAR(5))");
+		ct.execute();
+		System.out.println("INSERT INTO Profs VALUES (Ileana,BDDA)");
+		InsertCommande ic1 = new InsertCommande("INSERT INTO Profs VALUES (Ileana,BDDA)");
+		System.out.println();
+
+		System.out.println("INSERT INTO Profs VALUES (Jean-Guy_Mailly,PROG)");
+		InsertCommande ic2 = new InsertCommande("INSERT INTO Profs VALUES (Jean-Guy_Mailly,PROG)");
+		System.out.println();
+
+		System.out.println("INSERT INTO Profs VALUES (Crapez,GFE)");
+		InsertCommande ic3 = new InsertCommande("INSERT INTO Profs VALUES (Crapez,GFE)");
+		System.out.println();
+
+		System.out.println("INSERT INTO Profs VALUES (Delobelle,PROG)");
+		InsertCommande ic4 = new InsertCommande("INSERT INTO Profs VALUES (Delobelle,PROG)");	
+		System.out.println();
+
+		ic1.execute();
+		ic2.execute();
+		ic3.execute();
+		ic4.execute();
+		System.out.println("SELECT * FROM Profs");
+		SelectCommand sc1 = new SelectCommand("SELECT * FROM Profs");
+		sc1.execute();
+		System.out.println();
+
+		System.out.println("SELECT * FROM Profs WHERE NOM=Ileana AND UE=BDDA");
+		SelectCommand sc2 = new SelectCommand("SELECT * FROM Profs WHERE NOM=Ileana AND UE=BDDA");
+		sc2.execute();
+		System.out.println();
+
+		System.out.println("SELECT * FROM Profs WHERE UE=PROG");
+		SelectCommand sc3 = new SelectCommand("SELECT * FROM Profs WHERE UE=PROG");
+		sc3.execute();
+		System.out.println();
+
+		
 
 	}
 
