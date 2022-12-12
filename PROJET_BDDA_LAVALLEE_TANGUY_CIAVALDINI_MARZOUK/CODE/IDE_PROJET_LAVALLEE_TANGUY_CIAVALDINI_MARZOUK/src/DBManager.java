@@ -24,8 +24,9 @@ public class DBManager {
 	}
 	
 	public void ProcessCommand(String commande) throws IOException {
-		switch(commande){
-			case "CREATE TABLE":
+		String [] commandeNom = commande.split(" ");
+		switch(commandeNom[0]){
+			case "CREATE":
 				CreateTableCommand c = new CreateTableCommand(commande);
 				c.execute();
 			break;

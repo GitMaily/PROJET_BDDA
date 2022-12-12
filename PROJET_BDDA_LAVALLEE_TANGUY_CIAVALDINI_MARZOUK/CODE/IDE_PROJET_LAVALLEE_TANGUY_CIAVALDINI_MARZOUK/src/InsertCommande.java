@@ -56,7 +56,6 @@ public class InsertCommande {
         FileManager.getInstance().InsertRecordInRel(r); // r.ri = 
         
         DeleteValCol();
-        System.out.println();
     }
     
     private void DeleteValCol() {

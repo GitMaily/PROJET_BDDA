@@ -82,7 +82,7 @@ public class DiskManager {
 				if(f[i].length() <= DBParams.pageSize ) {
 					pi = new PageId(fileIdx,1);
 					//System.out.println("Page = 1");
-					System.out.println(pi.toString());
+					//System.out.println(pi.toString());
 					countpage++;
 
 					i = f.length;
@@ -91,7 +91,7 @@ public class DiskManager {
 				else if(f[i].length() <= DBParams.pageSize*2 ) {
 					pi = new PageId(fileIdx,2);
 					//System.out.println("Page = 2");
-					System.out.println(pi.toString());
+					//System.out.println(pi.toString());
 					countpage++;
 
 					i = f.length;
@@ -101,7 +101,7 @@ public class DiskManager {
 				else if(f[i].length() <= DBParams.pageSize*3 ) {
 					pi = new PageId(fileIdx,3);
 					//System.out.println("Page = 3");
-					System.out.println(pi.toString());
+					//System.out.println(pi.toString());
 					countpage++;
 
 					i = f.length;
