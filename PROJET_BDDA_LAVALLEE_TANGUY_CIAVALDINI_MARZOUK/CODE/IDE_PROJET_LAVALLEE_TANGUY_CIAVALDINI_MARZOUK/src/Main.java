@@ -10,7 +10,7 @@ public class Main {
 	
 	
 	
-	public static void lireDepuisFichier (ArrayList<String> liste) {
+	/*public static void lireDepuisFichier (ArrayList<String> liste) {
 		 try {
 	            BufferedReader reader = new BufferedReader(new FileReader("personnes.txt"));
 	 
@@ -41,37 +41,32 @@ public class Main {
        	System.out.println("La sauvegarde s'est mal passée...");
            e.printStackTrace();
        }
-	}
+	}*/
 	
 
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
-		DBParams param = new DBParams("/users/licence/il01193/Bureau/PROJET_BDDA_PERSO/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/",4096,4);
 		
-		param.setDBPath("/users/licence/il01193/Bureau/PROJET_BDDA_PERSO/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI/DB/");
 		
 		//DropDBCommand.execute();
 		
-			
-		//DiskManager dm = new DiskManager();
-	
-		//dm.creerFichierTexte();
-		//dm.lireFichier();
-		//dm.creerFichierTest();
-		//dm.creerFichierBinaire();
-		//dm.creerFichier();
-		//dm.allocPage();
-		//dm.readPage(null, null);
-		
 		//ne pas toucher fait partie du projet et pas d un test ET mettre avant les parametres framecount pagesize ect
+		DBParams.DBPath = args[0];
+		DBParams.frameCount = 2;
+		DBParams.maxPagesPerFile = 4;
+		DBParams.pageSize = 4096;
+		
+		
 		
 		DBManager.getInstance().Init();
 		
 		
 		Scanner scanner = new Scanner (System.in);
-		while(!scanner.equals("EXIT")) {
-			String commande = scanner.nextLine();
+		String commande = "";
+		
+		while(!commande.equals("EXIT")) { //!scanner.equals("EXIT"
+			 commande = scanner.nextLine();
 			
-			if(commande=="EXIT") {
+			if(commande.equals("EXIT")) {
 				DBManager.getInstance().Finish();
 				break;
 			}

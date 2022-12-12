@@ -1,15 +1,17 @@
 public class DBParams {
 	
-	public static String DBPath = "C:\\Users\\milly\\Desktop\\PROJET_BDDA\\PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK\\DB";
-	public static int pageSize = 4096;
-	public static int maxPagesPerFile = 4;
+	public static String DBPath;
+	public static int pageSize;
+	public static int maxPagesPerFile;
 	
-	public static int frameCount = 2;
+	public static int frameCount;
 	
-	public DBParams(String DBPath, int pageSize, int maxPagesPerFile) {
+	public DBParams(String DBPath, int pageSize, int maxPagesPerFile, int frameCount) {
 		DBParams.DBPath= DBPath;
 		DBParams.pageSize = pageSize;
 		DBParams.maxPagesPerFile= maxPagesPerFile;
+		DBParams.frameCount = frameCount;
+		
 		// TODO Auto-generated constructor stub
 		
 		

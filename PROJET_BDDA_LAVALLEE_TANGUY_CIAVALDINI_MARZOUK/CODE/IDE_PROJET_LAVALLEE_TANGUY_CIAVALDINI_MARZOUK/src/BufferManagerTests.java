@@ -2,8 +2,7 @@ import java.nio.ByteBuffer;
 
 public class BufferManagerTests {
 	
-	static DiskManager dm = DiskManager.getInstance();
-	static BufferManager bm = BufferManager.getInstance();
+	
 	
 	static PageId pid = new PageId();
 	static PageId p1 = new PageId(0,0);
@@ -11,6 +10,11 @@ public class BufferManagerTests {
 	static PageId p3 = new PageId(0,1);
 	
 	public static void main(String[] args) {
+		
+		DBParams.DBPath = args[0];
+		DBParams.frameCount = 2;
+		DBParams.maxPagesPerFile = 4;
+		DBParams.pageSize = 4096;
 		
 		TestEcriture();
 		//TestGetPage();
@@ -28,9 +32,9 @@ public class BufferManagerTests {
 	
 	
 	public static void AllouerLesPages() {
-		p1 = dm.allocPage();
-		p2 = dm.allocPage();
-		p3 = dm.allocPage();
+		p1 = DiskManager.getInstance().allocPage();
+		p2 = DiskManager.getInstance().allocPage();
+		p3 = DiskManager.getInstance().allocPage();
 	}
 	
 	
@@ -60,9 +64,9 @@ public class BufferManagerTests {
 		
 		
 		
-		dm.writePage(p1, bufferTest1);
-		dm.writePage(p2, bufferTest2);
-		dm.writePage(p3, bufferTest3);
+		DiskManager.getInstance().writePage(p1, bufferTest1);
+		DiskManager.getInstance().writePage(p2, bufferTest2);
+		DiskManager.getInstance().writePage(p3, bufferTest3);
 
 
 	}
@@ -73,10 +77,10 @@ public class BufferManagerTests {
 	public static void TestSimple() {
 		TestSimpleGetPages();
 		TestSimpleFreePages();
-		bm.FlushAll();
+		BufferManager.getInstance().FlushAll();
 		
 		// On vérifie que ça a bien flushé
-		if(bm.getListFrames().get(0).getPageId() == null) {
+		if(BufferManager.getInstance().getListFrames().get(0).getPageId() == null) {
 			System.out.println("Le flush a bien marché !");
 		}
 		
@@ -91,20 +95,20 @@ public class BufferManagerTests {
 
 		
 		// Afficher le contenu de bb1
-		bb1 = bm.GetPage(p1);
+		bb1 = BufferManager.getInstance().GetPage(p1);
 		for (int i = 0; i < bb1.capacity(); i++) {
 			System.out.print(bb1.array()[i]);
 		}
 		
 		// Afficher le contenu de bb2
-		bb2 = bm.GetPage(p2);
+		bb2 = BufferManager.getInstance().GetPage(p2);
 		for (int i = 0; i < bb2.capacity(); i++) {
 			System.out.print(bb2.array()[i]);
 		}
 		
 		System.out.println();
-		System.out.println("PageId[FileIdx,PageIdx] de ListFrames[0]: ["+bm.getListFrames().get(0).getPageId().getFileIdx()+"]["+bm.getListFrames().get(0).getPageId().getPageIdx()+"]");
-		System.out.println("PageId[FileIdx,PageIdx] de ListFrames[1]: ["+bm.getListFrames().get(1).getPageId().getFileIdx()+"]["+bm.getListFrames().get(1).getPageId().getPageIdx()+"]");
+		System.out.println("PageId[FileIdx,PageIdx] de ListFrames[0]: ["+BufferManager.getInstance().getListFrames().get(0).getPageId().getFileIdx()+"]["+BufferManager.getInstance().getListFrames().get(0).getPageId().getPageIdx()+"]");
+		System.out.println("PageId[FileIdx,PageIdx] de ListFrames[1]: ["+BufferManager.getInstance().getListFrames().get(1).getPageId().getFileIdx()+"]["+BufferManager.getInstance().getListFrames().get(1).getPageId().getPageIdx()+"]");
 		System.out.println();
 	
 	}
@@ -112,16 +116,16 @@ public class BufferManagerTests {
 	public static void TestSimpleFreePages() {
 		
 		// Affiche les pin count qui devraient être à 1
-		System.out.println("Pin_count de ListFrames[0]: "+bm.getListFrames().get(0).getPin_count());
-		System.out.println("Pin_count de ListFrames[1]: "+bm.getListFrames().get(1).getPin_count());
+		System.out.println("Pin_count de ListFrames[0]: "+BufferManager.getInstance().getListFrames().get(0).getPin_count());
+		System.out.println("Pin_count de ListFrames[1]: "+BufferManager.getInstance().getListFrames().get(1).getPin_count());
 
-		bm.FreePage(p1,false);
-		bm.FreePage(p2,false);
+		BufferManager.getInstance().FreePage(p1,false);
+		BufferManager.getInstance().FreePage(p2,false);
 		
 		// Affiche les pin count après un FreePage
 		System.out.println();
-		System.out.println("Pin_count de ListFrames[0]: "+bm.getListFrames().get(0).getPin_count());
-		System.out.println("Pin_count de ListFrames[1]: "+bm.getListFrames().get(1).getPin_count());
+		System.out.println("Pin_count de ListFrames[0]: "+BufferManager.getInstance().getListFrames().get(0).getPin_count());
+		System.out.println("Pin_count de ListFrames[1]: "+BufferManager.getInstance().getListFrames().get(1).getPin_count());
 
 	}
 	
@@ -135,30 +139,30 @@ public class BufferManagerTests {
 		ByteBuffer bb1 = ByteBuffer.allocate(DBParams.pageSize);
 		ByteBuffer bb2 = ByteBuffer.allocate(DBParams.pageSize);
 		
-		bm.GetPage(p1);
-		bm.GetPage(p2);
+		BufferManager.getInstance().GetPage(p1);
+		BufferManager.getInstance().GetPage(p2);
 		
-		bm.FreePage(p1, true);
-		bm.FreePage(p2, true);
+		BufferManager.getInstance().FreePage(p1, true);
+		BufferManager.getInstance().FreePage(p2, true);
 		
 		System.out.println();
 		// Afficher le contenu du ByteBuffer de ListFrames[0]
 		// Résultat attendu : contenu de p1
 		System.out.println("Contenu de p1");
-		for(int i = 0;i <bm.getListFrames().get(0).getBuffer().capacity();i++) {
-			System.out.print(bm.getListFrames().get(0).getBuffer().array()[i]);
+		for(int i = 0;i <BufferManager.getInstance().getListFrames().get(0).getBuffer().capacity();i++) {
+			System.out.print(BufferManager.getInstance().getListFrames().get(0).getBuffer().array()[i]);
 		}
 		
 		// Normalement la prochaine page demandée devra remplacer p1
-		bb1 = bm.GetPage(p3);
+		bb1 = BufferManager.getInstance().GetPage(p3);
 		
 		System.out.println();
 		// Afficher le contenu du ByteBuffer de ListFrames[0]
 		// Résultat attendu : contenu de p3
 		
 		System.out.println("Contenu de p3");
-		for(int i = 0;i <bm.getListFrames().get(0).getBuffer().capacity();i++) {
-			System.out.print(bm.getListFrames().get(0).getBuffer().array()[i]);
+		for(int i = 0;i <BufferManager.getInstance().getListFrames().get(0).getBuffer().capacity();i++) {
+			System.out.print(BufferManager.getInstance().getListFrames().get(0).getBuffer().array()[i]);
 		}
 		
 		
@@ -171,13 +175,13 @@ public class BufferManagerTests {
 		
 		
 		
-		bb2 = bm.GetPage(p1);
+		bb2 = BufferManager.getInstance().GetPage(p1);
 		System.out.println();
 		// Afficher le contenu du ByteBuffer de ListFrames[1]
 		// Résultat attendu : contenu de p1
 		System.out.println("Contenu de p1");
-		for(int i = 0;i <bm.getListFrames().get(1).getBuffer().capacity();i++) {
-			System.out.print(bm.getListFrames().get(1).getBuffer().array()[i]);
+		for(int i = 0;i <BufferManager.getInstance().getListFrames().get(1).getBuffer().capacity();i++) {
+			System.out.print(BufferManager.getInstance().getListFrames().get(1).getBuffer().array()[i]);
 		}
 		
 		System.out.println();
@@ -187,7 +191,7 @@ public class BufferManagerTests {
 			System.out.print(bb2.array()[i]);
 		}
 		
-		bm.FlushAll();
+		BufferManager.getInstance().FlushAll();
 
 	}
 	
@@ -196,31 +200,31 @@ public class BufferManagerTests {
 	 */
 	public static void TestAvance2() {
 
-		bm.GetPage(p1);
-		bm.GetPage(p2);
-		bm.GetPage(p1);
-		bm.GetPage(p1);
-		bm.GetPage(p1);
+		BufferManager.getInstance().GetPage(p1);
+		BufferManager.getInstance().GetPage(p2);
+		BufferManager.getInstance().GetPage(p1);
+		BufferManager.getInstance().GetPage(p1);
+		BufferManager.getInstance().GetPage(p1);
 
-		bm.FreePage(p1, true);
-		bm.FreePage(p2, true);
+		BufferManager.getInstance().FreePage(p1, true);
+		BufferManager.getInstance().FreePage(p2, true);
 		
 		
-		bm.GetPage(p3);
+		BufferManager.getInstance().GetPage(p3);
 		
-		bm.GetPage(p1);
-		bm.FreePage(p1, true);
-		bm.FreePage(p1, true);
-		bm.FreePage(p1, true);
-		bm.FreePage(p1, true);
-		bm.FreePage(p1, true);
+		BufferManager.getInstance().GetPage(p1);
+		BufferManager.getInstance().FreePage(p1, true);
+		BufferManager.getInstance().FreePage(p1, true);
+		BufferManager.getInstance().FreePage(p1, true);
+		BufferManager.getInstance().FreePage(p1, true);
+		BufferManager.getInstance().FreePage(p1, true);
 
-		bm.GetPage(p2);
-		bm.GetPage(p1);
-		bm.GetPage(p3);
+		BufferManager.getInstance().GetPage(p2);
+		BufferManager.getInstance().GetPage(p1);
+		BufferManager.getInstance().GetPage(p3);
 
 
-		bm.FlushAll();
+		BufferManager.getInstance().FlushAll();
 
 	}
 	
@@ -229,32 +233,32 @@ public class BufferManagerTests {
 		//ByteBuffer bb = ByteBuffer.allocate(DBParams.pageSize); // alloue 4096 octets
 		
 		
-		bm.GetPage(p1);
-		bm.GetPage(p2);
+		BufferManager.getInstance().GetPage(p1);
+		BufferManager.getInstance().GetPage(p2);
 		
-		//bm.FreePage(p1, true);
-		//bm.FreePage(p2, true);
+		//BufferManager.getInstance().FreePage(p1, true);
+		//BufferManager.getInstance().FreePage(p2, true);
 
 		
-		bm.GetPage(p3);
-		bm.GetPage(p1);
+		BufferManager.getInstance().GetPage(p3);
+		BufferManager.getInstance().GetPage(p1);
 	
-		bm.FlushAll();
+		BufferManager.getInstance().FlushAll();
 		
 	}
 	
 	public static void TestFreePage() {
 		
-		bm.FreePage(pid, true);
-		bm.FreePage(pid, false);
-		bm.FreePage(pid, false);
-		bm.FreePage(pid, true);
+		BufferManager.getInstance().FreePage(pid, true);
+		BufferManager.getInstance().FreePage(pid, false);
+		BufferManager.getInstance().FreePage(pid, false);
+		BufferManager.getInstance().FreePage(pid, true);
 		
 	}
 	
 	public static void TestFlushAll() {
 		
-		bm.FlushAll();
+		BufferManager.getInstance().FlushAll();
 		
 	}
 }

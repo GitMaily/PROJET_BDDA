@@ -34,8 +34,10 @@ public class DBManager {
 			break;
 			case "INSERT":
 				if(commande.contains("FILECONTENTS")){
-					InsertFichier infic = new InsertFichier(commande);
-					infic.insererFichier();
+					InsertCommande ic = new InsertCommande(commande);
+
+					//InsertFichier infic = new InsertFichier(commande);
+					//infic.insererFichier();
 				}
 				else{
 					InsertCommande ic = new InsertCommande(commande);

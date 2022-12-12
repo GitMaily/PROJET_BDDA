@@ -1,23 +1,32 @@
 
 public class CommandTests {
-	public static void main(String []args) {
-		dropDBTest();
+	
+	public static void csvTest() {
+		CreateTableCommand ct = new CreateTableCommand("CREATE TABLE S (C1:INTEGER,C2:REAL,C3:INTEGER,C4:INTEGER,C5:INTEGER)");
+		ct.execute();
 		
-		//createTableTest();
-		//insertCommandTest();
-		selectCommandTest();
+		InsertCommande ic = new InsertCommande("INSERT INTO S FILECONTENTS(S.csv)");
+		ic.execute();
 		
+		System.out.println(ic.toString());
 		
+		System.out.println("SELECT * FROM S WHERE C3=12");
+		SelectCommand sc = new SelectCommand("SELECT * FROM S WHERE C3=12");
+		sc.execute();
+		System.out.println();
 		
-		CreateTableCommand ct = new CreateTableCommand("CREATE TABLE R (C1:INTEGER,C2:VARHCAR(3),C3:INTEGER)");
+	}
+	
+	public static void scenarioTP6() {
+		CreateTableCommand ct = new CreateTableCommand("CREATE TABLE R (C1:REAL,C2:VARHCAR(3),C3:INTEGER)");
 		ct.execute();
 		
 		InsertCommande ic = new InsertCommande("INSERT INTO R VALUES (1,aab,2)");
-		ic.execute();
+		//ic.execute();
 		InsertCommande ic1 = new InsertCommande("INSERT INTO R VALUES (2,ab,2)");
-		ic1.execute();
+		//ic1.execute();
 		InsertCommande ic2 = new InsertCommande("INSERT INTO R VALUES (1,agh,1)");
-		ic2.execute();
+		//ic2.execute();
 		
 		System.out.println("SELECT * FROM R");
 		SelectCommand sc = new SelectCommand("SELECT * FROM R");
@@ -42,6 +51,20 @@ public class CommandTests {
 		System.out.println("SELECT * FROM R WHERE C1<2");
 		SelectCommand sc4 = new SelectCommand("SELECT * FROM R WHERE C1<2");
 		sc4.execute();
+	}
+	
+	public static void main(String []args) {
+		dropDBTest();
+		
+		//csvTest();
+		
+		//createTableTest();
+		//insertCommandTest();
+		//selectCommandTest();
+		
+		scenarioTP6();
+		
+		
 	}
 	
 	private static void dropDBTest() {
