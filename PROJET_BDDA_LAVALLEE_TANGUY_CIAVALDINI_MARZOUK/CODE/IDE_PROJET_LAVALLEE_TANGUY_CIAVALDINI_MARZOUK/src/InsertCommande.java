@@ -56,9 +56,11 @@ public class InsertCommande {
         Record r = new Record(Catalog.getInstance().GetRelationInfo(nomRelation), valeurCol);
         RecordId rid = FileManager.getInstance().InsertRecordInRel(r); // r.ri = 
         r.setRi(rid);
+        //System.out.println("le record est null ou pas?"+r.getRi());
         r.getRi().setPageId(rid.getPageId());
         r.getRi().setSlotIdx(rid.getSlotIdx());
-        
+        //System.out.println("le record est null ou pas?"+r.getRi());
+
         DeleteValCol();
     }
     

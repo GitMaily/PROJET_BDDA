@@ -10,7 +10,7 @@ public class Readcsv {
 	
 	private File f;
 	private ArrayList<String> ligne;
-	private String path = "C:\\Users\\milly\\Desktop\\PROJET_BDDA\\PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK";
+	private String path = "/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK";
 	public Readcsv(String nomFichier) {
 		//f = new File(nomfichier);
 		f = new File(path+File.separator+nomFichier);

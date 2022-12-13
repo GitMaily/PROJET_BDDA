@@ -22,15 +22,23 @@ public class DeleteCommand {
 	    sc.execute();
 	    
 	    this.recordR = sc.getRecordR();
-	    
+	    afficherListeRecordId();
 	
+	}
+	
+	
+	public void afficherListeRecordId() {
+		for(Record rec : recordR) {
+			System.out.println("afficher chaque rec null ou pas?"+rec.getRi());
+		}
 	}
 	
 	public void execute() {
 		int count = 0;
 		for(int i=0; i<recordR.size(); i++) {
         	if( i == recordR.size()-1) {
-        		
+                //System.out.println("le record est null ou pas dans le delete?"+recordR.get(i).getRi());
+
             	System.out.println(recordR.get(i).toString()+ ".");
             	if(deleteRecord(recordR.get(i))) {
         			count++;
@@ -55,11 +63,15 @@ public class DeleteCommand {
 	}
 	
 	private boolean deleteRecord(Record record) {
+		
+		System.out.println(record.getRi());
+		
+		
 		ArrayList<Record> records = new ArrayList<Record>();
 		
 		records = FileManager.getInstance().getAllRecords(record.getRelInfo());
 		
-		/*for(Record rec : records) {
+		for(Record rec : records) {
 			if(rec.getRi() != null && rec.getRi().getSlotIdx() == record.getRi().getSlotIdx()) {
 				
 				System.out.println("Le slotIdx"+rec.getRi().getSlotIdx());
@@ -68,16 +80,16 @@ public class DeleteCommand {
 		        return true;
 
 			}
-		}*/
+		}
 		//System.out.println("to string"+record.toString());
-		for(Record rec : records) {
+		/*for(Record rec : records) {
 			for(int i = 0;i<rec.getValues().size();i++) {
 				if(rec.getValues().get(i).equals(record.getValues().get(i))) {
 					
 					
 					
 					
-			        //FileManager.getInstance().DeleteRecordInRel(rec); // non fonctionnel
+			        FileManager.getInstance().DeleteRecordInRel(rec); // non fonctionnel
 
 				}
 				else {
@@ -85,7 +97,7 @@ public class DeleteCommand {
 				}
 			
 			}
-		}
+		}*/
 		
 		return false;
 		

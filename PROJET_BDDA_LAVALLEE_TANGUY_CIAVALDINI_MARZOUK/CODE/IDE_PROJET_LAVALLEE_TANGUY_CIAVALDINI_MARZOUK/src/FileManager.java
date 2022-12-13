@@ -249,7 +249,16 @@ private static FileManager INSTANCE = new FileManager();
 
 			rec.readFromBuffer(bbDataPage, bbDataPage.getInt(positionSlot));
 			positionSlot = (DBParams.pageSize-Integer.BYTES*2) - i*Integer.BYTES*2;
+			RecordId rid = new RecordId(pageId,positionSlot);
+			rec.setRi(rid);
+			
 			listeDeRecords.add(rec);
+			//System.out.println("DERNIER ESPOIR"+rec.getRi());
+
+			
+			
+			//System.out.println("DERNIER ESPOIR2"+rec.getRi());
+
 			//System.out.println(rec.toString());
 			//System.out.println("positionSlot = "+positionSlot);
 
@@ -314,17 +323,56 @@ private static FileManager INSTANCE = new FileManager();
 		ByteBuffer bbDataPage = BufferManager.getInstance().GetPage(pageId);
 		
 		/**
+		 * Affiche les records du ByteBuffer 
+		 */
+		
+		/*for(int i = 0; i<bbDataPage.getInt(DBParams.pageSize-Integer.BYTES);i+=Integer.BYTES) {
+			System.out.println(bbDataPage.getInt(i));
+		}
+		*/
+		/**
 		 * On remplace chaque byte par un 0
 		 */
-		//int index = record.getRi().getSlotIdx();
-		int index = 4056;
+		int index = record.getRi().getSlotIdx();
+		//int index = 4056;
 		System.out.println(index);
-	    for(int i = bbDataPage.getInt(index); i < bbDataPage.getInt(index + Integer.BYTES); i++) {
+		System.out.println("Position début ="+bbDataPage.getInt(index));
+		System.out.println("Position fin ="+(bbDataPage.getInt(index) + bbDataPage.getInt(index + Integer.BYTES)));
+
+		int positionDeb = bbDataPage.getInt(index);
+		int positionFin = (bbDataPage.getInt(index) + bbDataPage.getInt(index + Integer.BYTES));
+	    
+		/**
+		 * Affiche le record du ByteBuffer a supprimer
+		 */
+		
+		for(int i = positionDeb; i<positionFin;i+=Integer.BYTES) {
+			System.out.println(bbDataPage.getInt(i-1));
+		}
+		
+		
+		for(int i = positionDeb; i < positionFin; i++) {
+	    	System.out.println("Itérateur:"+i);
+	    	//System.out.println((bbDataPage.getInt(index) + bbDataPage.getInt(index + Integer.BYTES)));
+	    	System.out.println("y'a t'il qqch a la position du bytebuffer?"+bbDataPage.get(index));
+	    	
 	    	bbDataPage.put(index++, bbDataPage.get(i));
 	    	bbDataPage.put(i, (byte)0);
+	    	
+	    	System.out.println("y'a t'il qqch a la position du bytebuffer apres put 0?"+bbDataPage.get(i));
+
 	    }
 	    bbDataPage.position(index);
 		
+	    /**
+		 * Affiche le record du ByteBuffer supprimé
+		 */
+		
+		for(int i = positionDeb; i<positionFin;i++) {
+			System.out.println(bbDataPage.getInt(i-1));
+		}
+	    
+	    
 		ArrayList<Record> records = new ArrayList<Record>(); 
 		 
 		/**
@@ -334,7 +382,7 @@ private static FileManager INSTANCE = new FileManager();
 		//System.out.println(bbDataPage.getInt(index));
 		//System.out.println(bbDataPage.getInt(DBParams.pageSize-Integer.BYTES));
 		
-		for(int i = bbDataPage.getInt(index);i< bbDataPage.getInt(DBParams.pageSize-Integer.BYTES);i++) {
+		/*for(int i = bbDataPage.getInt(index);i< bbDataPage.getInt(DBParams.pageSize-Integer.BYTES);i++) {
 			
 			
 			//System.out.println(bbDataPage.getInt(index + Integer.BYTES));			
@@ -342,7 +390,7 @@ private static FileManager INSTANCE = new FileManager();
 			
 			bbDataPage.put(bbDataPage.getInt(index + Integer.BYTES) , bbDataPage.get(i));
 			index++;
-		}
+		}*/
 		
 		BufferManager.getInstance().FreePage(pageId, true);
 		/**

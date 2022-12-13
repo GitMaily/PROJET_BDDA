@@ -126,10 +126,19 @@ public class SelectCommand {
 		return resultat;
 	}
 	
+	public void afficherListeRecordId() {
+		for(Record rec : recordR) {
+			System.out.println("afficher chaque rec null ou pas?"+rec.getRi());
+		}
+	}
+	
 	public void execute() { // SELECT * FROM ToutesLesNotes // Cours=IF3BDDA AND Note<10 AND Note<18
 		ArrayList<Record> allRecords = null;
 		allRecords= FileManager.getInstance().getAllRecords(Catalog.getInstance().GetRelationInfo(nomRel));
 
+		
+		
+		
 		/**
 		 * Cas _WHERE_
 		 */
@@ -157,6 +166,8 @@ public class SelectCommand {
 	    			}
 	    			
 	    			if(resultatAND == true) {
+	    				System.out.println("NULL ou pas"+allRecords.get(j).getRi());
+	    				
 	      				 recordR.add(allRecords.get(j));
 	
 	    			}
@@ -208,6 +219,8 @@ public class SelectCommand {
         	
         }
         System.out.println("Total records="+ recordR.size());
+        
+        afficherListeRecordId();
 	}
 	
 	
