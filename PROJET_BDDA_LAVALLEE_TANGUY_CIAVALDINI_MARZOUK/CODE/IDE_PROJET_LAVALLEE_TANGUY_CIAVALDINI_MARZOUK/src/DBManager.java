@@ -31,7 +31,8 @@ public class DBManager {
 				c.execute();
 			break;
 			case "DROPDB":
-				DropDBCommand.execute();
+				DropDBCommand dropDB = new DropDBCommand();
+				dropDB.execute();
 			break;
 			case "INSERT":
 				if(commande.contains("FILECONTENTS")){

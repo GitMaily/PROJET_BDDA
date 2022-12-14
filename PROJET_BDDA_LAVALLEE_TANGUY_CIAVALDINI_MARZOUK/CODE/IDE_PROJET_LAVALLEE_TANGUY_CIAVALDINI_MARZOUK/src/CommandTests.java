@@ -1,6 +1,62 @@
 
 public class CommandTests {
 	
+	public static void deleteCommandTest() {
+		CreateTableCommand ct = new CreateTableCommand("CREATE TABLE S (C1:INTEGER,C2:REAL,C3:INTEGER,C4:INTEGER,C5:INTEGER)");
+		ct.execute();
+		
+		InsertCommande ic = new InsertCommande("INSERT INTO S VALUES (97,180,25,23,0)");
+		ic.execute();
+		
+		InsertCommande ic2 = new InsertCommande("INSERT INTO S VALUES (29,535.8,6,32,1)");
+		ic2.execute();
+		
+		InsertCommande ic3 = new InsertCommande("INSERT INTO S VALUES (167,408,12,14,3");
+		ic3.execute();
+		
+		InsertCommande ic4 = new InsertCommande("INSERT INTO S VALUES (91,132,6,15,4");
+		ic4.execute();
+		/*InsertCommande ic2 = new InsertCommande("INSERT INTO S VALUES (6,7,8,9,10)");
+		ic2.execute();
+		
+		InsertCommande ic3 = new InsertCommande("INSERT INTO S VALUES (6,7,8,9,10)");
+		ic3.execute();
+		*/
+		System.out.println("SELECT * FROM S WHERE C1=97");
+		SelectCommand scc = new SelectCommand("SELECT * FROM S WHERE C1=97");
+		scc.execute();
+		System.out.println();
+		
+		System.out.println("DELETE * FROM S WHERE C1=29");
+		DeleteCommand dc = new DeleteCommand("DELETE * FROM S WHERE C1=29");
+		dc.execute();
+		System.out.println();
+		
+		System.out.println("SELECT * FROM S WHERE C1=29");
+		SelectCommand scc2 = new SelectCommand("SELECT * FROM S WHERE C1=29");
+		scc2.execute();
+		System.out.println();
+		
+		
+		System.out.println("SELECT * FROM S");
+		SelectCommand scc3 = new SelectCommand("SELECT * FROM S");
+		scc3.execute();
+		System.out.println();
+		
+		
+		System.out.println("DELETE * FROM S");
+		DeleteCommand dc2 = new DeleteCommand("DELETE * FROM S");
+		dc2.execute();
+		System.out.println();
+		
+		System.out.println("SELECT * FROM S");
+		SelectCommand scc4 = new SelectCommand("SELECT * FROM S");
+		scc4.execute();
+		System.out.println();
+		
+	}
+	
+	
 	public static void csvTest() {
 		CreateTableCommand ct = new CreateTableCommand("CREATE TABLE S (C1:INTEGER,C2:REAL,C3:INTEGER,C4:INTEGER,C5:INTEGER)");
 		ct.execute();
@@ -10,6 +66,16 @@ public class CommandTests {
 		
 		System.out.println(ic.toString());
 		
+		System.out.println("SELECT * FROM S WHERE C1=97 AND C2=180");
+		SelectCommand sc1 = new SelectCommand("SELECT * FROM S WHERE C1=97 AND C2=180");
+		sc1.execute();
+		System.out.println();
+		
+		/*System.out.println("SELECT * FROM S");
+		SelectCommand scc = new SelectCommand("SELECT * FROM S");
+		scc.execute();
+		System.out.println();
+		*/
 		System.out.println("SELECT * FROM S WHERE C3=12");
 		SelectCommand sc = new SelectCommand("SELECT * FROM S WHERE C3=12");
 		sc.execute();
@@ -22,8 +88,27 @@ public class CommandTests {
 		System.out.println();
 		
 		
+		/*System.out.println("DELETE * FROM S");
+		DeleteCommand dc2 = new DeleteCommand("DELETE * FROM S");
+		dc2.execute();
+		System.out.println();
+		*/
 		
+		/*System.out.println("DELETE * FROM S");
+		DeleteCommand dc3 = new DeleteCommand("DELETE * FROM S");
+		dc3.execute();
+		System.out.println();
 		
+		System.out.println("SELECT * FROM S");
+		SelectCommand scc4 = new SelectCommand("SELECT * FROM S");
+		scc4.execute();
+		System.out.println();
+		
+		System.out.println("SELECT * FROM S WHERE C1=17");
+		SelectCommand scc5 = new SelectCommand("SELECT * FROM S WHERE C1=17");
+		scc5.execute();
+		System.out.println();
+		*/
 	}
 	
 	public static void scenarioTP6() {
@@ -71,6 +156,7 @@ public class CommandTests {
 		
 		dropDBTest();
 		
+		
 		csvTest();
 		
 		//createTableTest();
@@ -86,21 +172,12 @@ public class CommandTests {
 		
 	}
 	
-	private static void deleteCommandTest() {
-		csvTest();
-
-		DeleteCommand dc = new DeleteCommand("DELETE * FROM S WHERE C3=12 AND C1=167");
-		dc.execute();
-		
-		SelectCommand sc = new SelectCommand("SELECT * FROM S WHERE C3=12 AND C1=167");
-
-		sc.execute();
-	}
+	
 	
 	
 	private static void dropDBTest() {
-		DropDBCommand.supprimerFichiers();
-		
+		DropDBCommand dropDB = new DropDBCommand();
+		dropDB.execute();		
 	}
 
 	private static void createTableTest() {

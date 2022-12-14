@@ -151,80 +151,6 @@ public class FileManagerTests {
 		BufferManager.getInstance().FreePage(freePage, true);
 	}
 	
-	
-	/*public static void writeRecordToDataPageTest1() {
-		RelationInfo rel = creationRelationInfoContexte();
-		PageId pi = addDataPageTest(rel);
-		System.out.println("addDataPageTest pageId toString = "+pi.toString());
-		PageId freePage = getFreeDataPageIdTest();
-		System.out.println("getFreeDataPageIdTest freePage toString = "+pi.toString());
-
-		ArrayList<String> values = new ArrayList<String>();
-		values.add("Ileana");
-		values.add("BDDA");
-		Record record = new Record(rel,values);
-		RecordId rid = FileManager.getInstance().writeRecordToDataPage(record, freePage);
-		
-		System.out.println(rid.toString());
-		
-		//Affichage du contenu du DataPage
-		ByteBuffer bb = BufferManager.getInstance().GetPage(freePage);
-		
-		StringBuffer sbA = new StringBuffer();
-		for(int i = 0;i<bb.limit();i+=Character.BYTES) {
-			sbA.append(bb.getChar(i));
-		}
-		
-		System.out.println(sbA.toString());
-		
-		//Affichage de la position du début de l'espace disponible
-		//System.out.println(bb.getInt(4092));
-		
-		//Affichage fin du DataPage
-		StringBuffer sb2 = new StringBuffer();
-		for(int i = bb.capacity()-Integer.BYTES;i>=DBParams.pageSize-Integer.BYTES*2-(2*Integer.BYTES*bb.getInt(4088));i-=Character.BYTES) {
-			sb2.append(bb.getInt(i)+",");
-		}
-		System.out.println(sb2.toString());
-
-		
-		BufferManager.getInstance().FreePage(freePage, true);
-	}*/
-	
-	/*public static void writeRecordToDataPageTest2() {
-		RelationInfo rel = creationRelationInfoContexte();
-		PageId freePage2 = getFreeDataPageIdTest2();
-
-		ArrayList<String> values2 = new ArrayList<String>();
-		values2.add("Crapez");
-		values2.add("GFE");
-		Record record2 = new Record(rel,values2);
-		RecordId rid2 = FileManager.getInstance().writeRecordToDataPage(record2, freePage2);
-		
-		System.out.println(rid2.toString());
-		
-		ByteBuffer bb2 = BufferManager.getInstance().GetPage(freePage2);
-		
-		StringBuffer sb1B = new StringBuffer();
-		for(int i = 0;i<bb2.limit();i+=Character.BYTES) {
-			sb1B.append(bb2.getChar(i)+",");
-		}
-		System.out.println(bb2.getInt(4092));
-
-		StringBuffer sb2 = new StringBuffer();
-
-		for(int i = bb2.capacity()-Integer.BYTES;i>=DBParams.pageSize-Integer.BYTES*2-(2*Integer.BYTES*bb2.getInt(4088));i-=Character.BYTES) {
-			sb2.append(bb2.getInt(i)+",");
-		}
-		System.out.println(sb1B.toString());
-		System.out.println(sb2.toString());
-
-		BufferManager.getInstance().FreePage(freePage2, true);
-
-		
-		System.out.println(bb2.toString());
-	}*/
-	
 	public static ArrayList<Record> getRecordsInDataPageTest(RelationInfo rel, PageId freePage) {
 		System.out.println("***** Affichage de tous les records du DataPage *****");
 		
@@ -309,7 +235,10 @@ public class FileManagerTests {
 		}
 	}
 	public static void main(String[]args) {
-		
+		DBParams.DBPath = args[0];
+		DBParams.frameCount = 2;
+		DBParams.maxPagesPerFile = 4;
+		DBParams.pageSize = 4096;
 		//createNewHeaderPage
 		PageId headerPage = createNewHeaderPageTest();
 		RelationInfo rel = creationRelationInfoContexte(headerPage);

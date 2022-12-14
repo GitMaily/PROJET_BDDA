@@ -12,18 +12,30 @@ public class DeleteCommand {
 	public DeleteCommand (String saisie) {
 		this.saisie = saisie;
 		recordR=new ArrayList<>();
+		if(saisie.contains("WHERE")) {
 		
-		this.cmd = saisie.split("WHERE");
-        String[] tamp = cmd[0].split(" ");
-        this.nomRel=tamp[3];	    
-        
-        String commande = "SELECT * FROM "+nomRel+" WHERE"+cmd[1];
-	    this.sc = new SelectCommand(commande);
-	    sc.execute();
-	    
-	    this.recordR = sc.getRecordR();
-	    afficherListeRecordId();
-	
+			this.cmd = saisie.split("WHERE");
+	        String[] tamp = cmd[0].split(" ");
+	        this.nomRel=tamp[3];	    
+	        
+	        String commande = "SELECT * FROM "+nomRel+" WHERE"+cmd[1];
+		    this.sc = new SelectCommand(commande);
+		    sc.execute();
+		    
+		    this.recordR = sc.getRecordR();
+		    //afficherListeRecordId();
+		}
+		else {
+			this.cmd = saisie.split(" ");
+			this.nomRel = cmd[3];
+			
+	        String commande = "SELECT * FROM "+nomRel;
+	        this.sc = new SelectCommand(commande);
+		    sc.execute();
+		    
+		    this.recordR = sc.getRecordR();
+
+		}
 	}
 	
 	
@@ -37,7 +49,6 @@ public class DeleteCommand {
 		int count = 0;
 		for(int i=0; i<recordR.size(); i++) {
         	if( i == recordR.size()-1) {
-                //System.out.println("le record est null ou pas dans le delete?"+recordR.get(i).getRi());
 
             	System.out.println(recordR.get(i).toString()+ ".");
             	if(deleteRecord(recordR.get(i))) {
@@ -64,9 +75,6 @@ public class DeleteCommand {
 	
 	private boolean deleteRecord(Record record) {
 		
-		System.out.println(record.getRi());
-		
-		
 		ArrayList<Record> records = new ArrayList<Record>();
 		
 		records = FileManager.getInstance().getAllRecords(record.getRelInfo());
@@ -74,7 +82,6 @@ public class DeleteCommand {
 		for(Record rec : records) {
 			if(rec.getRi() != null && rec.getRi().getSlotIdx() == record.getRi().getSlotIdx()) {
 				
-				System.out.println("Le slotIdx"+rec.getRi().getSlotIdx());
 		        FileManager.getInstance().DeleteRecordInRel(rec); // r.ri = 
 		        
 		        return true;

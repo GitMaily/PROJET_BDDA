@@ -19,10 +19,10 @@ public class TestCatalog {
 			
 		}
 		
-		public static void lectureInit() throws FileNotFoundException, ClassNotFoundException, IOException {
+		public static boolean lectureInit() throws FileNotFoundException, ClassNotFoundException, IOException {
 			System.out.println("***** Vérification s'il existe un fichier catalog *****");
 			
-			File f = new File(DBParams.DBPath+File.separator+"catalog.sv");
+			File f = new File(DBParams.DBPath+File.separator+"Catalog.sv");
 			if(f.exists()) {
 				
 				System.out.println("Trouvé");
@@ -32,10 +32,12 @@ public class TestCatalog {
 				Catalog.getInstance().Init();
 				System.out.println("Catalog après : ");
 				System.out.println(Catalog.getInstance().toString());
+				return true;
 
 			}
 			else {
 				System.out.println("Aucun fichier catalog");
+				return false;
 			}
 		}
 		
@@ -50,14 +52,18 @@ public class TestCatalog {
 		}
 		
 		public static void main(String[] args) throws ClassNotFoundException, IOException{
-			//DBParams.DBPath="../../DB";
+			DBParams.DBPath=args[0];
 			DBParams.maxPagesPerFile = 4;
 			DBParams.frameCount = 2;
 			DBParams.pageSize = 4096;
 			
-			
-			lectureInit();
-			//ecritureFinish();
+			if(!lectureInit()) {
+				System.out.println("Création d'un fichier Catalog.sv");
+				ecritureFinish();
+			}
+			else {
+				ecritureFinish();
+			}
 		
 		}
 		

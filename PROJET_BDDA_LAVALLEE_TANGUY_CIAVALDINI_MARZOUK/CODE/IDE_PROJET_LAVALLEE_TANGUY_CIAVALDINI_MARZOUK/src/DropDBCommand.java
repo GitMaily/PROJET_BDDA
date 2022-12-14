@@ -2,7 +2,7 @@ import java.io.File;
 
 public class DropDBCommand {
 
-    public static void execute(){
+    public void execute(){
 		supprimerFichiers();
         Catalog.INSTANCE.reinitialiser();
         BufferManager.INSTANCE.reinitialiser();
@@ -10,7 +10,7 @@ public class DropDBCommand {
 		
     }
 
-    public static void supprimerFichiers(){
+    public void supprimerFichiers(){
     	
     	int nb = 0;
 		

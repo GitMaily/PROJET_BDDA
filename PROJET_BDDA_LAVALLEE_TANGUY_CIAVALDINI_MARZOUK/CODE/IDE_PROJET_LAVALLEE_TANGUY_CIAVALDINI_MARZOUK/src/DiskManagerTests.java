@@ -8,7 +8,10 @@ public class DiskManagerTests {
 	static DiskManager dm = DiskManager.getInstance();
 
 	public static void main(String[] args) {
-
+		DBParams.DBPath = args[0];
+		DBParams.frameCount = 2;
+		DBParams.maxPagesPerFile = 4;
+		DBParams.pageSize = 4096;
 		//TestEcriturePage(0);
 		//TestLecturePage(0);
 		

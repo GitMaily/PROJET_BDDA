@@ -10,7 +10,7 @@ public class Readcsv {
 	
 	private File f;
 	private ArrayList<String> ligne;
-	private String path = "/users/licence/il01193/Bureau/PROJET_BDDA/PROJET_BDDA_LAVALLEE_TANGUY_CIAVALDINI_MARZOUK";
+	private String path = DBParams.DBPath.substring(0, DBParams.DBPath.length()-3);
 	public Readcsv(String nomFichier) {
 		//f = new File(nomfichier);
 		f = new File(path+File.separator+nomFichier);
@@ -34,7 +34,7 @@ public class Readcsv {
 
 	public void affiche(){
 		for(int i=0; i<ligne.size();i++){
-			System.out.println("ligne"+ i+1 + " : "+ligne.get(i));
+			System.out.println("ligne"+ i + " : "+ligne.get(i));
 		}
 	}
 

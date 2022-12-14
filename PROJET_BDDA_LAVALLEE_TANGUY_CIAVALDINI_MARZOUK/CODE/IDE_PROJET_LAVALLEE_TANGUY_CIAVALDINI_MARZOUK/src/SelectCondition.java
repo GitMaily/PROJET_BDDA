@@ -1,4 +1,8 @@
-
+/**
+ * Permettre un meilleur polymorphisme / orienté objet
+ * Car 2 boucles switch imbriquée...
+ *
+ */
 public class SelectCondition {
 
 	private int indice; 

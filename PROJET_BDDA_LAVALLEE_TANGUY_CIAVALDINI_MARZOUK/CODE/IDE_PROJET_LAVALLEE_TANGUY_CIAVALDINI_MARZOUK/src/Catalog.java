@@ -17,7 +17,7 @@ public class Catalog implements Serializable {
 	private static final long serialVersionUID = 3473937835247764563L;
 	private ArrayList<RelationInfo> listRI; // liste de relation
 	private int compteurRelation; // un compteur de relation
-	private String path = DBParams.DBPath + File.separator +"catalog.sv";
+	private String path = DBParams.DBPath + File.separator +"Catalog.sv";
 	
 	static Catalog INSTANCE = new Catalog();
 	
@@ -150,8 +150,9 @@ public class Catalog implements Serializable {
 	 * Réinitialise le Catalogue lors de la saisie de la commande DROPDB
 	 */
 	public void reinitialiser(){
-		File file = new File(DBParams.DBPath+File.separator+"Catalog");
+		File file = new File(DBParams.DBPath+File.separator+"Catalog.sv");
 
+		//System.out.println(file.toString());
 		if(file.exists()) {
 			file.delete();
 		}

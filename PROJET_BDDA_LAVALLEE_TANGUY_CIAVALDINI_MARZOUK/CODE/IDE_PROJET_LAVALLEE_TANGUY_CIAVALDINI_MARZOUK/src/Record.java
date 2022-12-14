@@ -154,10 +154,10 @@ public class Record {
 		for(int i = 0; i < CI.size(); i++) { // -1?
 			switch(CI.get(i).getType_col()) {
 			case("INTEGER"):
-				res += 8; // t'aille d'un int + taille adresse
+				res += 12; // t'aille d'un int + taille adresse // 12 parce que la derniere valeur se chevauche.......
 				break;
 			case("REAL"):
-				res+= 8; // Taille d'un float + taille adresse 
+				res+= 12; // Taille d'un float + taille adresse // 12 parce que la derniere valeur se chevauche.......
 				break;
 			default:
 				res += (values.get(i).length())*2; // Taille du string

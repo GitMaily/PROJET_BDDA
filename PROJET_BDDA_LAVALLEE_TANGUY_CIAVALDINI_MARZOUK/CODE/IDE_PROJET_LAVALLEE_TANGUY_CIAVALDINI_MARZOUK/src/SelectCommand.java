@@ -166,7 +166,6 @@ public class SelectCommand {
 	    			}
 	    			
 	    			if(resultatAND == true) {
-	    				System.out.println("NULL ou pas"+allRecords.get(j).getRi());
 	    				
 	      				 recordR.add(allRecords.get(j));
 	
@@ -220,7 +219,7 @@ public class SelectCommand {
         }
         System.out.println("Total records="+ recordR.size());
         
-        afficherListeRecordId();
+        //afficherListeRecordId();
 	}
 	
 	

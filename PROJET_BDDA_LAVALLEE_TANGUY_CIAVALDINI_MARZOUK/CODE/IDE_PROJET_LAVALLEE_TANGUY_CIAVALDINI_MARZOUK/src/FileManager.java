@@ -156,6 +156,15 @@ private static FileManager INSTANCE = new FileManager();
 		// Ecriture du record à partir de la postion d'espace disponible
 		record.writeToBuffer(bb, posDispo);
 		
+		/**
+		 * Affiche le record dans le byteuffer
+		 * 
+		 */
+		/*int test = (posDispo +record.getWrittenSize());
+		for(int i = posDispo;i<test;i+=Integer.BYTES) {
+			System.out.print(bb.getInt(i));
+		}
+		*/
 		
 		/**
 		 * Actualisation de la DataPage 
@@ -164,8 +173,7 @@ private static FileManager INSTANCE = new FileManager();
 		int m = bb.getInt(DBParams.pageSize - Integer.BYTES*2); // M
 		//System.out.println("m = "+m);
 		//System.out.println(DBParams.pageSize - Integer.BYTES*2);
-	    //int positionSlot = (DBParams.pageSize-Integer.BYTES*2) - (m+1)*Integer.BYTES*1; // position du début du Record
-	    int positionSlot = (DBParams.pageSize - Integer.BYTES*2)- (m+1)*Integer.BYTES*2;
+	    int positionSlot = (DBParams.pageSize - Integer.BYTES*2)- (m+1)*Integer.BYTES*2;// position du début du Record
 	    // On actualise la position du début du Record
 	    bb.putInt(positionSlot,posDispo);
 	    // On actualise la taille du record, située juste un Integer après
@@ -248,19 +256,14 @@ private static FileManager INSTANCE = new FileManager();
 			//System.out.println("pos début rec2 = "+bbDataPage.getInt(positionSlot-8));
 
 			rec.readFromBuffer(bbDataPage, bbDataPage.getInt(positionSlot));
+			//System.out.println();
 			positionSlot = (DBParams.pageSize-Integer.BYTES*2) - i*Integer.BYTES*2;
+			//System.out.println("Pour record "+rec.toString()+": "+positionSlot);
+
 			RecordId rid = new RecordId(pageId,positionSlot);
 			rec.setRi(rid);
-			
 			listeDeRecords.add(rec);
-			//System.out.println("DERNIER ESPOIR"+rec.getRi());
-
 			
-			
-			//System.out.println("DERNIER ESPOIR2"+rec.getRi());
-
-			//System.out.println(rec.toString());
-			//System.out.println("positionSlot = "+positionSlot);
 
 
 		}
@@ -302,75 +305,84 @@ private static FileManager INSTANCE = new FileManager();
 		return writeRecordToDataPage(record, getfreeDataPageId(record.getRelInfo(), record.getWrittenSize()));
 	}
 	
-	
+	/**
+	 * Suppression d'un record d'une Relation
+	 * @param record Le record à supprimer
+	 */
 	public void DeleteRecordInRel(Record record) {
-		ArrayList<PageId> listePageIds = getAllDataPages(record.getRelInfo());
 		
-		
-		for(PageId pi : listePageIds) {
-			removeRecordFromDataPage(record, pi);
-		}
-		//return removeRecordFromDataPage(record); //, getUsedDataPageId(record.getRelInfo().getHeaderPageId()));
-		
+		removeRecordFromDataPage(record, record.getRi().getPageId());
 	}
 	
+	/**
+	 * Supprime un record de la DataPage. 
+	 * Cette méthode n'est pas complète : elle supprime seulement les données du record pour l'instant.
+	 * Etapes :
+	 * - Remplacer chaque byte par un 0, a partir du début du record jusqu'à la fin
+	 * - décaler vers la gauche toutes les données du DataPage restante, jusqu'à la position d'espace dispo
+	 * - Actualiser le headerPage et le slotDirectory
+	 * @param record Le record à supprimer
+	 * @param pageId Le pageId du Record
+	 * @return Le recordId du record qui vient d'être supprimé
+	 */
 	private RecordId removeRecordFromDataPage(Record record, PageId pageId) {
 		
 		
 		/**
 		 * Prendre le DataPage
 		 */
+		
 		ByteBuffer bbDataPage = BufferManager.getInstance().GetPage(pageId);
 		
-		/**
-		 * Affiche les records du ByteBuffer 
-		 */
+						/**
+						 * Affiche les records du ByteBuffer 
+						 */
+						
+						/*for(int i = 0; i<bbDataPage.getInt(DBParams.pageSize-Integer.BYTES);i+=Integer.BYTES) {
+							System.out.println(bbDataPage.getInt(i));
+						}*/
 		
-		/*for(int i = 0; i<bbDataPage.getInt(DBParams.pageSize-Integer.BYTES);i+=Integer.BYTES) {
-			System.out.println(bbDataPage.getInt(i));
-		}
-		*/
 		/**
 		 * On remplace chaque byte par un 0
 		 */
 		int index = record.getRi().getSlotIdx();
 		//int index = 4056;
-		System.out.println(index);
-		System.out.println("Position début ="+bbDataPage.getInt(index));
-		System.out.println("Position fin ="+(bbDataPage.getInt(index) + bbDataPage.getInt(index + Integer.BYTES)));
+		//System.out.println(index);
+		//System.out.println("Position début ="+bbDataPage.getInt(index));
+		//System.out.println("Position fin ="+(bbDataPage.getInt(index) + bbDataPage.getInt(index + Integer.BYTES)));
 
 		int positionDeb = bbDataPage.getInt(index);
 		int positionFin = (bbDataPage.getInt(index) + bbDataPage.getInt(index + Integer.BYTES));
 	    
-		/**
-		 * Affiche le record du ByteBuffer a supprimer
-		 */
+						/**
+						 * Affiche le record du ByteBuffer a supprimer
+						 */
+						/*System.out.println("Affichage record avant");
+				
+						for(int i = positionDeb; i<positionFin;i+=Integer.BYTES) {
+							
+							System.out.println(bbDataPage.getInt(i));
+						}*/
 		
-		for(int i = positionDeb; i<positionFin;i+=Integer.BYTES) {
-			System.out.println(bbDataPage.getInt(i-1));
-		}
-		
-		
+		int iterateurIndex = bbDataPage.getInt(index);
 		for(int i = positionDeb; i < positionFin; i++) {
-	    	System.out.println("Itérateur:"+i);
 	    	//System.out.println((bbDataPage.getInt(index) + bbDataPage.getInt(index + Integer.BYTES)));
-	    	System.out.println("y'a t'il qqch a la position du bytebuffer?"+bbDataPage.get(index));
 	    	
-	    	bbDataPage.put(index++, bbDataPage.get(i));
-	    	bbDataPage.put(i, (byte)0);
+	    	//bbDataPage.put(bbDataPage.getInt(index++), bbDataPage.get(i));
+	    	bbDataPage.put(iterateurIndex++, (byte)0);
 	    	
-	    	System.out.println("y'a t'il qqch a la position du bytebuffer apres put 0?"+bbDataPage.get(i));
 
 	    }
 	    bbDataPage.position(index);
 		
-	    /**
-		 * Affiche le record du ByteBuffer supprimé
-		 */
-		
-		for(int i = positionDeb; i<positionFin;i++) {
-			System.out.println(bbDataPage.getInt(i-1));
-		}
+					    /**
+						 * Affiche le record du ByteBuffer supprimé
+						 */
+						/*System.out.println("Affichage record après");
+				
+						for(int i = positionDeb; i<positionFin;i++) {
+							System.out.println(bbDataPage.getInt(i));
+						}*/
 	    
 	    
 		ArrayList<Record> records = new ArrayList<Record>(); 
@@ -428,6 +440,7 @@ private static FileManager INSTANCE = new FileManager();
 			listeDeRecords = getRecordsInDataPage(relInfo,pid);
 
 			for(Record rec : listeDeRecords) {
+				//System.out.println(rec.toString());
 				listeAllRecords.add(rec);
 			}
 		}		
