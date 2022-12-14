@@ -14,15 +14,36 @@ public class DBManager {
 		
 	}
 	
+	/**
+	 * une méthode Init qui contient un appel à la méthode Init du Catalog et un appel à la
+	 * méthode Init du BufferManager, ainsi que (si une telle méthode existe) un appel à la
+	 * méthode Init du DiskManager
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	public void Init() throws ClassNotFoundException, IOException {
 		Catalog.getInstance().Init();
 	}
 	
+	/**
+	 * une méthode Finish qui contient un appel à la méthode Finish du Catalog et un appel à la
+	 * méthode FlushAll (ou Finish, si Finish appelle FlushAll) du BufferManager, ainsi que si
+	 * besoin un appel à la méthode Finish du DiskManager
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public void Finish() throws FileNotFoundException, IOException {
 		Catalog.getInstance().Finish();
 		BufferManager.getInstance().FlushAll();
 	}
 	
+	
+	/**
+	 * une méthode ProcessCommand, qui prend en argument une chaîne de caractères qui
+	 * correspond à une commande. Pour l’instant cette méthode sera vide
+	 * @param commande
+	 * @throws IOException
+	 */
 	public void ProcessCommand(String commande) throws IOException {
 		String [] commandeNom = commande.split(" ");
 		switch(commandeNom[0]){

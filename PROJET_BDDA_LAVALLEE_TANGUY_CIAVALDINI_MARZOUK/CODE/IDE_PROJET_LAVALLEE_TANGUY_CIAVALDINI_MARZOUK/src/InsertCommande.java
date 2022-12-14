@@ -4,7 +4,12 @@ import java.util.ArrayList;
 public class InsertCommande {
      String nomRelation;
      ArrayList<String> valeurCol;
-
+     
+     
+     /**
+      * Cette commande demande l’insertion d’un record dans une relation, en indiquant les valeurs
+      * @param commande
+      */
     public InsertCommande(String commande){
         this.valeurCol = new ArrayList<>();
 
@@ -51,7 +56,8 @@ public class InsertCommande {
 	        }
         }
     }
-
+    
+    
     public void execute(){
         Record r = new Record(Catalog.getInstance().GetRelationInfo(nomRelation), valeurCol);
         RecordId rid = FileManager.getInstance().InsertRecordInRel(r); // r.ri = 

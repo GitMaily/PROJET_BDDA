@@ -52,8 +52,12 @@ public class Record {
 	}
 
 	
-	
-	
+	/**
+	 * Cette méthode doit écrire les valeurs du Record dans le buffer en partant de la position pos, en
+	 * utilisant le format à offset directory
+	 * @param buff le buffer
+	 * @param pos la position
+	 */
 	public void writeToBuffer(ByteBuffer buff, int pos) {
 		
 		String type;
@@ -101,7 +105,12 @@ public class Record {
 	}
 	
 	
-	
+	/**
+	 * Cette méthode devra lire les valeurs du Record depuis le buffer à partir de pos, en supposant que le
+	 * Record a été écrit avec writeToBuffer
+	 * @param buff le buffer
+	 * @param pos la position
+	 */
 	void readFromBuffer(ByteBuffer buff, int pos) {
 		buff.position(pos);
 		String type;
@@ -145,6 +154,11 @@ public class Record {
 		}
 	}
 	
+	/**
+	 * methode qui retourne la taille totale (en octets) occupé par le record lorsqu’il est écrit dans un buffer avec la
+	 * méthode writeToBuffer
+	 * @return
+	 */
 	public int getWrittenSize(){
 		int res = 0;
 		//ArrayList<ColInfo> CI = relInfo.getNom_col();

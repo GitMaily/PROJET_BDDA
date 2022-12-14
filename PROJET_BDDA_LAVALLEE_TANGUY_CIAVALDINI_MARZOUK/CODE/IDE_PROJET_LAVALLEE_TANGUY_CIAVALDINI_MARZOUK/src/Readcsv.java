@@ -19,6 +19,11 @@ public class Readcsv {
 		
 	}
 	
+	/**
+	 * cette methode permet de lire le fichier.csv
+	 * @return
+	 * @throws IOException
+	 */
 	public ArrayList<String> lireCsv() throws IOException{
 		FileReader fr = new FileReader(f);
 		BufferedReader bfrrd = new BufferedReader(fr);

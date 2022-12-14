@@ -10,6 +10,9 @@ public class DropDBCommand {
 		
     }
 
+    /**
+     * supprime les fichier du dossier DB
+     */
     public void supprimerFichiers(){
     	
     	int nb = 0;

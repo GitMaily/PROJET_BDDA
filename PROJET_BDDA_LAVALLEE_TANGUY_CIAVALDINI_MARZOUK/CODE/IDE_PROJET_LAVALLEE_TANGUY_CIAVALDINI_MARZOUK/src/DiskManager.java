@@ -52,7 +52,11 @@ public class DiskManager {
 
 	}
 	
-	
+	/**
+	 * Cette méthode doit allouer une page, c’est à dire réserver une nouvelle page à la demande
+	 * d’une des couches au-dessus.
+	 * @return
+	 */
 	public PageId allocPage() {
 		
 		String path = DBParams.DBPath;  
