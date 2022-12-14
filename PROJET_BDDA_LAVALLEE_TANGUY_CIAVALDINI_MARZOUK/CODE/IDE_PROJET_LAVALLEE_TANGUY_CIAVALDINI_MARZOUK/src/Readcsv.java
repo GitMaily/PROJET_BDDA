@@ -20,7 +20,7 @@ public class Readcsv {
 	}
 	
 	/**
-	 * cette methode permet de lire le fichier.csv
+	 * Cette methode permet de lire le fichier.csv
 	 * @return
 	 * @throws IOException
 	 */

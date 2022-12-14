@@ -57,7 +57,9 @@ public class InsertCommande {
         }
     }
     
-    
+    /**
+     * Execute l'insertion du record
+     */
     public void execute(){
         Record r = new Record(Catalog.getInstance().GetRelationInfo(nomRelation), valeurCol);
         RecordId rid = FileManager.getInstance().InsertRecordInRel(r); // r.ri = 

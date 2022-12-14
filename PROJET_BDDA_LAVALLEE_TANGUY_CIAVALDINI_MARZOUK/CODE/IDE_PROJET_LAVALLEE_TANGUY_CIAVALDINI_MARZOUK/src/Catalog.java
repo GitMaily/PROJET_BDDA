@@ -11,9 +11,6 @@ import java.util.ArrayList;
 
 public class Catalog implements Serializable {
 		
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3473937835247764563L;
 	private ArrayList<RelationInfo> listRI; // liste de relation
 	private int compteurRelation; // un compteur de relation

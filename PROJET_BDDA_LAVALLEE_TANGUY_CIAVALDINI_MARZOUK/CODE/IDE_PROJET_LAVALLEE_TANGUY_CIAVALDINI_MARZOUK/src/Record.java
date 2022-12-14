@@ -175,7 +175,7 @@ public class Record {
 				break;
 			default:
 				res += (values.get(i).length())*2; // Taille du string
-				res *= 2; // + taille adresse
+				res *= 3; // + taille adresse
 			} 
 		}
         return res;

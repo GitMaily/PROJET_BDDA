@@ -62,6 +62,7 @@ public class SelectCommand {
 		}
 				
 		boolean resultat = false;
+		int comparer = 0;
 		//for(int i = 0; i < sizeRecords ;i++) { // comparer nom type colonne
 			
 			int nbCol = allRecords.get(iterateur).getRelInfo().getNb_col();
@@ -105,15 +106,99 @@ public class SelectCommand {
     					}
     					break;
     					
-    				default:
-    					if (comparateur.equals("=")) {
+    				default: 
+    					switch(comparateur) { // Note = 16
+        				case "=": //resultat = allRecords.get(iterateur).getValues().get(j).trim().equals(newSplit[1].trim());
+        				
+        				
+		        				comparer =  allRecords.get(iterateur).getValues().get(j).trim().compareToIgnoreCase(newSplit[1].trim());
+		        				if (comparer < 0) {  
+		        					return false;
+		        				    // est plus petit
+		        				}
+		        				else if (comparer > 0) {
+		        					return false;
+		        				    // est plus grand
+		        				}
+		        				else {  
+		        					return true;
+		        				    // sont égaux
+		        				} 
+		        				
+        				case "<": 	// PROG > BDDA
+        					comparer =  allRecords.get(iterateur).getValues().get(j).trim().compareToIgnoreCase(newSplit[1].trim());
+			        				if (comparer < 0) {  
+			        					return true;
+			        				    // est plus petit
+			        				}
+			        				else if (comparer > 0) {
+			        					return false;
+			        				    // est plus grand
+			        				}
+			        				else {  
+			        					return false;
+			        				    // sont égaux
+			        				} 
+	        				
+						case ">": 	comparer =  allRecords.get(iterateur).getValues().get(j).trim().compareToIgnoreCase(newSplit[1].trim());
+									if (comparer < 0) {  
+			        					return false;
+			        				    // est plus petit
+			        				}
+			        				else if (comparer > 0) {
+			        					return true;
+			        				    // est plus grand
+			        				}
+			        				else {  
+			        					return false;
+			        				    // sont égaux
+			        				} 
+        				case "<=": 	comparer =  allRecords.get(iterateur).getValues().get(j).trim().compareToIgnoreCase(newSplit[1].trim());
+			        				if (comparer < 0) {  
+			        					return true;
+			        				    // est plus petit
+			        				}
+			        				else if (comparer > 0) {
+			        					return false;
+			        				    // est plus grand
+			        				}
+			        				else {  
+			        					return true;
+			        				    // sont égaux
+			        				} 
+        				
+        				case ">=": 	comparer =  allRecords.get(iterateur).getValues().get(j).trim().compareToIgnoreCase(newSplit[1].trim());
+			        				if (comparer < 0) {  
+			        					return false;
+			        				    // est plus petit
+			        				}
+			        				else if (comparer > 0) {
+			        					return true;
+			        				    // est plus grand
+			        				}
+			        				else {  
+			        					return true;
+			        				    // sont égaux
+			        				} 
+        				
+        				default: System.out.println("comparateur incorrect");
+        						resultat = false;
+        						
+        						
+    					}
+    					
+    					
+    					
+    					
+    					
+    					/*if (comparateur.equals("=")) {
     						
     						resultat = allRecords.get(iterateur).getValues().get(j).trim().equals(newSplit[1].trim());
     					}
     					else {
     						System.out.println("Comparateur incorrect");
     						resultat = false;
-    					}
+    					}*/
     					
     				}
 				
@@ -132,6 +217,10 @@ public class SelectCommand {
 		}
 	}
 	
+	
+	/**
+	 * Execute la selection mise en commande. Procède à une comparaison, puis affiche les records selectionnés par cette comparaison.
+	 */
 	public void execute() { // SELECT * FROM ToutesLesNotes // Cours=IF3BDDA AND Note<10 AND Note<18
 		ArrayList<Record> allRecords = null;
 		allRecords= FileManager.getInstance().getAllRecords(Catalog.getInstance().GetRelationInfo(nomRel));

@@ -9,6 +9,10 @@ public class DeleteCommand {
 	private ArrayList<Record> recordR;
 
 
+	/**
+	 * Procède à un parsing avec WHERE et " " puis fait une selection
+	 * @param saisie La commande saisie
+	 */
 	public DeleteCommand (String saisie) {
 		this.saisie = saisie;
 		recordR=new ArrayList<>();
@@ -45,6 +49,10 @@ public class DeleteCommand {
 		}
 	}
 	
+	/**
+	 * Execute la suppression du record
+	 * Il manque quelques étapes, donc pas fonctionnel entièrement.
+	 */
 	public void execute() {
 		int count = 0;
 		for(int i=0; i<recordR.size(); i++) {
@@ -73,6 +81,11 @@ public class DeleteCommand {
         
 	}
 	
+	/**
+	 * Fait appelle au FileManager pour supprimer les données du record dans le dataPage
+	 * @param record Le record à supprimer
+	 * @return true si le record a effectivement été supprimé, false sinon
+	 */
 	private boolean deleteRecord(Record record) {
 		
 		ArrayList<Record> records = new ArrayList<Record>();

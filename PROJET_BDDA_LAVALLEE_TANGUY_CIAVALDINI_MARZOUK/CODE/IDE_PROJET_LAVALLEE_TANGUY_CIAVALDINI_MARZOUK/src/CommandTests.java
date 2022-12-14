@@ -122,6 +122,9 @@ public class CommandTests {
 		InsertCommande ic2 = new InsertCommande("INSERT INTO R VALUES (1,agh,1)");
 		ic2.execute();
 		
+		InsertCommande ic3 = new InsertCommande("INSERT INTO R VALUES (1,zzz,1)");
+		ic3.execute();
+		
 		System.out.println("SELECT * FROM R");
 		SelectCommand sc = new SelectCommand("SELECT * FROM R");
 		sc.execute();
@@ -145,6 +148,13 @@ public class CommandTests {
 		System.out.println("SELECT * FROM R WHERE C1<2");
 		SelectCommand sc4 = new SelectCommand("SELECT * FROM R WHERE C1<2");
 		sc4.execute();
+		System.out.println();
+
+		
+		String commande = "SELECT * FROM R WHERE C2=agh";
+		System.out.println(commande);
+		SelectCommand sc5 = new SelectCommand(commande);
+		sc5.execute();
 		
 	}
 	
@@ -157,15 +167,17 @@ public class CommandTests {
 		dropDBTest();
 		
 		
-		csvTest();
+		//csvTest();
 		
 		//createTableTest();
 		//insertCommandTest();
 		//selectCommandTest();
 		
-		//scenarioTP6();
-		//profsTest();
+		scenarioTP6();
+		profsTest();
 		
+		
+		//comparerDesStrings();
 		//deleteCommandTest();
 		
 		
@@ -305,8 +317,50 @@ public class CommandTests {
 		sc3.execute();
 		System.out.println();
 
+		System.out.println("SELECT * FROM Profs WHERE UE<BDDA");
+		SelectCommand sc4 = new SelectCommand("SELECT * FROM Profs WHERE UE<BDDA");
+		sc4.execute();
+		System.out.println();
+		
+		System.out.println("SELECT * FROM Profs WHERE NOM<Ileana");
+		SelectCommand sc5 = new SelectCommand("SELECT * FROM Profs WHERE NOM<Ileana");
+		sc5.execute();
+		System.out.println();
 		
 
+	}
+	
+	
+	public static void comparerDesStrings() {
+		CreateTableCommand ct = new CreateTableCommand("CREATE TABLE Strings (STRING:VARCHAR(10)");
+		ct.execute();
+		
+		System.out.println("INSERT INTO Strings VALUES (aa)");
+		InsertCommande ic1 = new InsertCommande("INSERT INTO Strings VALUES (aa)");
+		ic1.execute();
+		System.out.println();
+		
+		System.out.println("INSERT INTO Strings VALUES (bb)");
+		InsertCommande ic2 = new InsertCommande("INSERT INTO Strings VALUES (bb)");
+		ic2.execute();
+		System.out.println();
+		
+		System.out.println("INSERT INTO Strings VALUES (cc)");
+		InsertCommande ic3 = new InsertCommande("INSERT INTO Strings VALUES (cc)");
+		ic3.execute();
+		
+		System.out.println();
+		System.out.println("SELECT * FROM Strings");
+		SelectCommand sc1 = new SelectCommand("SELECT * FROM Strings");
+		sc1.execute();
+		System.out.println();
+		
+		
+		String commande = "SELECT * FROM Strings WHERE STRING<cc";
+		SelectCommand sc2 = new SelectCommand(commande);
+		sc2.execute();
+		System.out.println();
+		
 	}
 
 }
